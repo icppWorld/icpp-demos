@@ -1,16 +1,22 @@
 [![icpp-demos](https://github.com/icppWorld/icpp-demos/actions/workflows/cicd.yml/badge.svg)](https://github.com/icppWorld/icpp-demos/actions/workflows/cicd.yml)
+
 # icpp-demos
 
-In the `canisters` folder, you can find several fully functional Smart Contracts that you can deploy and use as a starting point. 
+Example C++ Smart Contracts that you can deploy to the Internet Computer with [icpp-pro](https://docs.icpp.world).
 
-- Compile & deploy with icpp-free.
-- For interactive debugging & smoketesting, get [icpp-pro](https://docs.icpp.world/)
+## The Smart Contracts
+
+Each sub folder of `canisters` is a standalone icpp-pro development project.
+
+| canister      | content                                                      |
+| ------------- | ------------------------------------------------------------ |
+| api_reference | The [api-reference docs](https://docs.icpp.world/api-reference.html) example code. |
 
 ## Setup
 
-Follow the [Installation Guide](https://docs.icpp.world/installation.html)
+Follow the [icpp-pro installation](https://docs.icpp.world/installation.html) instructions
 
-## Deploy & Test
+## Deploy & Manually test
 
 ```bash
 # Goto root folder of a canister, eg.
@@ -22,15 +28,33 @@ dfx start --clean --background
 # Deploy the canister
 dfx deploy
 
-# Pro: Smoketest the canister
-pytest --network local
+# Manually test the canister methods, eg.
+$ dfx canister call --type idl --output idl demo demo_get_caller '()'
+Hello! Your principal is expmt-gtxsw-inftj-ttabj-qhp5s-nozup-n3bbo-k7zvn-dg4he-knac3-lae
 
-# Pro: Debug the canister in VS Code
-icpp build-native
 ```
 
-## `canisters/api_reference` 
-Includes all the code samples of the [api-reference docs](https://docs.icpp.world/api-reference.html)
+## Smoketest
+
+```bash
+# Smoketest the deployed canister
+pytest --network local
+
+# or, after deploying to mainnet
+pytest --network ic
+```
+
+
+
+## Native debug
+
+```bash
+# Build native debug executable with MockIC
+icpp build-native
+
+# Run it directly, or debug it in VS Code
+build-native/mockic.exe 
+```
 
 
 

@@ -1,0 +1,136 @@
+/*
+ The `docs start` and `docs end` comments are used by our docs building system.
+ You can strip them out in your own projects.
+*/
+
+service : {
+    // ---------------------------------------------------------------------------------------------
+    // CandidTypes 
+
+    // docs start: demo_candid_type_bool
+    "demo_candid_type_bool" : (bool) -> (bool) query;
+    "demo_candid_type_bools" : (bool, bool) -> (bool, bool) query; // docs end: demo_candid_type_bool
+
+    // docs start: demo_candid_type_float32
+    "demo_candid_type_float32" : (float32) -> (float32) query;
+    "demo_candid_type_float32s" : (float32, float32) -> (float32, float32) query; // docs end: demo_candid_type_float32
+
+    // docs start: demo_candid_type_float64
+    "demo_candid_type_float64" : (float64) -> (float64) query;
+    "demo_candid_type_float64s" : (float64, float64) -> (float64, float64) query; // docs end: demo_candid_type_float64
+
+    // docs start: demo_candid_type_int8
+    "demo_candid_type_int8" : (int8) -> (int8) query;
+    "demo_candid_type_int8s" : (int8, int8) -> (int8, int8) query; // docs end: demo_candid_type_int8
+
+    // docs start: demo_candid_type_int16
+    "demo_candid_type_int16" : (int16) -> (int16) query;
+    "demo_candid_type_int16s" : (int16, int16) -> (int16, int16) query; // docs end: demo_candid_type_int16
+
+    // docs start: demo_candid_type_int32
+    "demo_candid_type_int32" : (int32) -> (int32) query;
+    "demo_candid_type_int32s" : (int32, int32) -> (int32, int32) query; // docs end: demo_candid_type_int32
+
+    // docs start: demo_candid_type_int64
+    "demo_candid_type_int64" : (int64) -> (int64) query;
+    "demo_candid_type_int64s" : (int64, int64) -> (int64, int64) query; // docs end: demo_candid_type_int64
+
+    // docs start: demo_candid_type_int
+    "demo_candid_type_int" : (int) -> (int) query;
+    "demo_candid_type_ints" : (int, int) -> (int, int) query; // docs end: demo_candid_type_int
+
+    // docs start: demo_candid_type_nat8
+    "demo_candid_type_nat8" : (nat8) -> (nat8) query;
+    "demo_candid_type_nat8s" : (nat8, nat8) -> (nat8, nat8) query; // docs end: demo_candid_type_nat8
+
+    // docs start: demo_candid_type_nat16
+    "demo_candid_type_nat16" : (nat16) -> (nat16) query;
+    "demo_candid_type_nat16s" : (nat16, nat16) -> (nat16, nat16) query; // docs end: demo_candid_type_nat16
+
+    // docs start: demo_candid_type_nat32
+    "demo_candid_type_nat32" : (nat32) -> (nat32) query;
+    "demo_candid_type_nat32s" : (nat32, nat32) -> (nat32, nat32) query; // docs end: demo_candid_type_nat32
+
+    // docs start: demo_candid_type_nat64
+    "demo_candid_type_nat64" : (nat64) -> (nat64) query;
+    "demo_candid_type_nat64s" : (nat64, nat64) -> (nat64, nat64) query; // docs end: demo_candid_type_nat64
+
+    // docs start: demo_candid_type_nat
+    "demo_candid_type_nat" : (nat) -> (nat) query;
+    "demo_candid_type_nats" : (nat, nat) -> (nat, nat) query; // docs end: demo_candid_type_nat
+
+    // docs start: demo_candid_type_opt
+    "demo_candid_type_opt" : (opt bool) -> (opt bool) query;
+    "demo_candid_type_opts" : (opt bool, opt float32, opt float64, opt int8, opt int16, opt int32, opt int64, opt int, opt nat8, opt nat16, opt nat32, opt nat64, opt nat, opt principal, opt text) -> 
+                              (opt bool, opt float32, opt float64, opt int8, opt int16, opt int32, opt int64, opt int, opt nat8, opt nat16, opt nat32, opt nat64, opt nat, opt principal, opt text)
+                              query; // docs end: demo_candid_type_opt
+
+    // docs start: demo_candid_type_principal
+    "demo_candid_type_principal" : (principal) -> (principal) query;
+    "demo_candid_type_principals" : (principal, principal) -> (principal, principal) query; // docs end: demo_candid_type_principal
+
+    // docs start: demo_candid_type_text
+    "demo_candid_type_text" : (text) -> (text) query;
+    "demo_candid_type_texts" : (text, text) -> (text, text) query; // docs end: demo_candid_type_text
+
+    /*
+    "demo_candid_type_reserved" : (reserved) -> (reserved) query;
+    "demo_candid_type_vec_nat16" : (vec nat16) -> (vec nat16) query;
+    "demo_candid_type_vec_all" : (vec bool, vec nat, vec nat8, vec nat16, vec nat32, vec nat64, vec int, vec int8, vec int16, vec int32, vec int64, vec float32, vec float64, vec text, vec principal) -> 
+                          (vec bool, vec nat, vec nat8, vec nat16, vec nat32, vec nat64, vec int, vec int8, vec int16, vec int32, vec int64, vec float32, vec float64, vec text, vec principal) 
+                          query;
+    "demo_candid_type_opt_nat16" : (opt nat16) -> (opt nat16) query;
+    "demo_candid_type_opt_nat16_no_value" : (opt nat16) -> (opt nat16) query;
+    "demo_candid_type_opt_all" : (opt bool, opt bool, opt bool, opt nat, opt nat, opt nat8, opt nat8, opt nat16, opt nat16, opt nat32, opt nat32, opt nat64, opt nat64, opt int, opt int, opt int8, opt int8, opt int16, opt int16, opt int32, opt int32, opt int64, opt int64, opt float32, opt float32, opt float64, opt float64, opt text, opt text, opt principal, opt principal) -> 
+                          (opt bool, opt bool, opt bool, opt nat, opt nat, opt nat8, opt nat8, opt nat16, opt nat16, opt nat32, opt nat32, opt nat64, opt nat64, opt int, opt int, opt int8, opt int8, opt int16, opt int16, opt int32, opt int32, opt int64, opt int64, opt float32, opt float32, opt float64, opt float64, opt text, opt text, opt principal, opt principal) 
+                          query;
+    "demo_candid_type_record" : (record { name: text; "secret float64": float64; "secret int": int })  -> 
+                         (record { greeting: text; message: text; "secret float64": float64; "secret int": int }) 
+                         query;
+    "demo_candid_type_variant_ok" : (Result)  -> (Result) query;
+    "demo_candid_type_variant_err" : (Result)  -> (Result) query;
+    "demo_candid_type_variant" : (Result, Result)  -> 
+                          (Result, Result) 
+                          query;
+                          */
+
+    // ---------------------------------------------------------------------------------------------
+    // IC_API - ic0 system interface
+    
+    // docs start: demo_debug_print
+    "demo_debug_print": () -> () query; // docs end: demo_debug_print
+
+    // docs start: demo_ic_api
+    "demo_ic_api": () -> () query; // docs end: demo_ic_api
+    
+    // docs start: demo_get_caller
+    "demo_get_caller": () -> (text) query; // docs end: demo_get_caller
+
+    // docs start: demo_from_wire
+    "demo_from_wire_no_arg": () -> () query;
+    "demo_from_wire_one_arg": (text) -> (text) query;
+    "demo_from_wire_multiple_args": (text, nat64) -> (text) query; // docs end: demo_from_wire
+
+    // docs start: demo_time
+    "demo_time": () -> (text) query; // docs end: demo_time
+
+    // docs start: demo_to_wire
+    "demo_to_wire_no_arg": () -> () query;
+    "demo_to_wire_one_arg": (text) -> (text) query;
+    "demo_to_wire_multiple_args": (text, nat64) -> (text, text, nat64, text) query; // docs end: demo_to_wire
+
+    // docs start: demo_trap
+    "demo_trap": () -> () query; // docs end: demo_trap
+
+    // ---------------------------------------------------------------------------------------------
+    // IC_API - utilities
+
+    // docs start: demo_string_to_int128
+    "demo_string_to_int128": () -> () query; // docs end: demo_string_to_int128
+
+    // docs start: demo_to_string_128
+    "demo_to_string_128": () -> () query; // docs end: demo_to_string_128
+
+    // ---------------------------------------------------------------------------------------------
+};
+

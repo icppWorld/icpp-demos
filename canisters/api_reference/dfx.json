@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "canisters": {
+    "demo": {
+      "type": "custom",
+      "candid": "src/demo.did",
+      "wasm": "build/demo.wasm",
+      "build": "icpp build-wasm --to-compile all"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  }
+}

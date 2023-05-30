@@ -1,0 +1,6 @@
+service : {
+  "inc": () -> ();
+  "read": () -> (nat64) query;
+  "write": (nat64) -> ();
+  "inc_query": () -> () query;
+}

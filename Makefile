@@ -93,7 +93,7 @@ python-clean:
 	find . -name '*.pyo' -exec rm -f {} +
 	find . -name '*~' -exec rm -f  {} +
 
-PYTHON_DIRS ?= canisters
+PYTHON_DIRS ?= scripts canisters
 
 .PHONY: python-format
 python-format:
@@ -111,7 +111,7 @@ python-lint:
 python-type:
 	@echo "---"
 	@echo "python-type"
-	python -m mypy --config-file .mypy.ini --show-column-numbers --strict $(PYTHON_DIRS)
+	python -m mypy --config-file .mypy.ini --show-column-numbers --strict --explicit-package-bases $(PYTHON_DIRS)
 
 
 ###########################################################################

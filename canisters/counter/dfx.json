@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "canisters": {
+    "counter": {
+      "type": "custom",
+      "candid": "src/counter.did",
+      "wasm": "build/counter.wasm",
+      "build": "icpp build-wasm --to-compile all"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  }
+}

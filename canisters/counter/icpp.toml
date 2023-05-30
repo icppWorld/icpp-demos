@@ -1,0 +1,18 @@
+[build-wasm]
+canister          = "counter"
+did_path          = "src/counter.did"
+cpp_paths         = ["src/counter.cpp"]
+cpp_header_paths  = ["src/counter.h"]
+cpp_compile_flags = []
+cpp_link_flags    = []
+c_paths           = []
+c_header_paths    = []
+c_compile_flags   = []
+[build-native]
+cpp_paths         = ["native/main.cpp"]
+cpp_header_paths  = ["native/main.h"]
+cpp_compile_flags = []
+cpp_link_flags    = []
+c_paths           = []
+c_header_paths    = []
+c_compile_flags   = []

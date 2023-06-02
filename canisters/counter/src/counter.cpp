@@ -1,9 +1,9 @@
+// Demo of a counter, stored in static memory
+
 #include "counter.h"
-
-#include <string>
-
 #include "ic_api.h"
 
+// For Orthogonal Persistence to work, the data must be managed at a global level
 uint64_t counter{0};
 
 void inc() {

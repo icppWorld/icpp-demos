@@ -1,6 +1,13 @@
 service : {
+  // docs start: demo_counter
   "inc": () -> ();
   "read": () -> (nat64) query;
   "write": (nat64) -> ();
-  "inc_query": () -> () query;
+  "inc_query": () -> () query; // docs end: demo_counter
+
+  // docs start: demo_counter_vec
+  "inc_counter_vec": () -> ();
+  "read_counter_vec": () -> (vec nat64) query;
+  "write_counter_vec": (vec nat64) -> ();
+  "inc_query_counter_vec": () -> () query; // docs end: demo_counter_vec
 }

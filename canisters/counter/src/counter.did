@@ -10,4 +10,10 @@ service : {
   "read_counter_vec": () -> (vec nat64) query;
   "write_counter_vec": (vec nat64) -> ();
   "inc_query_counter_vec": () -> () query; // docs end: demo_counter_vec
+
+  // docs start: demo_counter_for_caller
+  "inc_counter_for_caller": () -> ();
+  "read_counter_for_caller": () -> (nat64) query;
+  "write_counter_for_caller": (nat64) -> ();
+  "inc_query_counter_for_caller": () -> () query; // docs end: demo_counter_for_caller
 }

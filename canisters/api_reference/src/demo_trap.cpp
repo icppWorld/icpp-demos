@@ -12,7 +12,7 @@ Caused by: Failed query call.
 #include "ic_api.h"
 
 void demo_trap() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
   IC_API::trap("\n   Hello " + caller.get_text() + "\n   This is a trap demo.");

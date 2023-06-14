@@ -18,7 +18,7 @@ $ dfx canister call --type idl --output idl demo demo_candid_type_float64s '(0.1
 #include "ic_api.h"
 
 void demo_candid_type_float64() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
   double in{0.0};
@@ -29,7 +29,7 @@ void demo_candid_type_float64() {
 }
 
 void demo_candid_type_float64s() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
   double in1{0.0};

@@ -18,7 +18,7 @@ $ dfx canister call --type idl --output idl demo demo_candid_type_nat64s '(101 :
 #include "ic_api.h"
 
 void demo_candid_type_nat64() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
   uint64_t in{0};
@@ -29,7 +29,7 @@ void demo_candid_type_nat64() {
 }
 
 void demo_candid_type_nat64s() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
   uint64_t in1{0};

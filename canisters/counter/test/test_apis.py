@@ -105,6 +105,7 @@ def test__counter_vec(network: str) -> None:
     expected_response = "(vec { 11 : nat64; 11 : nat64;})"
     assert response == expected_response
 
+
 def test__counter_for_caller(network: str) -> None:
     # for IC network, the update calls take longer
     update_timeout_seconds = 3

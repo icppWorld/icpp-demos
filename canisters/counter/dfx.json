@@ -5,7 +5,7 @@
       "type": "custom",
       "candid": "src/counter.did",
       "wasm": "build/counter.wasm",
-      "build": "icpp build-wasm --to-compile all"
+      "build": "icpp build-wasm --to-compile mine"
     }
   },
   "defaults": {

@@ -8,7 +8,7 @@ $ dfx canister call --type idl --output idl demo demo_get_caller '()'
 #include "ic_api.h"
 
 void demo_get_caller() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
 
   // The caller's authenticated principal
   // - The calling message was signed using the caller's private key

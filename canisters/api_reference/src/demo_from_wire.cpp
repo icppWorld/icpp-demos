@@ -14,7 +14,7 @@ $ dfx canister call --type idl --output idl demo demo_from_wire_multiple_args '(
 #include "ic_api.h"
 
 void demo_from_wire_no_arg() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
   ic_api.from_wire();
@@ -22,7 +22,7 @@ void demo_from_wire_no_arg() {
 }
 
 void demo_from_wire_one_arg() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
   std::string hobby{""};
@@ -36,7 +36,7 @@ void demo_from_wire_one_arg() {
 }
 
 void demo_from_wire_multiple_args() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
   std::string hobby{""};

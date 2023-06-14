@@ -52,7 +52,7 @@ $ dfx canister call --type idl --output idl demo demo_candid_type_opts '(opt (tr
 #include "ic_api.h"
 
 void demo_candid_type_opt() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
   std::optional<bool> in;
@@ -71,7 +71,7 @@ void demo_candid_type_opt() {
 }
 
 void demo_candid_type_opts() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
   // ---------------------------------------------------------------------------

@@ -18,7 +18,7 @@ $ dfx canister call --type idl --output idl demo demo_candid_type_texts '("demo 
 #include "ic_api.h"
 
 void demo_candid_type_text() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
   std::string in{""};
@@ -30,7 +30,7 @@ void demo_candid_type_text() {
 }
 
 void demo_candid_type_texts() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
   std::string in1{""};

@@ -7,12 +7,13 @@
 
 #include <unordered_map>
 
+// State of the Smart Contract, using Orthogonal Persistence
 // For Orthogonal Persistence to work, the data must be managed at a global level
 std::pair<std::string, uint64_t> *p_counter_ump = nullptr;
 __uint128_t len_counter_ump = 0;
 
 void inc_counter_for_caller() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterUpdate{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
   std::string principal = caller.get_text();
 
@@ -29,7 +30,7 @@ void inc_counter_for_caller() {
 }
 
 void read_counter_for_caller() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
   std::string principal = caller.get_text();
 
@@ -41,7 +42,7 @@ void read_counter_for_caller() {
 }
 
 void write_counter_for_caller() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterUpdate{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
   std::string principal = caller.get_text();
 
@@ -63,7 +64,7 @@ void write_counter_for_caller() {
 
 // Calling a query function does NOT persist between calls. Try it out...
 void inc_query_counter_for_caller() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
   std::string principal = caller.get_text();
 

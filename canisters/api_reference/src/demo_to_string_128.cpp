@@ -19,7 +19,7 @@ $ dfx canister call --type idl --output idl demo demo_to_string_128 '()'
 #include "ic_api.h"
 
 void demo_to_string_128() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
   // -------------------------------------------------------------------------

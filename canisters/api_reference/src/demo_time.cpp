@@ -41,7 +41,7 @@ std::string format_time(uint64_t time_in_ns) {
 }
 
 void demo_time() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
   uint64_t time_in_ns = ic_api.time();

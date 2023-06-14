@@ -18,7 +18,7 @@ $ dfx canister call --type idl --output idl demo demo_candid_type_ints '(101 : i
 #include "ic_api.h"
 
 void demo_candid_type_int() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
   __int128_t in{0};
@@ -29,7 +29,7 @@ void demo_candid_type_int() {
 }
 
 void demo_candid_type_ints() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
   __int128_t in1{0};

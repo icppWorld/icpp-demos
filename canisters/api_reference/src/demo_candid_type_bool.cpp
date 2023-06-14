@@ -18,7 +18,7 @@ $ dfx canister call --type idl --output idl demo demo_candid_type_bools '(true, 
 #include "ic_api.h"
 
 void demo_candid_type_bool() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
   bool in{false};
@@ -29,7 +29,7 @@ void demo_candid_type_bool() {
 }
 
 void demo_candid_type_bools() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
   bool in1{false};

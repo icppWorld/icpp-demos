@@ -18,7 +18,7 @@ $ dfx canister call --type idl --output idl demo demo_candid_type_principals '(p
 #include "ic_api.h"
 
 void demo_candid_type_principal() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
 
   // The caller's authenticated principal
   // - The calling message was signed using the caller's private key
@@ -37,7 +37,7 @@ void demo_candid_type_principal() {
 }
 
 void demo_candid_type_principals() {
-  IC_API ic_api(false);
+  IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
   std::string in1{""};

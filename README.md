@@ -10,6 +10,7 @@ Each sub folder of `canisters` is a standalone icpp-pro development project.
 
 | canister      | content                                                      |
 | ------------- | ------------------------------------------------------------ |
+| counter       | Demonstrates Orthogonal Persistence for several data structures |
 | api_reference | The [api-reference docs](https://docs.icpp.world/api-reference.html) example code. |
 
 ## Setup

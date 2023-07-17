@@ -34,17 +34,17 @@ void demo_candid_type_float64s() {
 
   double in1{0.0};
   double in2{0.0};
-  std::vector<CandidType> args_in;
-  args_in.push_back(CandidTypeFloat64(&in1));
-  args_in.push_back(CandidTypeFloat64(&in2));
+  CandidArgs args_in;
+  args_in.append(CandidTypeFloat64(&in1));
+  args_in.append(CandidTypeFloat64(&in2));
   ic_api.from_wire(args_in);
 
   IC_API::debug_print("Method " + std::string(__func__) + " received values '" +
                       std::to_string(in1) + "' & '" + std::to_string(in2) +
                       "'");
 
-  std::vector<CandidType> args_out;
-  args_out.push_back(CandidTypeFloat64(in1));
-  args_out.push_back(CandidTypeFloat64(in2));
+  CandidArgs args_out;
+  args_out.append(CandidTypeFloat64(in1));
+  args_out.append(CandidTypeFloat64(in2));
   ic_api.to_wire(args_out);
 }

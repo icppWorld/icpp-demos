@@ -1,15 +1,40 @@
 #!/bin/sh
 
-echo "------------------------------------------"
-echo "Starting a clean local network"
+#######################################################################
+# This is a Linux & Mac shell script
+#
+# (-) Install icpp-pro or icpp-free in a python environment
+# (-) Install dfx
+# (-) In a terminal:
+#
+#     ./demo.sh
+#
+#######################################################################
+echo " "
+echo "--------------------------------------------------"
+echo "Stopping the local network"
 dfx stop
+
+echo " "
+echo "--------------------------------------------------"
+echo "Starting the local network as a background process"
 dfx start --clean --background
 
-echo "------------------------------------------"
-echo "Building & deploying the canister"
+#######################################################################
+echo "--------------------------------------------------"
+echo "Building the wasm with wasi-sdk"
+icpp build-wasm --to-compile all
+# icpp build-wasm --to-compile mine
+
+#######################################################################
+echo " "
+echo "--------------------------------------------------"
+echo "Deploying the wasm to a canister on the local network"
 dfx deploy
 
-echo "------------------------------------------"
+#######################################################################
+echo " "
+echo "--------------------------------------------------"
 echo "Testing counter with dfx"
 dfx canister call counter read
 dfx canister call counter inc
@@ -19,7 +44,9 @@ dfx canister call counter read
 dfx canister call counter inc_query
 dfx canister call counter read
 
-echo "------------------------------------------"
+#######################################################################
+echo " "
+echo "--------------------------------------------------"
 echo "Testing counter_vec with dfx"
 dfx canister call counter read_counter_vec
 dfx canister call counter write_counter_vec '(vec { 10 : nat64; 10 : nat64 })'
@@ -27,6 +54,26 @@ dfx canister call counter read_counter_vec
 dfx canister call counter inc_query_counter_vec
 dfx canister call counter read_counter_vec
 
-echo "------------------------------------------"
-echo "Running the smoketests (requires icpp-pro)"
+#######################################################################
+echo " "
+echo "--------------------------------------------------"
+echo "Running the full smoketests with pytest"
 pytest --network=local
+
+#######################################################################
+echo "--------------------------------------------------"
+echo "Stopping the local network"
+dfx stop
+
+#######################################################################
+echo " "
+echo "--------------------------------------------------"
+echo "Building the OS native debug executable with clang++"
+icpp build-native --to-compile all
+# icpp build-native --to-compile mine
+
+#######################################################################
+echo " "
+echo "--------------------------------------------------"
+echo "Running the OS native debug executable"
+./build-native/mockic.exe

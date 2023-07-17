@@ -92,22 +92,22 @@ void demo_candid_type_opts() {
   std::optional<std::string> in_principal;
   std::optional<std::string> in_text;
 
-  std::vector<CandidType> args_in;
-  args_in.push_back(CandidTypeOptBool{&in_bool});
-  args_in.push_back(CandidTypeOptFloat32{&in_float32});
-  args_in.push_back(CandidTypeOptFloat64{&in_float64});
-  args_in.push_back(CandidTypeOptInt8{&in_int8});
-  args_in.push_back(CandidTypeOptInt16{&in_int16});
-  args_in.push_back(CandidTypeOptInt32{&in_int32});
-  args_in.push_back(CandidTypeOptInt64{&in_int64});
-  args_in.push_back(CandidTypeOptInt{&in_int});
-  args_in.push_back(CandidTypeOptNat8{&in_nat8});
-  args_in.push_back(CandidTypeOptNat16{&in_nat16});
-  args_in.push_back(CandidTypeOptNat32{&in_nat32});
-  args_in.push_back(CandidTypeOptNat64{&in_nat64});
-  args_in.push_back(CandidTypeOptNat{&in_nat});
-  args_in.push_back(CandidTypeOptPrincipal{&in_principal});
-  args_in.push_back(CandidTypeOptText{&in_text});
+  CandidArgs args_in;
+  args_in.append(CandidTypeOptBool{&in_bool});
+  args_in.append(CandidTypeOptFloat32{&in_float32});
+  args_in.append(CandidTypeOptFloat64{&in_float64});
+  args_in.append(CandidTypeOptInt8{&in_int8});
+  args_in.append(CandidTypeOptInt16{&in_int16});
+  args_in.append(CandidTypeOptInt32{&in_int32});
+  args_in.append(CandidTypeOptInt64{&in_int64});
+  args_in.append(CandidTypeOptInt{&in_int});
+  args_in.append(CandidTypeOptNat8{&in_nat8});
+  args_in.append(CandidTypeOptNat16{&in_nat16});
+  args_in.append(CandidTypeOptNat32{&in_nat32});
+  args_in.append(CandidTypeOptNat64{&in_nat64});
+  args_in.append(CandidTypeOptNat{&in_nat});
+  args_in.append(CandidTypeOptPrincipal{&in_principal});
+  args_in.append(CandidTypeOptText{&in_text});
 
   ic_api.from_wire(args_in);
 
@@ -249,21 +249,21 @@ void demo_candid_type_opts() {
 
   // ---------------------------------------------------------------------------
   // Return the data
-  std::vector<CandidType> args_out;
-  args_out.push_back(CandidTypeOptBool{in_bool});
-  args_out.push_back(CandidTypeOptFloat32{in_float32});
-  args_out.push_back(CandidTypeOptFloat64{in_float64});
-  args_out.push_back(CandidTypeOptInt8{in_int8});
-  args_out.push_back(CandidTypeOptInt16{in_int16});
-  args_out.push_back(CandidTypeOptInt32{in_int32});
-  args_out.push_back(CandidTypeOptInt64{in_int64});
-  args_out.push_back(CandidTypeOptInt{in_int});
-  args_out.push_back(CandidTypeOptNat8{in_nat8});
-  args_out.push_back(CandidTypeOptNat16{in_nat16});
-  args_out.push_back(CandidTypeOptNat32{in_nat32});
-  args_out.push_back(CandidTypeOptNat64{in_nat64});
-  args_out.push_back(CandidTypeOptNat{in_nat});
-  args_out.push_back(CandidTypeOptPrincipal{in_principal});
-  args_out.push_back(CandidTypeOptText{in_text});
+  CandidArgs args_out;
+  args_out.append(CandidTypeOptBool{in_bool});
+  args_out.append(CandidTypeOptFloat32{in_float32});
+  args_out.append(CandidTypeOptFloat64{in_float64});
+  args_out.append(CandidTypeOptInt8{in_int8});
+  args_out.append(CandidTypeOptInt16{in_int16});
+  args_out.append(CandidTypeOptInt32{in_int32});
+  args_out.append(CandidTypeOptInt64{in_int64});
+  args_out.append(CandidTypeOptInt{in_int});
+  args_out.append(CandidTypeOptNat8{in_nat8});
+  args_out.append(CandidTypeOptNat16{in_nat16});
+  args_out.append(CandidTypeOptNat32{in_nat32});
+  args_out.append(CandidTypeOptNat64{in_nat64});
+  args_out.append(CandidTypeOptNat{in_nat});
+  args_out.append(CandidTypeOptPrincipal{in_principal});
+  args_out.append(CandidTypeOptText{in_text});
   ic_api.to_wire(args_out);
 }

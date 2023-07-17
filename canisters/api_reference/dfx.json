@@ -4,8 +4,7 @@
     "demo": {
       "type": "custom",
       "candid": "src/demo.did",
-      "wasm": "build/demo.wasm",
-      "build": "icpp build-wasm --to-compile all"
+      "wasm": "build/demo.wasm"
     }
   },
   "defaults": {

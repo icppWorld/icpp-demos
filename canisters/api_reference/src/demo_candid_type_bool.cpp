@@ -34,17 +34,17 @@ void demo_candid_type_bools() {
 
   bool in1{false};
   bool in2{false};
-  std::vector<CandidType> args_in;
-  args_in.push_back(CandidTypeBool(&in1));
-  args_in.push_back(CandidTypeBool(&in2));
+  CandidArgs args_in;
+  args_in.append(CandidTypeBool(&in1));
+  args_in.append(CandidTypeBool(&in2));
   ic_api.from_wire(args_in);
 
   IC_API::debug_print("Method " + std::string(__func__) + " received values '" +
                       std::to_string(in1) + "' & '" + std::to_string(in2) +
                       "'");
 
-  std::vector<CandidType> args_out;
-  args_out.push_back(CandidTypeBool(in1));
-  args_out.push_back(CandidTypeBool(in2));
+  CandidArgs args_out;
+  args_out.append(CandidTypeBool(in1));
+  args_out.append(CandidTypeBool(in2));
   ic_api.to_wire(args_out);
 }

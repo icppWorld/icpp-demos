@@ -6,3 +6,8 @@ This folder contains all the code used in the icpp-pro api-reference docs, compl
 
 - See this [README.md](https://github.com/icppWorld/icpp-demos#readme) for build & deployment instructions.
 
+## To run the demos
+
+- [Install](https://docs.icpp.world/installation.html)
+- run `.\demo.ps1` in Windows PowerShell (Miniconda recommended)
+- run `./demo.sh`  on Linux / Mac

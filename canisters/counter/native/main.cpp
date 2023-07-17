@@ -10,7 +10,6 @@
 #include "../src/counter_vec.h"
 
 // The Mock IC
-#include "global.h"
 #include "mock_ic.h"
 
 int main() {

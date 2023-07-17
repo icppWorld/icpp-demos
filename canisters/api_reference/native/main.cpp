@@ -39,7 +39,6 @@
 // clang-format on
 
 // The Mock IC
-#include "global.h"
 #include "mock_ic.h"
 
 int main() {

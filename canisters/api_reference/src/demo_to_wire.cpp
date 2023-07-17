@@ -41,15 +41,15 @@ void demo_to_wire_multiple_args() {
 
   std::string hobby{""};
   uint64_t num_icp{0};
-  std::vector<CandidType> args_in;
-  args_in.push_back(CandidTypeText(&hobby));
-  args_in.push_back(CandidTypeNat64(&num_icp));
+  CandidArgs args_in;
+  args_in.append(CandidTypeText(&hobby));
+  args_in.append(CandidTypeNat64(&num_icp));
   ic_api.from_wire(args_in);
 
-  std::vector<CandidType> args_out;
-  args_out.push_back(CandidTypeText(caller.get_text()));
-  args_out.push_back(CandidTypeText(hobby));
-  args_out.push_back(CandidTypeNat64(num_icp));
-  args_out.push_back(CandidTypeText("ICP"));
+  CandidArgs args_out;
+  args_out.append(CandidTypeText(caller.get_text()));
+  args_out.append(CandidTypeText(hobby));
+  args_out.append(CandidTypeNat64(num_icp));
+  args_out.append(CandidTypeText("ICP"));
   ic_api.to_wire(args_out);
 }

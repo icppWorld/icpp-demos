@@ -34,17 +34,17 @@ void demo_candid_type_nats() {
 
   __uint128_t in1{0};
   __uint128_t in2{0};
-  std::vector<CandidType> args_in;
-  args_in.push_back(CandidTypeNat(&in1));
-  args_in.push_back(CandidTypeNat(&in2));
+  CandidArgs args_in;
+  args_in.append(CandidTypeNat(&in1));
+  args_in.append(CandidTypeNat(&in2));
   ic_api.from_wire(args_in);
 
   IC_API::debug_print("Method " + std::string(__func__) + " received values '" +
                       IC_API::to_string_128(in1) + "' & '" +
                       IC_API::to_string_128(in2) + "'");
 
-  std::vector<CandidType> args_out;
-  args_out.push_back(CandidTypeNat(in1));
-  args_out.push_back(CandidTypeNat(in2));
+  CandidArgs args_out;
+  args_out.append(CandidTypeNat(in1));
+  args_out.append(CandidTypeNat(in2));
   ic_api.to_wire(args_out);
 }

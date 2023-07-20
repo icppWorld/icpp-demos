@@ -18,6 +18,7 @@ cpp_paths         = [
                         "src/demo_candid_type_nat.cpp",
                         "src/demo_candid_type_opt.cpp",
                         "src/demo_candid_type_principal.cpp",
+                        "src/demo_candid_type_record.cpp",
                         "src/demo_candid_type_text.cpp",
                         # IC_API - ic0 system interface
                         "src/demo_debug_print.cpp",
@@ -48,6 +49,7 @@ cpp_header_paths  = [
                         "src/demo_candid_type_nat.h",
                         "src/demo_candid_type_opt.h",
                         "src/demo_candid_type_principal.h",
+                        "src/demo_candid_type_record.h",
                         "src/demo_candid_type_text.h",
                         # IC_API - ic0 system interface
                         "src/demo_debug_print.h",

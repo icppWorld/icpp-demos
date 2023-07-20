@@ -23,6 +23,7 @@
 #include "../src/demo_candid_type_nat.h"
 #include "../src/demo_candid_type_opt.h"
 #include "../src/demo_candid_type_principal.h"
+#include "../src/demo_candid_type_record.h"
 #include "../src/demo_candid_type_text.h"
 
 #include "../src/demo_debug_print.h"
@@ -219,6 +220,21 @@ int main() {
                   "4449444c0002686801010001020102",
                   "4449444c0002686801010001020102", silent_on_trap,
                   my_principal);
+
+  // '(record {"field 1" = true : bool; "field 2" = 0.1 : float32; "field 3" = 0.2 : float64; "field 4" = -8 : int8; "field 5" = -16 : int16; "field 6" = -32 : int32; "field 7" = -64 : int64; "field 8" = -128 : int; "field 9" = 8 : nat8; "field 10" = 16 : nat16; "field A" = 32 : nat32; "field B" = 64 : nat64; "field C" = 128 : nat; "field D" = principal "2ibo7-dia"; "field E" = "demo" : text;})'
+  // -> same
+  mockIC.run_test(
+      "demo_candid_type_record", demo_candid_type_record,
+      "4449444c016c0f859dacdf0a7acba6b7e10f7ecca6b7e10f73cda6b7e10f72cea6b7e10f77cfa6b7e10f76d0a6b7e10f75d1a6b7e10f74d2a6b7e10f7cd3a6b7e10f7bdba6b7e10f79dca6b7e10f78dda6b7e10f7ddea6b7e10f68dfa6b7e10f710100100001cdcccc3d9a9999999999c93ff8f0ffe0ffffffc0ffffffffffffff807f0820000000400000000000000080010101000464656d6f",
+      "4449444c016c0f859dacdf0a7acba6b7e10f7ecca6b7e10f73cda6b7e10f72cea6b7e10f77cfa6b7e10f76d0a6b7e10f75d1a6b7e10f74d2a6b7e10f7cd3a6b7e10f7bdba6b7e10f79dca6b7e10f78dda6b7e10f7ddea6b7e10f68dfa6b7e10f710100100001cdcccc3d9a9999999999c93ff8f0ffe0ffffffc0ffffffffffffff807f0820000000400000000000000080010101000464656d6f",
+      silent_on_trap, my_principal);
+
+  // '(record {"field 1A" = -8 : int8;}, record {"field 2A" = -16 : int16;})'
+  // -> same
+  mockIC.run_test("demo_candid_type_records", demo_candid_type_records,
+                  "4449444c026c01969dacdf0a776c01f59eacdf0a76020001f8f0ff",
+                  "4449444c026c01969dacdf0a776c01f59eacdf0a76020001f8f0ff",
+                  silent_on_trap, my_principal);
 
   // '("demo A" : text)' -> '("demo A" : text)'
   mockIC.run_test("demo_candid_type_text", demo_candid_type_text,

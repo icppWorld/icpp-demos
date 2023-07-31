@@ -47,16 +47,6 @@ dfx canister call counter read
 #######################################################################
 echo " "
 echo "--------------------------------------------------"
-echo "Testing counter_vec with dfx"
-dfx canister call counter read_counter_vec
-dfx canister call counter write_counter_vec '(vec { 10 : nat64; 10 : nat64 })'
-dfx canister call counter read_counter_vec
-dfx canister call counter inc_query_counter_vec
-dfx canister call counter read_counter_vec
-
-#######################################################################
-echo " "
-echo "--------------------------------------------------"
 echo "Running the full smoketests with pytest"
 pytest --network=local
 

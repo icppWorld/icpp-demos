@@ -70,16 +70,6 @@ wsl --% dfx canister call counter read
 #######################################################################
 Write-Host " "
 Write-Host "--------------------------------------------------"
-Write-Host "Testing counter_vec with dfx"
-wsl --% dfx canister call counter read_counter_vec
-wsl --% dfx canister call counter write_counter_vec '(vec { 10 : nat64; 10 : nat64 })'
-wsl --% dfx canister call counter read_counter_vec
-wsl --% dfx canister call counter inc_query_counter_vec
-wsl --% dfx canister call counter read_counter_vec
-
-#######################################################################
-Write-Host " "
-Write-Host "--------------------------------------------------"
 Write-Host "Running the full smoketests with pytest"
 pytest --network=local
 

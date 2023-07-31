@@ -3,12 +3,10 @@ canister          = "counter"
 did_path          = "src/counter.did"
 cpp_paths         = [
                         "src/counter.cpp",
-                        "src/counter_vec.cpp",
                         "src/counter_for_caller.cpp",
                     ]
 cpp_header_paths  = [
                         "src/counter.h",
-                        "src/counter_vec.h",
                         "src/counter_for_caller.cpp",
                     ]
 cpp_compile_flags = []

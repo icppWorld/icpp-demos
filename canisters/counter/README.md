@@ -1,6 +1,4 @@
-# `counter`
-
-Demonstrations of update calls and orthogonal persistence in C++ Smart Contracts.
+# counter: An Orthogonal Persistence demo for uint64_t
 
 - [Install](https://docs.icpp.world/installation.html)
 - run `.\demo.ps1` in Windows PowerShell (Miniconda recommended)

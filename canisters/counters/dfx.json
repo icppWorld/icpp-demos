@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "canisters": {
+    "counters": {
+      "type": "custom",
+      "candid": "src/counters.did",
+      "wasm": "build/counters.wasm"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  }
+}

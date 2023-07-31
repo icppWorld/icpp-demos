@@ -1,0 +1,8 @@
+service : {
+  // docs start: demo_counters
+  canister_init: () -> ();
+  write_counters: (vec nat64) -> ();
+  additional_counters: (vec nat64) -> ();
+  inc_counters: () -> ();
+  read_counters: () -> (vec nat64) query; // docs end: demo_counters
+}

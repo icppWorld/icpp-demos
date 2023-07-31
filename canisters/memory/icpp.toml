@@ -1,0 +1,22 @@
+[build-wasm]
+canister          = "memory"
+did_path          = "src/memory.did"
+cpp_paths         = [
+                        "src/memory.cpp",
+                    ]
+cpp_header_paths  = [
+                        "src/memory.h",
+                    ]
+cpp_compile_flags = []
+cpp_link_flags    = []
+c_paths           = []
+c_header_paths    = []
+c_compile_flags   = []
+[build-native]
+cpp_paths         = ["native/main.cpp"]
+cpp_header_paths  = ["native/main.h"]
+cpp_compile_flags = []
+cpp_link_flags    = []
+c_paths           = []
+c_header_paths    = []
+c_compile_flags   = []

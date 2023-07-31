@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "canisters": {
+    "memory": {
+      "type": "custom",
+      "candid": "src/memory.did",
+      "wasm": "build/memory.wasm"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  }
+}

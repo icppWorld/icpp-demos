@@ -1,0 +1,5 @@
+service : {
+  // docs start: demo_memory
+  "change_memory": () -> ();
+  "print_memory": () -> () query; // docs end: demo_memory
+}

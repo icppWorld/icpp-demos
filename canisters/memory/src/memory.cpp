@@ -28,7 +28,7 @@ uint64_t *p_cf_i1{nullptr};
 // -- vector
 std::vector<uint64_t> *p_vec1{nullptr};
 // -- string
-std::string *p_str1;
+std::string *p_str1{nullptr};
 
 // -- vector wrapped in a class
 class MyVec {

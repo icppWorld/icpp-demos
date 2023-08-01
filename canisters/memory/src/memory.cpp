@@ -25,14 +25,25 @@ uint64_t *p_nd_i1{nullptr};
 uint64_t *p_cf_i1{nullptr};
 
 // Self managed pointers to STL containters or wrapped STL containers
+// -- vector
 std::vector<uint64_t> *p_vec1{nullptr};
+// -- string
+std::string *p_str1;
 
+// -- vector wrapped in a class
 class MyVec {
 public:
   MyVec() : vec{0, 0} {}
   std::vector<uint64_t> vec;
 };
 MyVec *p_vec2{nullptr};
+
+// -- string wrapped in a class
+class MyString {
+public:
+  std::string str;
+};
+MyString *p_str2{nullptr};
 
 // --
 // These do NOT work.
@@ -57,9 +68,18 @@ void new_memory() {
   if (p_vec1 == nullptr) {
     IC_API::trap("Allocation of p_vec1 failed");
   }
+  p_str1 = new (std::nothrow) std::string();
+  if (p_str1 == nullptr) {
+    IC_API::trap("Allocation of p_str1 failed");
+  }
+
   p_vec2 = new (std::nothrow) MyVec();
   if (p_vec2 == nullptr) {
     IC_API::trap("Allocation of p_vec2 failed");
+  }
+  p_str2 = new (std::nothrow) MyString();
+  if (p_str2 == nullptr) {
+    IC_API::trap("Allocation of p_str2 failed");
   }
 }
 
@@ -76,9 +96,18 @@ void delete_memory() {
     delete p_vec1;
     p_vec1 = nullptr;
   }
+  if (p_str1) {
+    delete p_str1;
+    p_str1 = nullptr;
+  }
+
   if (p_vec2) {
     delete p_vec2;
     p_vec2 = nullptr;
+  }
+  if (p_str2) {
+    delete p_str2;
+    p_str2 = nullptr;
   }
 }
 
@@ -97,8 +126,12 @@ void change_it() {
   ++(*p_vec1)[0];
   ++(*p_vec1)[1];
 
+  *p_str1 = "String value: '" + std::to_string(i1) + "'";
+
   ++p_vec2->vec[0];
   ++p_vec2->vec[1];
+
+  p_str2->str = "String value: '" + std::to_string(i1) + "'";
 
   // Outcomment if you want to test
   // ++vec1[0];
@@ -108,12 +141,12 @@ void change_it() {
   // ++vec101.vec[1];
 }
 
-void print_it(std::string caller) {
+void print_it(std::string calling_function) {
   char buffer[200]; // Make sure the buffer is large enough
-  std::string pointer_string;
+  std::string address;
 
   IC_API::debug_print("------");
-  IC_API::debug_print(caller + ":");
+  IC_API::debug_print(calling_function + ":");
 
   IC_API::debug_print(" ");
   IC_API::debug_print("i1 = " + std::to_string(i1));
@@ -123,22 +156,22 @@ void print_it(std::string caller) {
   IC_API::debug_print("arr1[0] = " + std::to_string(arr1[0]));
   IC_API::debug_print("arr1[1] = " + std::to_string(arr1[1]));
   std::snprintf(buffer, sizeof(buffer), "%p", static_cast<void *>(arr1.data()));
-  pointer_string = buffer;
-  IC_API::debug_print("arr1.data() address = " + pointer_string);
+  address = buffer;
+  IC_API::debug_print("arr1.data() address = " + address);
 
   IC_API::debug_print(" ");
   IC_API::debug_print("p_nd_i1[0] = " + std::to_string(p_nd_i1[0]));
   IC_API::debug_print("p_nd_i1[1] = " + std::to_string(p_nd_i1[1]));
   std::snprintf(buffer, sizeof(buffer), "%p", static_cast<void *>(p_nd_i1));
-  pointer_string = buffer;
-  IC_API::debug_print("p_nd_i1 address = " + pointer_string);
+  address = buffer;
+  IC_API::debug_print("p_nd_i1 address = " + address);
 
   IC_API::debug_print(" ");
   IC_API::debug_print("p_cf_i1[0] = " + std::to_string(p_cf_i1[0]));
   IC_API::debug_print("p_cf_i1[1] = " + std::to_string(p_cf_i1[1]));
   std::snprintf(buffer, sizeof(buffer), "%p", static_cast<void *>(p_cf_i1));
-  pointer_string = buffer;
-  IC_API::debug_print("p_cf_i1 address = " + pointer_string);
+  address = buffer;
+  IC_API::debug_print("p_cf_i1 address = " + address);
 
   IC_API::debug_print(" ");
   IC_API::debug_print("(*p_vec1).size() = " + std::to_string((*p_vec1).size()));
@@ -146,8 +179,14 @@ void print_it(std::string caller) {
   IC_API::debug_print("(*p_vec1)[1] = " + std::to_string((*p_vec1)[1]));
   std::snprintf(buffer, sizeof(buffer), "%p",
                 static_cast<void *>((*p_vec1).data()));
-  pointer_string = buffer;
-  IC_API::debug_print("(*p_vec1).data() address = " + pointer_string);
+  address = buffer;
+  IC_API::debug_print("(*p_vec1).data() address = " + address);
+
+  IC_API::debug_print(" ");
+  IC_API::debug_print("p_str1 content = " + *p_str1);
+  std::snprintf(buffer, sizeof(buffer), "%p", static_cast<void *>(p_str1));
+  address = buffer;
+  IC_API::debug_print("p_str1 address = " + address);
 
   IC_API::debug_print(" ");
   IC_API::debug_print("p_vec2->vec.size() = " +
@@ -156,8 +195,14 @@ void print_it(std::string caller) {
   IC_API::debug_print("p_vec2->vec[1] = " + std::to_string(p_vec2->vec[1]));
   std::snprintf(buffer, sizeof(buffer), "%p",
                 static_cast<void *>(p_vec2->vec.data()));
-  pointer_string = buffer;
-  IC_API::debug_print("p_vec2->vec.data() address = " + pointer_string);
+  address = buffer;
+  IC_API::debug_print("p_vec2->vec.data() address = " + address);
+
+  IC_API::debug_print(" ");
+  IC_API::debug_print("p_str2->str content = " + p_str2->str);
+  std::snprintf(buffer, sizeof(buffer), "%p", static_cast<void *>(p_str2));
+  address = buffer;
+  IC_API::debug_print("p_str2 address = " + address);
 
   // Outcomment if you want to test
   // IC_API::debug_print(" ");
@@ -165,8 +210,8 @@ void print_it(std::string caller) {
   // IC_API::debug_print("vec1[0] = " + std::to_string(vec1[0]));
   // IC_API::debug_print("vec1[1] = " + std::to_string(vec1[1]));
   // std::snprintf(buffer, sizeof(buffer), "%p", static_cast<void *>(vec1.data()));
-  // pointer_string = buffer;
-  // IC_API::debug_print("vec1.data() address = " + pointer_string);
+  // address = buffer;
+  // IC_API::debug_print("vec1.data() address = " + address);
 
   // IC_API::debug_print(" ");
   // IC_API::debug_print("vec101.vec.size() = " +
@@ -175,8 +220,8 @@ void print_it(std::string caller) {
   // IC_API::debug_print("vec101.vec[1] = " + std::to_string(vec101.vec[1]));
   // std::snprintf(buffer, sizeof(buffer), "%p",
   //               static_cast<void *>(vec101.vec.data()));
-  // pointer_string = buffer;
-  // IC_API::debug_print("vec101.vec.data() address = " + pointer_string);
+  // address = buffer;
+  // IC_API::debug_print("vec101.vec.data() address = " + address);
 }
 
 // -----------------------------------------------------------------------

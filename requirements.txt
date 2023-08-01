@@ -1,4 +1,9 @@
 icpp-pro
+
+# llama2 canister
+numpy
+
+# to lint python scripts
 black
 pylint==2.13.9
 mypy

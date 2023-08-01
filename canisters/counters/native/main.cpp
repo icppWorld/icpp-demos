@@ -52,4 +52,8 @@ int main() {
       "read_counters", read_counters, "4449444c0000",
       "4449444c016d780100040c000000000000000c000000000000000b000000000000000b00000000000000",
       silent_on_trap, my_principal);
+
+  // -----------------------------------------------------------------------------
+  // returns 1 if any tests failed
+  return mockIC.test_summary();
 }

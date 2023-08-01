@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "canisters": {
+    "counter4me": {
+      "type": "custom",
+      "candid": "src/counter4me.did",
+      "wasm": "build/counter4me.wasm"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  }
+}

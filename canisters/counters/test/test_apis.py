@@ -5,7 +5,7 @@
    $ pytest --network=[local/ic]
 
 """
-# pylint: disable=missing-function-docstring, unused-import, wildcard-import, unused-wildcard-import, line-too-long
+# pylint: disable=missing-function-docstring, unused-import, wildcard-import, unused-wildcard-import, line-too-long, unused-argument
 
 from pathlib import Path
 import pytest
@@ -18,7 +18,7 @@ DFX_JSON_PATH = Path(__file__).parent / "../dfx.json"
 CANISTER_NAME = "counters"
 
 
-def test__counters(network: str) -> None:
+def test__counters(identity_default: dict[str, str], network: str) -> None:
     # for IC network, the update calls take longer
     update_timeout_seconds = 3
     if network == "ic":

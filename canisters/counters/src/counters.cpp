@@ -38,12 +38,16 @@ void delete_memory() {
   }
 }
 
-void print_counters(std::string caller) {
-  IC_API::debug_print("Called by " + caller);
-  IC_API::debug_print("p_counters->vec.size() = " +
-                      std::to_string(p_counters->vec.size()));
-  for (auto &value : p_counters->vec) {
-    IC_API::debug_print("value = " + std::to_string(value));
+void print_counters(std::string calling_function) {
+  IC_API::debug_print("Called by " + calling_function);
+  if (p_counters) {
+    IC_API::debug_print("p_counters->vec.size() = " +
+                        std::to_string(p_counters->vec.size()));
+    for (auto &value : p_counters->vec) {
+      IC_API::debug_print("value = " + std::to_string(value));
+    }
+  } else {
+    IC_API::debug_print("p_counters is null");
   }
 }
 
@@ -76,16 +80,18 @@ void additional_counters() {
   IC_API ic_api(CanisterUpdate{std::string(__func__)}, false);
   std::vector<uint64_t> v;
   ic_api.from_wire(CandidTypeVecNat64{&v});
-  p_counters->vec.insert(p_counters->vec.end(), v.begin(), v.end());
+  if (p_counters)
+    p_counters->vec.insert(p_counters->vec.end(), v.begin(), v.end());
   print_counters(std::string(__func__));
   ic_api.to_wire();
 }
 
 void inc_counters() {
   IC_API ic_api(CanisterUpdate{std::string(__func__)}, false);
-  for (auto &value : p_counters->vec) {
-    ++value;
-  }
+  if (p_counters)
+    for (auto &value : p_counters->vec) {
+      ++value;
+    }
   print_counters(std::string(__func__));
   ic_api.to_wire();
 }

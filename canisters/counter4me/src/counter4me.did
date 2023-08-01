@@ -1,0 +1,7 @@
+service : {
+  // docs start: demo_counter4me
+  canister_init: () -> ();
+  write_counter4me: (nat64) -> ();
+  inc_counter4me: () -> ();
+  read_counter4me: () -> (nat64) query; // docs end: demo_counter4me
+}

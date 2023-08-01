@@ -5,7 +5,7 @@
    $ pytest --network=[local/ic]
 
 """
-# pylint: disable=missing-function-docstring, unused-import, wildcard-import, unused-wildcard-import, line-too-long
+# pylint: disable=missing-function-docstring, unused-import, wildcard-import, unused-wildcard-import, line-too-long, unused-argument
 
 from pathlib import Path
 import pytest

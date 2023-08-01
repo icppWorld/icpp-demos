@@ -6,7 +6,6 @@
 #include <iostream>
 
 #include "../src/counter.h"
-#include "../src/counter_for_caller.h"
 
 // The Mock IC
 #include "mock_ic.h"
@@ -35,21 +34,7 @@ int main() {
                   "4449444c0001780b00000000000000", silent_on_trap,
                   my_principal);
 
-  // --------------------------------------------------------------------
-  // Test the counter stored in static std::unordered_map
-  // We send a vec of counters, that are stored for the caller's principal
-
-  // '(10: nat64)' -> '()'
-  mockIC.run_test("write_counter_for_caller", write_counter_for_caller,
-                  "4449444c0001780a00000000000000", "", silent_on_trap,
-                  my_principal);
-
-  // '()' -> '()'
-  mockIC.run_test("inc_counter_for_caller", inc_counter_for_caller,
-                  "4449444c0000", "", silent_on_trap, my_principal);
-
-  // '()' -> '(11: nat64)'
-  mockIC.run_test("read_counter_for_caller", read_counter_for_caller,
-                  "4449444c0000", "4449444c0001780b00000000000000",
-                  silent_on_trap, my_principal);
+  // -----------------------------------------------------------------------------
+  // returns 1 if any tests failed
+  return mockIC.test_summary();
 }

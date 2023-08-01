@@ -46,17 +46,16 @@ CLANG_TIDY = $(ICPP_COMPILER_ROOT)/bin/clang-tidy
 # CI/CD - Phony Makefile targets
 #
 .PHONY: all-tests
-all-tests: all-static all-canister-native all-canister-deploy-local-pytest 
+all-tests: all-static all-canisters 
 	
-.PHONY: all-canister-deploy-local-pytest
-all-canister-deploy-local-pytest:
+.PHONY: all-canisters
+all-canisters:
 	dfx identity use default
-	@python -m scripts.all_canister_deploy_local_pytest
-
-.PHONY: all-canister-native
-all-canister-native:
-	@python -m scripts.all_canister_native
-
+	cd canisters/api_reference && ./demo.sh
+	cd canisters/counter && ./demo.sh
+	cd canisters/counter4me && ./demo.sh
+	cd canisters/counters && ./demo.sh
+	
 .PHONY: all-static
 all-static: \
 	cpp-format cpp-lint \

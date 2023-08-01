@@ -6,6 +6,8 @@ paths.txt
 .*.swp
 .DS_Store
 icpp-venv
+models
+canisters_wip
 
 # Windows
 .vs

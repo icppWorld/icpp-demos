@@ -28,4 +28,8 @@ int main() {
   // '()' -> '()'
   mockIC.run_test("print_memory", print_memory, "4449444c0000", "",
                   silent_on_trap, my_principal);
+
+  // -----------------------------------------------------------------------------
+  // returns 1 if any tests failed
+  return mockIC.test_summary();
 }

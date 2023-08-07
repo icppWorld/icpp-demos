@@ -36,5 +36,11 @@ Write-Host "Testing canisters\counters"
 Set-Location -Path ..\counters
 .\demo.ps1
 
+Write-Host " "
+Write-Host "--------------------------------------------------"
+Write-Host "Testing canisters\icpp_llama2"
+Set-Location -Path ..\icpp_llama2
+.\demo.ps1
+
 # Change directory back to the root
 Set-Location -Path ..\..

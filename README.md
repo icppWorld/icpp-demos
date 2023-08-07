@@ -8,8 +8,11 @@ Each sub folder of `canisters` contains a standalone icpp-pro project.
 
 | canister      | content                                                      |
 | ------------- | ------------------------------------------------------------ |
-| counter       | Demonstrates Orthogonal Persistence for several data structures |
 | api_reference | The [api-reference docs](https://docs.icpp.world/api-reference.html) example code. |
+| counter       | An Orthogonal Persistence demo for uint64_t |
+| counter4me    | An Orthogonal Persistence demo for std::unordered_map<std::string, uint64_t> |
+| counters      | An Orthogonal Persistence demo for std::vector |
+| memory        | Orthogonal Persistence of C++ Data Structures on the Internet Computer: A Study |
 
 ## Setup
 

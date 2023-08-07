@@ -27,15 +27,15 @@ std::string format_time(uint64_t time_in_ns) {
   std::string formatted_time = "";
   formatted_time += std::to_string(tm->tm_year + 1900); // Year
   formatted_time += "-";
-  formatted_time += std::to_string(tm->tm_mon + 1); // Month
+  formatted_time += std::to_string(tm->tm_mon + 1);     // Month
   formatted_time += "-";
-  formatted_time += std::to_string(tm->tm_mday); // Day
+  formatted_time += std::to_string(tm->tm_mday);        // Day
   formatted_time += " ";
-  formatted_time += std::to_string(tm->tm_hour); // Hour
+  formatted_time += std::to_string(tm->tm_hour);        // Hour
   formatted_time += ":";
-  formatted_time += std::to_string(tm->tm_min); // Minute
+  formatted_time += std::to_string(tm->tm_min);         // Minute
   formatted_time += ":";
-  formatted_time += std::to_string(tm->tm_sec); // Second
+  formatted_time += std::to_string(tm->tm_sec);         // Second
 
   return formatted_time;
 }

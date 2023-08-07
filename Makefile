@@ -38,7 +38,7 @@ VERSION_CLANG := $(shell cat version_clang.txt)
 
 ###########################################################################
 # Use some clang tools that come with wasi-sdk
-ICPP_COMPILER_ROOT := $(HOME)/.icpp/wasi-sdk-16.0
+ICPP_COMPILER_ROOT := $(HOME)/.icpp/wasi-sdk-20.0
 CLANG_FORMAT = $(ICPP_COMPILER_ROOT)/bin/clang-format
 CLANG_TIDY = $(ICPP_COMPILER_ROOT)/bin/clang-tidy
 
@@ -92,7 +92,7 @@ python-clean:
 	find . -name '*.pyo' -exec rm -f {} +
 	find . -name '*~' -exec rm -f  {} +
 
-PYTHON_DIRS ?= scripts canisters
+PYTHON_DIRS ?= canisters
 
 .PHONY: python-format
 python-format:
@@ -111,54 +111,3 @@ python-type:
 	@echo "---"
 	@echo "python-type"
 	python -m mypy --config-file .mypy.ini --show-column-numbers --strict --explicit-package-bases $(PYTHON_DIRS)
-
-
-###########################################################################
-# Toolchain installation for .github/workflows
-
-.PHONY: install-clang-ubuntu
-install-clang-ubuntu:
-	@echo "Installing clang-$(VERSION_CLANG) compiler"
-	sudo apt update && sudo apt install clang-$(VERSION_CLANG)
-
-	@echo "Creating soft links for compiler executables"
-	sudo ln --force -s /usr/bin/clang-$(VERSION_CLANG) /usr/bin/clang
-	sudo ln --force -s /usr/bin/clang++-$(VERSION_CLANG) /usr/bin/clang++
-
-
-# This installs ~/bin/dfx
-# Make sure to source ~/.profile afterwards -> it adds ~/bin to the path if it exists
-.PHONY: install-dfx
-install-dfx:
-	sh -ci "$$(curl -fsSL https://sdk.dfinity.org/install.sh)"
-
-.PHONY: install-didc
-install-didc:
-	@echo "Installing didc $(VERSION_DIDC) ..."
-	sudo rm -rf /usr/local/bin/didc
-	wget https://github.com/dfinity/candid/releases/download/${VERSION_DIDC}/$(DIDC)
-	sudo mv $(DIDC) /usr/local/bin/didc
-	chmod +x /usr/local/bin/didc
-	@echo " "
-	@echo "Installed successfully in:"
-	@echo /usr/local/bin/didc
-
-.PHONY: install-jp
-install-jp:
-	sudo apt-get update && sudo apt-get install jp
-
-.PHONY: install-python
-install-python:
-	pip install --upgrade pip
-	pip install -e .[dev]
-
-.PHONY:install-rust
-install-rust:
-	@echo "Installing rust"
-	curl https://sh.rustup.rs -sSf | sh -s -- -y
-	@echo "Installing ic-cdk-optimizer"
-	cargo install ic-cdk-optimizer
-
-.PHONY: install-wabt
-install-wabt:
-	sudo apt update && sudo apt install wabt

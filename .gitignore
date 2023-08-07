@@ -7,7 +7,7 @@ paths.txt
 .DS_Store
 icpp-venv
 models
-canisters_wip
+wip
 
 # Windows
 .vs

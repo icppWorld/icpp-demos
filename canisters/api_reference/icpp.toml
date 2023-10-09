@@ -1,78 +1,48 @@
 [build-wasm]
-canister          = "demo"
-did_path          = "src/demo.did"
-cpp_paths         = [
-                        # CandidTypes
-                        "src/demo_candid_type_bool.cpp",
-                        "src/demo_candid_type_float32.cpp",
-                        "src/demo_candid_type_float64.cpp",
-                        "src/demo_candid_type_int8.cpp",
-                        "src/demo_candid_type_int16.cpp",
-                        "src/demo_candid_type_int32.cpp",
-                        "src/demo_candid_type_int64.cpp",
-                        "src/demo_candid_type_int.cpp",
-                        "src/demo_candid_type_nat8.cpp",
-                        "src/demo_candid_type_nat16.cpp",
-                        "src/demo_candid_type_nat32.cpp",
-                        "src/demo_candid_type_nat64.cpp",
-                        "src/demo_candid_type_nat.cpp",
-                        "src/demo_candid_type_opt.cpp",
-                        "src/demo_candid_type_principal.cpp",
-                        "src/demo_candid_type_record.cpp",
-                        "src/demo_candid_type_text.cpp",
-                        # IC_API - ic0 system interface
-                        "src/demo_debug_print.cpp",
-                        "src/demo_ic_api.cpp", 
-                        "src/demo_get_caller.cpp",
-                        "src/demo_from_wire.cpp",
-                        "src/demo_time.cpp",
-                        "src/demo_to_wire.cpp",
-                        "src/demo_trap.cpp",
-                        # IC_API - utilities
-                        "src/demo_string_to_int128.cpp",
-                        "src/demo_to_string_128.cpp",
-                    ]
-cpp_header_paths  = [
-                        # CandidTypes
-                        "src/demo_candid_type_bool.h",
-                        "src/demo_candid_type_float32.h",
-                        "src/demo_candid_type_float64.h",
-                        "src/demo_candid_type_int8.h",
-                        "src/demo_candid_type_int16.h",
-                        "src/demo_candid_type_int32.h",
-                        "src/demo_candid_type_int64.h",
-                        "src/demo_candid_type_int.h",
-                        "src/demo_candid_type_nat8.h",
-                        "src/demo_candid_type_nat16.h",
-                        "src/demo_candid_type_nat32.h",
-                        "src/demo_candid_type_nat64.h",
-                        "src/demo_candid_type_nat.h",
-                        "src/demo_candid_type_opt.h",
-                        "src/demo_candid_type_principal.h",
-                        "src/demo_candid_type_record.h",
-                        "src/demo_candid_type_text.h",
-                        # IC_API - ic0 system interface
-                        "src/demo_debug_print.h",
-                        "src/demo_ic_api.h", 
-                        "src/demo_get_caller.h",
-                        "src/demo_from_wire.h",
-                        "src/demo_time.h",
-                        "src/demo_to_wire.h",
-                        "src/demo_trap.h",
-                        # IC_API - utilities
-                        "src/demo_string_to_int128.h",
-                        "src/demo_to_string_128.h",
-                        ]
+canister = "demo"
+did_path = "src/demo.did"
+cpp_paths = [
+    # CandidTypes
+    "src/demo_candid_type_bool.cpp",
+    "src/demo_candid_type_float32.cpp",
+    "src/demo_candid_type_float64.cpp",
+    "src/demo_candid_type_int8.cpp",
+    "src/demo_candid_type_int16.cpp",
+    "src/demo_candid_type_int32.cpp",
+    "src/demo_candid_type_int64.cpp",
+    "src/demo_candid_type_int.cpp",
+    "src/demo_candid_type_nat8.cpp",
+    "src/demo_candid_type_nat16.cpp",
+    "src/demo_candid_type_nat32.cpp",
+    "src/demo_candid_type_nat64.cpp",
+    "src/demo_candid_type_nat.cpp",
+    "src/demo_candid_type_opt.cpp",
+    "src/demo_candid_type_principal.cpp",
+    "src/demo_candid_type_record.cpp",
+    "src/demo_candid_type_text.cpp",
+    # IC_API - ic0 system interface
+    "src/demo_debug_print.cpp",
+    "src/demo_ic_api.cpp",
+    "src/demo_get_caller.cpp",
+    "src/demo_from_wire.cpp",
+    "src/demo_time.cpp",
+    "src/demo_to_wire.cpp",
+    "src/demo_trap.cpp",
+    # IC_API - utilities
+    "src/demo_string_to_int128.cpp",
+    "src/demo_to_string_128.cpp",
+]
+cpp_include_dirs = []
 cpp_compile_flags = []
-cpp_link_flags    = []
-c_paths           = []
-c_header_paths    = []
-c_compile_flags   = []
+cpp_link_flags = []
+c_paths = []
+c_include_dirs = []
+c_compile_flags = []
 [build-native]
-cpp_paths         = ["native/main.cpp"]
-cpp_header_paths  = ["native/main.h"]
+cpp_paths = ["native/main.cpp"]
+cpp_include_dirs = []
 cpp_compile_flags = []
-cpp_link_flags    = []
-c_paths           = []
-c_header_paths    = []
-c_compile_flags   = []
+cpp_link_flags = []
+c_paths = []
+c_include_dirs = []
+c_compile_flags = []

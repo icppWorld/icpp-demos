@@ -1,22 +1,18 @@
 [build-wasm]
-canister          = "counter4me"
-did_path          = "src/counter4me.did"
-cpp_paths         = [
-                        "src/counter4me.cpp",
-                    ]
-cpp_header_paths  = [
-                        "src/counter4me.h",
-                    ]
+canister = "counter4me"
+did_path = "src/counter4me.did"
+cpp_paths = ["src/counter4me.cpp"]
+cpp_include_dirs = []
 cpp_compile_flags = []
-cpp_link_flags    = []
-c_paths           = []
-c_header_paths    = []
-c_compile_flags   = []
+cpp_link_flags = []
+c_paths = []
+c_include_dirs = []
+c_compile_flags = []
 [build-native]
-cpp_paths         = ["native/main.cpp"]
-cpp_header_paths  = ["native/main.h"]
+cpp_paths = ["native/main.cpp"]
+cpp_include_dirs = []
 cpp_compile_flags = []
-cpp_link_flags    = []
-c_paths           = []
-c_header_paths    = []
-c_compile_flags   = []
+cpp_link_flags = []
+c_paths = []
+c_include_dirs = []
+c_compile_flags = []

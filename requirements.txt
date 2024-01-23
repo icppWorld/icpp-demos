@@ -1,4 +1,4 @@
-icpp-pro>=3.4.1
+icpp-pro>=3.13.0
 
 # to lint python scripts
 black

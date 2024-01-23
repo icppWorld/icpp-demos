@@ -451,8 +451,9 @@ def test__demo_candid_type_record(network: str, principal: str) -> None:
         canister_output="idl",
         network=network,
     )
-    expected_response = '(record { field 10 = 16 : nat16; field 1 = true; field 2 = 0.1 : float32; field 3 = 0.2 : float64; field 4 = -8 : int8; field 5 = -16 : int16; field 6 = -32 : int32; field 7 = -64 : int64; field 8 = -128 : int; field 9 = 8 : nat8; field A = 32 : nat32; field B = 64 : nat64; field C = 128 : nat; field D = principal "2ibo7-dia"; field E = "demo";})'
-    assert response == expected_response
+    expected_response_1 = '(record { field 10 = 16 : nat16; field 1 = true; field 2 = 0.1 : float32; field 3 = 0.2 : float64; field 4 = -8 : int8; field 5 = -16 : int16; field 6 = -32 : int32; field 7 = -64 : int64; field 8 = -128 : int; field 9 = 8 : nat8; field A = 32 : nat32; field B = 64 : nat64; field C = 128 : nat; field D = principal "2ibo7-dia"; field E = "demo";})'
+    expected_response_2 = '(record { "field 10" = 16 : nat16; "field 1" = true; "field 2" = 0.1 : float32; "field 3" = 0.2 : float64; "field 4" = -8 : int8; "field 5" = -16 : int16; "field 6" = -32 : int32; "field 7" = -64 : int64; "field 8" = -128 : int; "field 9" = 8 : nat8; "field A" = 32 : nat32; "field B" = 64 : nat64; "field C" = 128 : nat; "field D" = principal "2ibo7-dia"; "field E" = "demo";})'
+    assert response in (expected_response_1, expected_response_2)
 
 
 def test__demo_candid_type_records(network: str, principal: str) -> None:
@@ -465,10 +466,13 @@ def test__demo_candid_type_records(network: str, principal: str) -> None:
         canister_output="idl",
         network=network,
     )
-    expected_response = (
+    expected_response_1 = (
         "(record { field 1A = -8 : int8;}, record { field 2A = -16 : int16;})"
     )
-    assert response == expected_response
+    expected_response_2 = (
+        '(record { "field 1A" = -8 : int8;}, record { "field 2A" = -16 : int16;})'
+    )
+    assert response in (expected_response_1, expected_response_2)
 
 
 def test__demo_candid_type_text(network: str, principal: str) -> None:

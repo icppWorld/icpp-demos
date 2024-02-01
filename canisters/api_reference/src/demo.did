@@ -88,12 +88,15 @@ service : {
     "demo_candid_type_vec_all" : (vec bool, vec nat, vec nat8, vec nat16, vec nat32, vec nat64, vec int, vec int8, vec int16, vec int32, vec int64, vec float32, vec float64, vec text, vec principal) -> 
                           (vec bool, vec nat, vec nat8, vec nat16, vec nat32, vec nat64, vec int, vec int8, vec int16, vec int32, vec int64, vec float32, vec float64, vec text, vec principal) 
                           query;    
-    "demo_candid_type_variant_ok" : (Result)  -> (Result) query;
-    "demo_candid_type_variant_err" : (Result)  -> (Result) query;
-    "demo_candid_type_variant" : (Result, Result)  -> 
-                          (Result, Result) 
-                          query;
                           */
+
+    // docs start: demo_candid_type_variant
+    "demo_candid_type_variant" : (variant {"field 1" : bool; "field 2" : float32; "field 3" : float64; "field 4" : int8; "field 5" : int16; "field 6" : int32; "field 7": int64; "field 8" : int; "field 9" : nat8; "field 10" : nat16; "field A" : nat32; "field B" : nat64; "field C" : nat; "field D" : principal; "field E" : text;})   -> 
+                                 (variant {"field 1" : bool; "field 2" : float32; "field 3" : float64; "field 4" : int8; "field 5" : int16; "field 6" : int32; "field 7": int64; "field 8" : int; "field 9" : nat8; "field 10" : nat16; "field A" : nat32; "field B" : nat64; "field C" : nat; "field D" : principal; "field E" : text;}) 
+                                 query;
+    "demo_candid_type_variants" : (variant {"field 1" : bool; "field 2" : float32;}, variant {"field 1" : bool; "field 2" : float32;}) -> 
+                                  (variant {"field 1" : bool; "field 2" : float32;}, variant {"field 1" : bool; "field 2" : float32;})
+                                  query; // docs end: demo_candid_type_variant
 
     // ---------------------------------------------------------------------------------------------
     // IC_API - ic0 system interface

@@ -25,6 +25,7 @@
 #include "../src/demo_candid_type_principal.h"
 #include "../src/demo_candid_type_record.h"
 #include "../src/demo_candid_type_text.h"
+#include "../src/demo_candid_type_variant.h"
 
 #include "../src/demo_debug_print.h"
 #include "../src/demo_from_wire.h"
@@ -247,6 +248,20 @@ int main() {
                   "4449444c000271710664656d6f20410664656d6f2042",
                   silent_on_trap, my_principal);
 
+  // '(variant {"field 2" = 0.1 : float32})'
+  // -> same
+  mockIC.run_test("demo_candid_type_variant", demo_candid_type_variant,
+                  "4449444c016b01cca6b7e10f73010000cdcccc3d",
+                  "4449444c016b01cca6b7e10f73010000cdcccc3d", silent_on_trap,
+                  my_principal);
+
+  // '(variant {"field 2" = 0.1 : float32}, variant {"field 2" = 0.1 : float32})'
+  // -> same
+  mockIC.run_test(
+      "demo_candid_type_variants", demo_candid_type_variants,
+      "4449444c016b01cca6b7e10f7302000000cdcccc3d00cdcccc3d",
+      "4449444c026b01cca6b7e10f736b01cca6b7e10f7302000100cdcccc3d00cdcccc3d",
+      silent_on_trap, my_principal);
   // -----------------------------------------------------------------------------
   // IC_API - ic0 system interface
 

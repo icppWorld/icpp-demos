@@ -1,4 +1,4 @@
-/* file: src/demo_candid_type_float64.cpp
+/* file: https://github.com/icppWorld/icpp-demos/tree/main/canisters/api_reference/src/demo_candid_type_float64.cpp
 
 $ dfx canister call --type idl --output idl demo demo_candid_type_float64 '(0.1 : float64)'
 (0.1 : float64)

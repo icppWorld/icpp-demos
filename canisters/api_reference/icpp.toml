@@ -1,37 +1,7 @@
 [build-wasm]
 canister = "demo"
 did_path = "src/demo.did"
-cpp_paths = [
-    # CandidTypes
-    "src/demo_candid_type_bool.cpp",
-    "src/demo_candid_type_float32.cpp",
-    "src/demo_candid_type_float64.cpp",
-    "src/demo_candid_type_int8.cpp",
-    "src/demo_candid_type_int16.cpp",
-    "src/demo_candid_type_int32.cpp",
-    "src/demo_candid_type_int64.cpp",
-    "src/demo_candid_type_int.cpp",
-    "src/demo_candid_type_nat8.cpp",
-    "src/demo_candid_type_nat16.cpp",
-    "src/demo_candid_type_nat32.cpp",
-    "src/demo_candid_type_nat64.cpp",
-    "src/demo_candid_type_nat.cpp",
-    "src/demo_candid_type_opt.cpp",
-    "src/demo_candid_type_principal.cpp",
-    "src/demo_candid_type_record.cpp",
-    "src/demo_candid_type_text.cpp",
-    # IC_API - ic0 system interface
-    "src/demo_debug_print.cpp",
-    "src/demo_ic_api.cpp",
-    "src/demo_get_caller.cpp",
-    "src/demo_from_wire.cpp",
-    "src/demo_time.cpp",
-    "src/demo_to_wire.cpp",
-    "src/demo_trap.cpp",
-    # IC_API - utilities
-    "src/demo_string_to_int128.cpp",
-    "src/demo_to_string_128.cpp",
-]
+cpp_paths = ["src/*.cpp"]
 cpp_include_dirs = []
 cpp_compile_flags = []
 cpp_link_flags = []

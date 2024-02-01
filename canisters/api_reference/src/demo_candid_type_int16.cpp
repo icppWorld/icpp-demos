@@ -1,4 +1,4 @@
-/* file: src/demo_candid_type_int16.cpp
+/* file: https://github.com/icppWorld/icpp-demos/tree/main/canisters/api_reference/src/demo_candid_type_int16.cpp
 
 $ dfx canister call --type idl --output idl demo demo_candid_type_int16 '(101 : int16)'
 (101 : int16)

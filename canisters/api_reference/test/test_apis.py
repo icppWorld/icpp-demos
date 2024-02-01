@@ -503,6 +503,40 @@ def test__demo_candid_type_texts(network: str, principal: str) -> None:
     assert response == expected_response
 
 
+def test__demo_candid_type_variant(network: str, principal: str) -> None:
+    response = call_canister_api(
+        dfx_json_path=DFX_JSON_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_candid_type_variant",
+        canister_argument='(variant { "field 2" = 0.1 : float32 })',
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    expected_response_1 = "(variant { field 2 = 0.1 : float32 })"
+    expected_response_2 = '(variant { "field 2" = 0.1 : float32 })'
+    assert response in (expected_response_1, expected_response_2)
+
+
+def test__demo_candid_type_variants(network: str, principal: str) -> None:
+    response = call_canister_api(
+        dfx_json_path=DFX_JSON_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_candid_type_variants",
+        canister_argument='(variant { "field 2" = 0.1 : float32 }, variant { "field 2" = 0.1 : float32 })',
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    expected_response_1 = (
+        "(variant { field 2 = 0.1 : float32 }, variant { field 2 = 0.1 : float32 })"
+    )
+    expected_response_2 = (
+        '(variant { "field 2" = 0.1 : float32 }, variant { "field 2" = 0.1 : float32 })'
+    )
+    assert response in (expected_response_1, expected_response_2)
+
+
 # -------------------------------------------------------------------------------
 # IC_API - ic0 system interface
 

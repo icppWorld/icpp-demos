@@ -1,4 +1,4 @@
-/* file: src/demo_candid_type_opt.cpp
+/* file: https://github.com/icppWorld/icpp-demos/tree/main/canisters/api_reference/src/demo_candid_type_opt.cpp
 
 // ----------------------------------------------------------
 // The (opt bool) has three possible values:

@@ -1,4 +1,4 @@
-/* file: src/demo_candid_type_bool.cpp
+/* file: https://github.com/icppWorld/icpp-demos/tree/main/canisters/api_reference/src/demo_candid_type_bool.cpp
 
 $ dfx canister call --type idl --output idl demo demo_candid_type_bool '(true)'
 (true)

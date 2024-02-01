@@ -1,4 +1,4 @@
-/* file: src/demo_candid_type_nat32.cpp
+/* file: https://github.com/icppWorld/icpp-demos/tree/main/canisters/api_reference/src/demo_candid_type_nat32.cpp
 
 $ dfx canister call --type idl --output idl demo demo_candid_type_nat32 '(101 : nat32)'
 (101 : nat32)

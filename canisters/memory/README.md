@@ -2,6 +2,8 @@
 
 I've been experimenting with orthogonal persistence of various C++ data structures in canisters on the Internet Computer (IC) and would like to share my findings with the community.
 
+This canister is NOT deployed to the IC, because the investigation relies on debug_print statements, which only work in the local network.
+
 ## Here are the key points:
 
 1. Data structures fully living in the global/static section of the stack are correctly persisted. This includes regular data types like `int`, `float`, `uint64_t`, etc. and the special STL container `std::array`, which keeps all its data on the stack.

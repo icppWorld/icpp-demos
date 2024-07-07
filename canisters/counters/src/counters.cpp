@@ -3,6 +3,7 @@
 #include "counters.h"
 #include "ic_api.h"
 
+#include <iostream>
 #include <vector>
 
 // State of the Smart Contract, using Orthogonal Persistence
@@ -22,8 +23,8 @@ Counters *p_counters{nullptr};
 // Create a Counters instance if not yet done
 void new_memory() {
   if (p_counters == nullptr) {
-    IC_API::debug_print(std::string(__func__) +
-                        ": Creating Counters Instance.");
+    std::cout << std::string(__func__) + ": Creating Counters Instance."
+              << std::endl;
     p_counters = new (std::nothrow) Counters();
     if (p_counters == nullptr) {
       IC_API::trap("Allocation of p_counters failed");
@@ -39,15 +40,16 @@ void delete_memory() {
 }
 
 void print_counters(std::string calling_function) {
-  IC_API::debug_print("Called by " + calling_function);
+  std::cout << "Called by " + calling_function << std::endl;
   if (p_counters) {
-    IC_API::debug_print("p_counters->vec.size() = " +
-                        std::to_string(p_counters->vec.size()));
+    std::cout << "p_counters->vec.size() = " +
+                     std::to_string(p_counters->vec.size())
+              << std::endl;
     for (auto &value : p_counters->vec) {
-      IC_API::debug_print("value = " + std::to_string(value));
+      std::cout << "value = " + std::to_string(value) << std::endl;
     }
   } else {
-    IC_API::debug_print("p_counters is null");
+    std::cout << "p_counters is null" << std::endl;
   }
 }
 

@@ -34,6 +34,7 @@ $ dfx canister call --type idl --output idl demo demo_candid_type_records '(reco
 */
 #include "demo_candid_type_record.h"
 
+#include <iostream>
 #include <string>
 
 #include "ic_api.h"
@@ -79,24 +80,26 @@ void demo_candid_type_record() {
   ic_api.from_wire(r_in);
 
   // ---------------------------------------------------------------------------
-  IC_API::debug_print(
-      "Method " + std::string(__func__) +
-      "\n received a record with fields: \n" +
-      "\n field 1  - bool        value '" + std::to_string(f1) +
-      "\n field 2  - float       value '" + std::to_string(f2) +
-      "\n field 3  - double      value '" + std::to_string(f3) +
-      "\n field 4  - int8_t      value '" + std::to_string(f4) +
-      "\n field 5  - int16_t     value '" + std::to_string(f5) +
-      "\n field 6  - int32_t     value '" + std::to_string(f6) +
-      "\n field 7  - int64_t     value '" + std::to_string(f7) +
-      "\n field 8  - __int128_t  value '" + IC_API::to_string_128(f8) +
-      "\n field 9  - uint8_t     value '" + std::to_string(f9) +
-      "\n field 10 - uint16_t    value '" + std::to_string(f10) +
-      "\n field A  - uint32_t    value '" + std::to_string(fa) +
-      "\n field B  - uint64_t    value '" + std::to_string(fb) +
-      "\n field C  - __uint128_t value '" + IC_API::to_string_128(fc) +
-      "\n field D  - std::string value '" + fd +
-      "\n field E  - std::string value '" + fe + "'");
+  std::cout << "Method " + std::string(__func__) +
+                   "\n received a record with fields: \n" +
+                   "\n field 1  - bool        value '" + std::to_string(f1) +
+                   "\n field 2  - float       value '" + std::to_string(f2) +
+                   "\n field 3  - double      value '" + std::to_string(f3) +
+                   "\n field 4  - int8_t      value '" + std::to_string(f4) +
+                   "\n field 5  - int16_t     value '" + std::to_string(f5) +
+                   "\n field 6  - int32_t     value '" + std::to_string(f6) +
+                   "\n field 7  - int64_t     value '" + std::to_string(f7) +
+                   "\n field 8  - __int128_t  value '" +
+                   IC_API::to_string_128(f8) +
+                   "\n field 9  - uint8_t     value '" + std::to_string(f9) +
+                   "\n field 10 - uint16_t    value '" + std::to_string(f10) +
+                   "\n field A  - uint32_t    value '" + std::to_string(fa) +
+                   "\n field B  - uint64_t    value '" + std::to_string(fb) +
+                   "\n field C  - __uint128_t value '" +
+                   IC_API::to_string_128(fc) +
+                   "\n field D  - std::string value '" + fd +
+                   "\n field E  - std::string value '" + fe + "'"
+            << std::endl;
   // ---------------------------------------------------------------------------
 
   CandidTypeRecord r_out;
@@ -138,11 +141,13 @@ void demo_candid_type_records() {
   ic_api.from_wire(args_in);
 
   // ---------------------------------------------------------------------------
-  IC_API::debug_print(
-      "Method " + std::string(__func__) + "\n received a record with field:" +
-      "\n field 1A  - int8_t      value '" + std::to_string(f1a) +
-      "\n and      a record with field:" +
-      "\n field 2A  - int16_t     value '" + std::to_string(f2a) + "'");
+  std::cout << "Method " + std::string(__func__) +
+                   "\n received a record with field:" +
+                   "\n field 1A  - int8_t      value '" + std::to_string(f1a) +
+                   "\n and      a record with field:" +
+                   "\n field 2A  - int16_t     value '" + std::to_string(f2a) +
+                   "'"
+            << std::endl;
 
   // ---------------------------------------------------------------------------
   // Return the data

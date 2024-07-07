@@ -2,7 +2,7 @@
 
 I've been experimenting with orthogonal persistence of various C++ data structures in canisters on the Internet Computer (IC) and would like to share my findings with the community.
 
-This canister is NOT deployed to the IC, because the investigation relies on debug_print statements, which only work in the local network.
+This canister is NOT deployed to the IC, because the investigation relies on print statements, which only work in the local network.
 
 ## Here are the key points:
 
@@ -33,11 +33,11 @@ To run the experiment, follow these instructions.
   ```bash
   icpp build-wasm  # second time, add this option: --to-compile mine
   dfx deploy
-  dfx canister call memory change_memory # see debug_print of canister
-  dfx canister call memory print_memory  # see debug_print of canister
+  dfx canister call memory change_memory # see output in local dfx log window
+  dfx canister call memory print_memory  # see output in local dfx log window
   ```
 
-The debug_print in the canister shows the following:
+The output in the canister shows the following:
 
 ```bash
 dfx canister call memory change_memory

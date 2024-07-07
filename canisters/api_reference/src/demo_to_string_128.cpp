@@ -13,6 +13,7 @@ $ dfx canister call --type idl --output idl demo demo_to_string_128 '()'
 */
 #include "demo_to_string_128.h"
 
+#include <iostream>
 #include <optional>
 #include <string>
 
@@ -29,9 +30,9 @@ void demo_to_string_128() {
   __int128_t v3{-103};
 
   // To create a string, use the IC_API utility method `to_string_128`
-  IC_API::debug_print("v1 =" + IC_API::to_string_128(v1));
-  IC_API::debug_print("v2 =" + IC_API::to_string_128(v2));
-  IC_API::debug_print("v3 =" + IC_API::to_string_128(v3));
+  std::cout << "v1 =" + IC_API::to_string_128(v1) << std::endl;
+  std::cout << "v2 =" + IC_API::to_string_128(v2) << std::endl;
+  std::cout << "v3 =" + IC_API::to_string_128(v3) << std::endl;
 
   // ----------------------------------------------------------------------------
   // Numbers larger than uint64_t & int64_t can NOT be initialized with a literal

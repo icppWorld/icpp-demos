@@ -5,6 +5,7 @@
 #include "counter4me.h"
 #include "ic_api.h"
 
+#include <iostream>
 #include <vector>
 
 // State of the Smart Contract, using Orthogonal Persistence
@@ -24,8 +25,8 @@ counter4me *p_counter4me{nullptr};
 // Create a counter4me instance if not yet done
 void new_memory() {
   if (p_counter4me == nullptr) {
-    IC_API::debug_print(std::string(__func__) +
-                        ": Creating counter4me Instance.");
+    std::cout << std::string(__func__) + ": Creating counter4me Instance."
+              << std::endl;
     p_counter4me = new (std::nothrow) counter4me();
     if (p_counter4me == nullptr) {
       IC_API::trap("Allocation of p_counter4me failed");
@@ -41,20 +42,23 @@ void delete_memory() {
 }
 
 void print_counter4me(std::string calling_function, std::string caller) {
-  IC_API::debug_print("Called by " + calling_function);
-  IC_API::debug_print("caller = " + caller);
+  std::cout << "Called by " + calling_function << std::endl;
+  std::cout << "caller = " + caller << std::endl;
   if (p_counter4me) {
-    IC_API::debug_print("p_counter4me->umap[caller] = " +
-                        std::to_string(p_counter4me->umap[caller]));
-    IC_API::debug_print("Full content of umap:");
-    IC_API::debug_print("- p_counter4me->umap.size() = " +
-                        std::to_string(p_counter4me->umap.size()));
+    std::cout << "p_counter4me->umap[caller] = " +
+                     std::to_string(p_counter4me->umap[caller])
+              << std::endl;
+    std::cout << "Full content of umap:" << std::endl;
+    std::cout << "- p_counter4me->umap.size() = " +
+                     std::to_string(p_counter4me->umap.size())
+              << std::endl;
     for (const auto &pair : p_counter4me->umap) {
-      IC_API::debug_print("- p_counter4me->umap[\"" + pair.first +
-                          "\"] = " + std::to_string(pair.second));
+      std::cout << "- p_counter4me->umap[\"" + pair.first +
+                       "\"] = " + std::to_string(pair.second)
+                << std::endl;
     }
   } else {
-    IC_API::debug_print("p_counter4me is null");
+    std::cout << "p_counter4me is null" << std::endl;
   }
 }
 

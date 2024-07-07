@@ -13,6 +13,7 @@ $ dfx canister call --type idl --output idl demo demo_candid_type_bools '(true, 
 */
 #include "demo_candid_type_bool.h"
 
+#include <iostream>
 #include <string>
 
 #include "ic_api.h"
@@ -23,8 +24,9 @@ void demo_candid_type_bool() {
 
   bool in{false};
   ic_api.from_wire(CandidTypeBool{&in});
-  IC_API::debug_print("Method " + std::string(__func__) + " received value '" +
-                      std::to_string(in) + "'");
+  std::cout << "Method " + std::string(__func__) + " received value '" +
+                   std::to_string(in) + "'"
+            << std::endl;
   ic_api.to_wire(CandidTypeBool{in});
 }
 
@@ -39,9 +41,9 @@ void demo_candid_type_bools() {
   args_in.append(CandidTypeBool(&in2));
   ic_api.from_wire(args_in);
 
-  IC_API::debug_print("Method " + std::string(__func__) + " received values '" +
-                      std::to_string(in1) + "' & '" + std::to_string(in2) +
-                      "'");
+  std::cout << "Method " + std::string(__func__) + " received values '" +
+                   std::to_string(in1) + "' & '" + std::to_string(in2) + "'"
+            << std::endl;
 
   CandidArgs args_out;
   args_out.append(CandidTypeBool(in1));

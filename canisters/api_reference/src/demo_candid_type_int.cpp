@@ -13,6 +13,7 @@ $ dfx canister call --type idl --output idl demo demo_candid_type_ints '(101 : i
 */
 #include "demo_candid_type_int.h"
 
+#include <iostream>
 #include <string>
 
 #include "ic_api.h"
@@ -23,8 +24,9 @@ void demo_candid_type_int() {
 
   __int128_t in{0};
   ic_api.from_wire(CandidTypeInt{&in});
-  IC_API::debug_print("Method " + std::string(__func__) + " received value '" +
-                      IC_API::to_string_128(in) + "'");
+  std::cout << "Method " + std::string(__func__) + " received value '" +
+                   IC_API::to_string_128(in) + "'"
+            << std::endl;
   ic_api.to_wire(CandidTypeInt{in});
 }
 
@@ -39,9 +41,10 @@ void demo_candid_type_ints() {
   args_in.append(CandidTypeInt(&in2));
   ic_api.from_wire(args_in);
 
-  IC_API::debug_print("Method " + std::string(__func__) + " received values '" +
-                      IC_API::to_string_128(in1) + "' & '" +
-                      IC_API::to_string_128(in2) + "'");
+  std::cout << "Method " + std::string(__func__) + " received values '" +
+                   IC_API::to_string_128(in1) + "' & '" +
+                   IC_API::to_string_128(in2) + "'"
+            << std::endl;
 
   CandidArgs args_out;
   args_out.append(CandidTypeInt(in1));

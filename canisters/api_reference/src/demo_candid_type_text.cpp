@@ -13,6 +13,7 @@ $ dfx canister call --type idl --output idl demo demo_candid_type_texts '("demo 
 */
 #include "demo_candid_type_text.h"
 
+#include <iostream>
 #include <string>
 
 #include "ic_api.h"
@@ -23,8 +24,9 @@ void demo_candid_type_text() {
 
   std::string in{""};
   ic_api.from_wire(CandidTypeText{&in});
-  IC_API::debug_print("Method " + std::string(__func__) + " received value '" +
-                      in + "'");
+  std::cout << "Method " + std::string(__func__) + " received value '" + in +
+                   "'"
+            << std::endl;
 
   ic_api.to_wire(CandidTypeText{in});
 }
@@ -40,8 +42,9 @@ void demo_candid_type_texts() {
   args_in.append(CandidTypeText(&in2));
   ic_api.from_wire(args_in);
 
-  IC_API::debug_print("Method " + std::string(__func__) + " received values '" +
-                      in1 + "' & '" + in2 + "'");
+  std::cout << "Method " + std::string(__func__) + " received values '" + in1 +
+                   "' & '" + in2 + "'"
+            << std::endl;
 
   CandidArgs args_out;
   args_out.append(CandidTypeText(in1));

@@ -24,6 +24,7 @@ $ dfx canister call --type idl --output idl demo demo_candid_type_variants '(var
 */
 #include "demo_candid_type_variant.h"
 
+#include <iostream>
 #include <string>
 
 #include "ic_api.h"
@@ -108,7 +109,7 @@ void demo_candid_type_variant() {
     msg.append("\n field E  - std::string value '" + fe);
   }
 
-  IC_API::debug_print(msg);
+  std::cout << msg << std::endl;
 
   // ---------------------------------------------------------------------------
   // Return the data
@@ -200,7 +201,7 @@ void demo_candid_type_variants() {
     msg.append("\n field 2  - float       value '" + std::to_string(f2b));
   }
 
-  IC_API::debug_print(msg);
+  std::cout << msg << std::endl;
 
   // ---------------------------------------------------------------------------
   // Return the data

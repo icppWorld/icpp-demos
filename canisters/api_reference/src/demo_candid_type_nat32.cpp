@@ -13,6 +13,7 @@ $ dfx canister call --type idl --output idl demo demo_candid_type_nat32s '(101 :
 */
 #include "demo_candid_type_nat32.h"
 
+#include <iostream>
 #include <string>
 
 #include "ic_api.h"
@@ -23,8 +24,9 @@ void demo_candid_type_nat32() {
 
   uint32_t in{0};
   ic_api.from_wire(CandidTypeNat32{&in});
-  IC_API::debug_print("Method " + std::string(__func__) + " received value '" +
-                      std::to_string(in) + "'");
+  std::cout << "Method " + std::string(__func__) + " received value '" +
+                   std::to_string(in) + "'"
+            << std::endl;
   ic_api.to_wire(CandidTypeNat32{in});
 }
 
@@ -39,9 +41,9 @@ void demo_candid_type_nat32s() {
   args_in.append(CandidTypeNat32(&in2));
   ic_api.from_wire(args_in);
 
-  IC_API::debug_print("Method " + std::string(__func__) + " received values '" +
-                      std::to_string(in1) + "' & '" + std::to_string(in2) +
-                      "'");
+  std::cout << "Method " + std::string(__func__) + " received values '" +
+                   std::to_string(in1) + "' & '" + std::to_string(in2) + "'"
+            << std::endl;
 
   CandidArgs args_out;
   args_out.append(CandidTypeNat32(in1));

@@ -13,6 +13,7 @@ $ dfx canister call --type idl --output idl demo demo_candid_type_float64s '(0.1
 */
 #include "demo_candid_type_float64.h"
 
+#include <iostream>
 #include <string>
 
 #include "ic_api.h"
@@ -23,8 +24,9 @@ void demo_candid_type_float64() {
 
   double in{0.0};
   ic_api.from_wire(CandidTypeFloat64{&in});
-  IC_API::debug_print("Method " + std::string(__func__) + " received value '" +
-                      std::to_string(in) + "'");
+  std::cout << "Method " + std::string(__func__) + " received value '" +
+                   std::to_string(in) + "'"
+            << std::endl;
   ic_api.to_wire(CandidTypeFloat64{in});
 }
 
@@ -39,9 +41,9 @@ void demo_candid_type_float64s() {
   args_in.append(CandidTypeFloat64(&in2));
   ic_api.from_wire(args_in);
 
-  IC_API::debug_print("Method " + std::string(__func__) + " received values '" +
-                      std::to_string(in1) + "' & '" + std::to_string(in2) +
-                      "'");
+  std::cout << "Method " + std::string(__func__) + " received values '" +
+                   std::to_string(in1) + "' & '" + std::to_string(in2) + "'"
+            << std::endl;
 
   CandidArgs args_out;
   args_out.append(CandidTypeFloat64(in1));

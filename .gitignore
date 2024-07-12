@@ -11,6 +11,9 @@ paths.txt
 icpp-venv
 models
 wip
+canisters/files/internal_data_file
+canisters/files/external_data_file
+tmp_upload_data
 
 # Windows
 .vs

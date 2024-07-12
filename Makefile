@@ -38,24 +38,37 @@ VERSION_CLANG := $(shell cat version_clang.txt)
 
 ###########################################################################
 # Use some clang tools that come with wasi-sdk
-ICPP_COMPILER_ROOT := $(HOME)/.icpp/wasi-sdk/wasi-sdk-22.0
-CLANG_FORMAT = $(ICPP_COMPILER_ROOT)/bin/clang-format
-CLANG_TIDY = $(ICPP_COMPILER_ROOT)/bin/clang-tidy
+WASI_SDK_COMPILER_ROOT := $(HOME)/.icpp/wasi-sdk/wasi-sdk-22.0
+CLANG_FORMAT = $(WASI_SDK_COMPILER_ROOT)/bin/clang-format
+CLANG_TIDY = $(WASI_SDK_COMPILER_ROOT)/bin/clang-tidy
+
+.PHONY: summary
+summary:
+	@echo "-------------------------------------------------------------"
+	@echo OS=$(OS)
+	@echo VERSION_DIDC=$(VERSION_DIDC)
+	@echo VERSION_CLANG=$(VERSION_CLANG)
+	@echo WASI_SDK_COMPILER_VERSION=$(WASI_SDK_COMPILER_VERSION)
+	@echo WASI_SDK_COMPILER_ROOT=$(WASI_SDK_COMPILER_ROOT)
+	@echo CLANG_FORMAT=$(CLANG_FORMAT)
+	@echo CLANG_TIDY=$(CLANG_TIDY)
+	@echo "-------------------------------------------------------------"
 
 ###########################################################################
 # CI/CD - Phony Makefile targets
 #
 .PHONY: all-tests
-all-tests: all-static all-canisters 
-	
-.PHONY: all-canisters
-all-canisters:
+all-tests: all-static all-canister-native all-canister-deploy-local-pytest
+
+.PHONY: all-canister-deploy-local-pytest
+all-canister-deploy-local-pytest:
 	dfx identity use default
-	cd canisters/api_reference && ./demo.sh
-	cd canisters/counter && ./demo.sh
-	cd canisters/counter4me && ./demo.sh
-	cd canisters/counters && ./demo.sh
+	@python -m scripts.all_canister_deploy_local_pytest
 	
+.PHONY: all-canister-native
+all-canister-native:
+	@python -m scripts.all_canister_native
+
 .PHONY: all-static
 all-static: \
 	cpp-format cpp-lint \

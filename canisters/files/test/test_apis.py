@@ -19,7 +19,7 @@ DFX_JSON_PATH = Path(__file__).parent / "../dfx.json"
 # Canister in the dfx.json file we want to test
 CANISTER_NAME = "files"
 
-
+@pytest.mark.run_after_upgrade
 def test__health(identity_anonymous: dict[str, str], network: str) -> None:
     response = call_canister_api(
         dfx_json_path=DFX_JSON_PATH,
@@ -70,7 +70,7 @@ def test__write_read_during_update(network: str) -> None:
     assert response == expected_response
 
 
-# After an update, it is persisted, and we are able to download it
+@pytest.mark.run_after_upgrade
 def test__file_download_chunk_2(network: str) -> None:
     response = call_canister_api(
         dfx_json_path=DFX_JSON_PATH,
@@ -83,7 +83,7 @@ def test__file_download_chunk_2(network: str) -> None:
     assert response == expected_response
 
 
-# and we are able to download it N bytes at a time
+@pytest.mark.run_after_upgrade
 def test__file_download_chunk_0_to_9(network: str) -> None:
     response = call_canister_api(
         dfx_json_path=DFX_JSON_PATH,
@@ -95,7 +95,7 @@ def test__file_download_chunk_0_to_9(network: str) -> None:
     expected_response = r'(variant { Ok = record { done = false; chunk = blob "\5f\64\61\74\61\5f\06\00\00\00"; offset = 0 : nat64; filesize = 52 : nat64; chunksize = 10 : nat64;} })'
     assert response == expected_response
 
-
+@pytest.mark.run_after_upgrade
 def test__file_download_chunk_10_to_19(network: str) -> None:
     response = call_canister_api(
         dfx_json_path=DFX_JSON_PATH,
@@ -108,7 +108,7 @@ def test__file_download_chunk_10_to_19(network: str) -> None:
     assert response == expected_response
 
 
-# The last 10 bytes
+@pytest.mark.run_after_upgrade
 def test__file_download_chunk_last_10(network: str) -> None:
     response = call_canister_api(
         dfx_json_path=DFX_JSON_PATH,

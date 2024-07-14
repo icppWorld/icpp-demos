@@ -1,4 +1,4 @@
-"""Download a file and writes it to disk
+"""Download a file and write it to disk
 
 Run with:
 

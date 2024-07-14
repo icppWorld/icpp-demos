@@ -12,11 +12,14 @@ $pythonInterpreter = Join-Path $activeEnvPath "python.exe"
 # Define the path to the Git Bash executable
 $gitBashPath = "C:\Program Files\Git\bin\bash.exe"
 
+# ---------------------------------------------------------
+# Run the tests
+
 # Define the path to the all-test bash script
 $winAllTestPath = ".\windows-all-tests.sh"
 
 # Execute the bash script using Git Bash
-& $gitBashPath $winAllTestPath $pythonInterpreter "all-static"
+& $gitBashPath $winAllTestPath $pythonInterpreter "all-tests"
 
 # Capture the exit code from Git Bash
 $exitCode = $LASTEXITCODE

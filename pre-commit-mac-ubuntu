@@ -12,5 +12,5 @@
 #############################################################
 
 # Apply all static auto-formatting & perform the static checks
-export PATH="$HOME/miniconda3/envs/icpp-pro/bin:$PATH"
+export PATH="$HOME/miniconda3/envs/icpp-demos/bin:$PATH"
 /usr/bin/make all-static

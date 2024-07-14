@@ -64,7 +64,7 @@ all-tests: all-static all-canister-native all-canister-deploy-local-pytest
 all-canister-deploy-local-pytest:
 	dfx identity use default
 	@python -m scripts.all_canister_deploy_local_pytest
-	
+
 .PHONY: all-canister-native
 all-canister-native:
 	@python -m scripts.all_canister_native
@@ -75,7 +75,8 @@ all-static: \
 	python-format python-lint python-type
 	
 CPP_AND_H_FILES = $(shell ls \
-canisters/*/src/*.cpp canisters/*/src/*.h)
+canisters/*/src/*.cpp canisters/*/src/*.h \
+canisters/*/native/*.cpp canisters/*/native/*.h)
 
 .PHONY: cpp-format
 cpp-format:

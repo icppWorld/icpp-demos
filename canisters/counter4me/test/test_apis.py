@@ -9,6 +9,7 @@
 # pylint: disable=missing-function-docstring, unused-import, wildcard-import, unused-wildcard-import, line-too-long, unused-argument
 
 from pathlib import Path
+from typing import Dict
 import pytest
 from icpp.smoketest import call_canister_api
 
@@ -20,7 +21,7 @@ CANISTER_NAME = "counter4me"
 
 
 def test__counter4me_default_principal(
-    identity_default: dict[str, str], network: str
+    identity_default: Dict[str, str], network: str
 ) -> None:
     # for IC network, the update calls take longer
     update_timeout_seconds = 60
@@ -66,7 +67,7 @@ def test__counter4me_default_principal(
 
 
 def test__counter4me_anonymous_principal(
-    identity_anonymous: dict[str, str], network: str
+    identity_anonymous: Dict[str, str], network: str
 ) -> None:
     # for IC network, the update calls take longer
     update_timeout_seconds = 60

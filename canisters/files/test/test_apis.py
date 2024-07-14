@@ -21,7 +21,7 @@ CANISTER_NAME = "files"
 
 
 @pytest.mark.run_after_upgrade
-def test__health(identity_anonymous: dict[str, str], network: str) -> None:
+def test__health(identity_anonymous: Dict[str, str], network: str) -> None:
     response = call_canister_api(
         dfx_json_path=DFX_JSON_PATH,
         canister_name=CANISTER_NAME,

@@ -1,4 +1,4 @@
-"""Download a file and writes it to disk
+"""Uploads a file to the canister
 
 Run with:
 

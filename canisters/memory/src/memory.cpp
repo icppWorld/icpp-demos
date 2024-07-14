@@ -3,6 +3,7 @@
 #include "memory.h"
 #include "ic_api.h"
 
+#include <iostream>
 #include <vector>
 
 // -----------------------------------------------------------------------
@@ -145,83 +146,86 @@ void print_it(std::string calling_function) {
   char buffer[200]; // Make sure the buffer is large enough
   std::string address;
 
-  IC_API::debug_print("------");
-  IC_API::debug_print(calling_function + ":");
+  std::cout << "------" << std::endl;
+  std::cout << calling_function + ":" << std::endl;
 
-  IC_API::debug_print(" ");
-  IC_API::debug_print("i1 = " + std::to_string(i1));
+  std::cout << " " << std::endl;
+  std::cout << "i1 = " + std::to_string(i1) << std::endl;
 
-  IC_API::debug_print(" ");
-  IC_API::debug_print("arr1.size() = " + std::to_string(arr1.size()));
-  IC_API::debug_print("arr1[0] = " + std::to_string(arr1[0]));
-  IC_API::debug_print("arr1[1] = " + std::to_string(arr1[1]));
+  std::cout << " " << std::endl;
+  std::cout << "arr1.size() = " + std::to_string(arr1.size()) << std::endl;
+  std::cout << "arr1[0] = " + std::to_string(arr1[0]) << std::endl;
+  std::cout << "arr1[1] = " + std::to_string(arr1[1]) << std::endl;
   std::snprintf(buffer, sizeof(buffer), "%p", static_cast<void *>(arr1.data()));
   address = buffer;
-  IC_API::debug_print("arr1.data() address = " + address);
+  std::cout << "arr1.data() address = " + address << std::endl;
 
-  IC_API::debug_print(" ");
-  IC_API::debug_print("p_nd_i1[0] = " + std::to_string(p_nd_i1[0]));
-  IC_API::debug_print("p_nd_i1[1] = " + std::to_string(p_nd_i1[1]));
+  std::cout << " " << std::endl;
+  std::cout << "p_nd_i1[0] = " + std::to_string(p_nd_i1[0]) << std::endl;
+  std::cout << "p_nd_i1[1] = " + std::to_string(p_nd_i1[1]) << std::endl;
   std::snprintf(buffer, sizeof(buffer), "%p", static_cast<void *>(p_nd_i1));
   address = buffer;
-  IC_API::debug_print("p_nd_i1 address = " + address);
+  std::cout << "p_nd_i1 address = " + address << std::endl;
 
-  IC_API::debug_print(" ");
-  IC_API::debug_print("p_cf_i1[0] = " + std::to_string(p_cf_i1[0]));
-  IC_API::debug_print("p_cf_i1[1] = " + std::to_string(p_cf_i1[1]));
+  std::cout << " " << std::endl;
+  std::cout << "p_cf_i1[0] = " + std::to_string(p_cf_i1[0]) << std::endl;
+  std::cout << "p_cf_i1[1] = " + std::to_string(p_cf_i1[1]) << std::endl;
   std::snprintf(buffer, sizeof(buffer), "%p", static_cast<void *>(p_cf_i1));
   address = buffer;
-  IC_API::debug_print("p_cf_i1 address = " + address);
+  std::cout << "p_cf_i1 address = " + address << std::endl;
 
-  IC_API::debug_print(" ");
-  IC_API::debug_print("(*p_vec1).size() = " + std::to_string((*p_vec1).size()));
-  IC_API::debug_print("(*p_vec1)[0] = " + std::to_string((*p_vec1)[0]));
-  IC_API::debug_print("(*p_vec1)[1] = " + std::to_string((*p_vec1)[1]));
+  std::cout << " " << std::endl;
+  std::cout << "(*p_vec1).size() = " + std::to_string((*p_vec1).size())
+            << std::endl;
+  std::cout << "(*p_vec1)[0] = " + std::to_string((*p_vec1)[0]) << std::endl;
+  std::cout << "(*p_vec1)[1] = " + std::to_string((*p_vec1)[1]) << std::endl;
   std::snprintf(buffer, sizeof(buffer), "%p",
                 static_cast<void *>((*p_vec1).data()));
   address = buffer;
-  IC_API::debug_print("(*p_vec1).data() address = " + address);
+  std::cout << "(*p_vec1).data() address = " + address << std::endl;
 
-  IC_API::debug_print(" ");
-  IC_API::debug_print("p_str1 content = " + *p_str1);
+  std::cout << " " << std::endl;
+  std::cout << "p_str1 content = " + *p_str1 << std::endl;
   std::snprintf(buffer, sizeof(buffer), "%p", static_cast<void *>(p_str1));
   address = buffer;
-  IC_API::debug_print("p_str1 address = " + address);
+  std::cout << "p_str1 address = " + address << std::endl;
 
-  IC_API::debug_print(" ");
-  IC_API::debug_print("p_vec2->vec.size() = " +
-                      std::to_string(p_vec2->vec.size()));
-  IC_API::debug_print("p_vec2->vec[0] = " + std::to_string(p_vec2->vec[0]));
-  IC_API::debug_print("p_vec2->vec[1] = " + std::to_string(p_vec2->vec[1]));
+  std::cout << " " << std::endl;
+  std::cout << "p_vec2->vec.size() = " + std::to_string(p_vec2->vec.size())
+            << std::endl;
+  std::cout << "p_vec2->vec[0] = " + std::to_string(p_vec2->vec[0])
+            << std::endl;
+  std::cout << "p_vec2->vec[1] = " + std::to_string(p_vec2->vec[1])
+            << std::endl;
   std::snprintf(buffer, sizeof(buffer), "%p",
                 static_cast<void *>(p_vec2->vec.data()));
   address = buffer;
-  IC_API::debug_print("p_vec2->vec.data() address = " + address);
+  std::cout << "p_vec2->vec.data() address = " + address << std::endl;
 
-  IC_API::debug_print(" ");
-  IC_API::debug_print("p_str2->str content = " + p_str2->str);
+  std::cout << " " << std::endl;
+  std::cout << "p_str2->str content = " + p_str2->str << std::endl;
   std::snprintf(buffer, sizeof(buffer), "%p", static_cast<void *>(p_str2));
   address = buffer;
-  IC_API::debug_print("p_str2 address = " + address);
+  std::cout << "p_str2 address = " + address << std::endl;
 
   // Outcomment if you want to test
-  // IC_API::debug_print(" ");
-  // IC_API::debug_print("vec1.size() = " + std::to_string(vec1.size()));
-  // IC_API::debug_print("vec1[0] = " + std::to_string(vec1[0]));
-  // IC_API::debug_print("vec1[1] = " + std::to_string(vec1[1]));
+  // std::cout << " " << std::endl;
+  // std::cout << "vec1.size() = " + std::to_string(vec1.size()) << std::endl;
+  // std::cout << "vec1[0] = " + std::to_string(vec1[0]) << std::endl;
+  // std::cout << "vec1[1] = " + std::to_string(vec1[1]) << std::endl;
   // std::snprintf(buffer, sizeof(buffer), "%p", static_cast<void *>(vec1.data()));
   // address = buffer;
-  // IC_API::debug_print("vec1.data() address = " + address);
+  // std::cout << "vec1.data() address = " + address << std::endl;
 
-  // IC_API::debug_print(" ");
-  // IC_API::debug_print("vec101.vec.size() = " +
-  //                     std::to_string(vec101.vec.size()));
-  // IC_API::debug_print("vec101.vec[0] = " + std::to_string(vec101.vec[0]));
-  // IC_API::debug_print("vec101.vec[1] = " + std::to_string(vec101.vec[1]));
+  // std::cout << " " << std::endl;
+  // std::cout << "vec101.vec.size() = " +
+  //                     std::to_string(vec101.vec.size()) << std::endl;
+  // std::cout << "vec101.vec[0] = " + std::to_string(vec101.vec[0]) << std::endl;
+  // std::cout << "vec101.vec[1] = " + std::to_string(vec101.vec[1]) << std::endl;
   // std::snprintf(buffer, sizeof(buffer), "%p",
   //               static_cast<void *>(vec101.vec.data()));
   // address = buffer;
-  // IC_API::debug_print("vec101.vec.data() address = " + address);
+  // std::cout << "vec101.vec.data() address = " + address << std::endl;
 }
 
 // -----------------------------------------------------------------------

@@ -13,6 +13,7 @@ $ dfx canister call --type idl --output idl demo demo_string_to_int128 '()'
 */
 #include "demo_string_to_int128.h"
 
+#include <iostream>
 #include <optional>
 #include <string>
 
@@ -30,31 +31,32 @@ void demo_string_to_int128() {
   //   conversion is successful.
 
   std::optional<__uint128_t> max__uint128_t = IC_API::string_to_uint128_t(
-      "340282366920938463463374607431768211455");  // 2^128 - 1
+      "340282366920938463463374607431768211455"); // 2^128 - 1
   std::optional<__int128_t> max__int128_t = IC_API::string_to_int128_t(
-      "170141183460469231731687303715884105727");  // +2^127 - 1
+      "170141183460469231731687303715884105727"); // +2^127 - 1
   std::optional<__int128_t> min__int128_t = IC_API::string_to_int128_t(
       "-170141183460469231731687303715884105727"); // -2^127 - 1
 
   // Now we first check the content of the std::optional, before using to_string_128
   // This is a roundtrip from string -> value -> string
   if (max__uint128_t.has_value()) {
-    IC_API::debug_print("max__uint128_t=" +
-                        IC_API::to_string_128(max__uint128_t.value()));
+    std::cout << "max__uint128_t=" +
+                     IC_API::to_string_128(max__uint128_t.value())
+              << std::endl;
   } else {
     IC_API::trap("ERROR: string_to_uint128_t failed for max__uint128_t");
   }
 
   if (max__int128_t.has_value()) {
-    IC_API::debug_print("max__int128_t=" +
-                        IC_API::to_string_128(max__int128_t.value()));
+    std::cout << "max__int128_t=" + IC_API::to_string_128(max__int128_t.value())
+              << std::endl;
   } else {
     IC_API::trap("ERROR: string_to_int128_t failed for max__int128_t");
   }
 
   if (min__int128_t.has_value()) {
-    IC_API::debug_print("min__int128_t=" +
-                        IC_API::to_string_128(min__int128_t.value()));
+    std::cout << "min__int128_t=" + IC_API::to_string_128(min__int128_t.value())
+              << std::endl;
   } else {
     IC_API::trap("ERROR: string_to_int128_t failed for min__int128_t");
   }

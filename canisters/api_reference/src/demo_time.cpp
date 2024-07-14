@@ -7,6 +7,7 @@ $ dfx canister call --type idl --output idl demo demo_time '()'
 #include "demo_time.h"
 #include "ic_api.h"
 #include <ctime>
+#include <iostream>
 #include <sstream>
 
 std::string format_time(uint64_t time_in_ns) {
@@ -27,15 +28,15 @@ std::string format_time(uint64_t time_in_ns) {
   std::string formatted_time = "";
   formatted_time += std::to_string(tm->tm_year + 1900); // Year
   formatted_time += "-";
-  formatted_time += std::to_string(tm->tm_mon + 1);     // Month
+  formatted_time += std::to_string(tm->tm_mon + 1); // Month
   formatted_time += "-";
-  formatted_time += std::to_string(tm->tm_mday);        // Day
+  formatted_time += std::to_string(tm->tm_mday); // Day
   formatted_time += " ";
-  formatted_time += std::to_string(tm->tm_hour);        // Hour
+  formatted_time += std::to_string(tm->tm_hour); // Hour
   formatted_time += ":";
-  formatted_time += std::to_string(tm->tm_min);         // Minute
+  formatted_time += std::to_string(tm->tm_min); // Minute
   formatted_time += ":";
-  formatted_time += std::to_string(tm->tm_sec);         // Second
+  formatted_time += std::to_string(tm->tm_sec); // Second
 
   return formatted_time;
 }
@@ -50,6 +51,6 @@ void demo_time() {
   msg.append("The current system time in nanoseconds: " +
              std::to_string(time_in_ns) + " (" + format_time(time_in_ns) + ")");
 
-  IC_API::debug_print(msg);
+  std::cout << msg << std::endl;
   ic_api.to_wire(CandidTypeText(msg));
 }

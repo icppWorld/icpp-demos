@@ -13,6 +13,7 @@ $ dfx canister call --type idl --output idl demo demo_candid_type_principals '(p
 */
 #include "demo_candid_type_principal.h"
 
+#include <iostream>
 #include <string>
 
 #include "ic_api.h"
@@ -30,8 +31,9 @@ void demo_candid_type_principal() {
   // - It's just a string, nothing more. Not authenticated by IC using keys
   std::string in{""};
   ic_api.from_wire(CandidTypePrincipal{&in});
-  IC_API::debug_print("Method " + std::string(__func__) + " received value '" +
-                      in + "'");
+  std::cout << "Method " + std::string(__func__) + " received value '" + in +
+                   "'"
+            << std::endl;
 
   ic_api.to_wire(CandidTypePrincipal{in});
 }
@@ -47,8 +49,9 @@ void demo_candid_type_principals() {
   args_in.append(CandidTypePrincipal(&in2));
   ic_api.from_wire(args_in);
 
-  IC_API::debug_print("Method " + std::string(__func__) + " received values '" +
-                      in1 + "' & '" + in2 + "'");
+  std::cout << "Method " + std::string(__func__) + " received values '" + in1 +
+                   "' & '" + in2 + "'"
+            << std::endl;
 
   CandidArgs args_out;
   args_out.append(CandidTypePrincipal(in1));

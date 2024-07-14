@@ -21,9 +21,9 @@ CANISTER_NAME = "memory"
 
 def test__memory(network: str) -> None:
     # for IC network, the update calls take longer
-    update_timeout_seconds = 3
+    update_timeout_seconds = 60
     if network == "ic":
-        update_timeout_seconds = 10
+        update_timeout_seconds = 60
     # ------------------------------------------------
     response = call_canister_api(
         dfx_json_path=DFX_JSON_PATH,

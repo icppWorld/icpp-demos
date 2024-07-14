@@ -11,11 +11,16 @@ $ dfx canister call --type idl --output idl demo demo_debug_print '()'
 */
 #include "demo_debug_print.h"
 #include "ic_api.h"
+#include <iostream>
 
 void demo_debug_print() {
   IC_API ic_api(CanisterQuery{std::string(__func__)}, false);
   CandidTypePrincipal caller = ic_api.get_caller();
 
+  // You can use this
+  std::cout << "Hello " + caller.get_text() << std::endl;
+
+  // Or this.
   IC_API::debug_print("Hello " + caller.get_text());
 
   ic_api.from_wire();

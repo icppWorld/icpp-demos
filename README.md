@@ -12,6 +12,7 @@ Each sub folder of `canisters` contains a standalone icpp-pro project.
 | counter       | An Orthogonal Persistence demo for uint64_t |
 | counter4me    | An Orthogonal Persistence demo for std::unordered_map<std::string, uint64_t> |
 | counters      | An Orthogonal Persistence demo for std::vector |
+| files         | A demo of the virtual file system: open/close/read/write, ascii & binary, upload/download |
 | memory        | Orthogonal Persistence of C++ Data Structures on the Internet Computer: A Study |
 
 ## Setup

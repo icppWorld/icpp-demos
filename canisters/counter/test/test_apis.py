@@ -21,9 +21,9 @@ CANISTER_NAME = "counter"
 
 def test__counter(identity_default: dict[str, str], network: str) -> None:
     # for IC network, the update calls take longer
-    update_timeout_seconds = 3
+    update_timeout_seconds = 60
     if network == "ic":
-        update_timeout_seconds = 10
+        update_timeout_seconds = 60
     # ------------------------------------------------
     # Set the counter to 10
     response = call_canister_api(

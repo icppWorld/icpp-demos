@@ -105,7 +105,7 @@ python-clean:
 	find . -name '*.pyo' -exec rm -f {} +
 	find . -name '*~' -exec rm -f  {} +
 
-PYTHON_DIRS ?= canisters
+PYTHON_DIRS ?= canisters scripts
 
 .PHONY: python-format
 python-format:

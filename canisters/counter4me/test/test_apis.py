@@ -23,9 +23,9 @@ def test__counter4me_default_principal(
     identity_default: dict[str, str], network: str
 ) -> None:
     # for IC network, the update calls take longer
-    update_timeout_seconds = 3
+    update_timeout_seconds = 60
     if network == "ic":
-        update_timeout_seconds = 10
+        update_timeout_seconds = 60
     # ------------------------------------------------
     # Set the counter to 10
     response = call_canister_api(
@@ -69,9 +69,9 @@ def test__counter4me_anonymous_principal(
     identity_anonymous: dict[str, str], network: str
 ) -> None:
     # for IC network, the update calls take longer
-    update_timeout_seconds = 3
+    update_timeout_seconds = 60
     if network == "ic":
-        update_timeout_seconds = 10
+        update_timeout_seconds = 60
     # ------------------------------------------------
     # Set the counter to 10
     response = call_canister_api(

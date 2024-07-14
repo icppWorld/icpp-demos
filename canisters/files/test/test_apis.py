@@ -19,6 +19,7 @@ DFX_JSON_PATH = Path(__file__).parent / "../dfx.json"
 # Canister in the dfx.json file we want to test
 CANISTER_NAME = "files"
 
+
 @pytest.mark.run_after_upgrade
 def test__health(identity_anonymous: dict[str, str], network: str) -> None:
     response = call_canister_api(
@@ -94,6 +95,7 @@ def test__file_download_chunk_0_to_9(network: str) -> None:
     )
     expected_response = r'(variant { Ok = record { done = false; chunk = blob "\5f\64\61\74\61\5f\06\00\00\00"; offset = 0 : nat64; filesize = 52 : nat64; chunksize = 10 : nat64;} })'
     assert response == expected_response
+
 
 @pytest.mark.run_after_upgrade
 def test__file_download_chunk_10_to_19(network: str) -> None:

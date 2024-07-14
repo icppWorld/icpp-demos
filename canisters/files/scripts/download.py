@@ -44,7 +44,7 @@ def main() -> int:
     dfx_json_path = ROOT_PATH / "dfx.json"
 
     print(
-        f"Summary of model & NFT Collection:"
+        f"Summary:"
         f"\n - canister_filename   = {canister_filename}"
         f"\n - local_filename_path = {local_filename_path}"
         f"\n - chunksize           = {chunksize} ({chunksize/1024/1024:.3f} Mb)"

@@ -1,5 +1,4 @@
-// canister_init, and health & ready endpoints
-#include "canister.h"
+#include "health.h"
 
 #include <iostream>
 #include <string>

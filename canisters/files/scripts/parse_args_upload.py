@@ -5,7 +5,7 @@ import argparse
 
 def parse_args() -> argparse.Namespace:
     """Returns the command line arguments"""
-    parser = argparse.ArgumentParser(description="Download a file")
+    parser = argparse.ArgumentParser(description="Upload a file")
     parser.add_argument(
         "local-filename",
         type=str,

@@ -44,10 +44,6 @@ type FileUploadRecord = record {
 };
 
 // -----------------------------------------------------
-type ReadSmallFileInputRecord = record { 
-  filename: text;
-};
-
 type FileContentRecordResult = variant {
   Err : ApiError;
   Ok : FileContentRecord;

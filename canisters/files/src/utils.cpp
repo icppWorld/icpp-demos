@@ -29,27 +29,3 @@ bool open_ofstream(const std::string &filename,
   }
   return true;
 }
-
-std::ofstream open_ofstream_or_trap(std::string filename,
-                                    std::ios_base::openmode mode) {
-  std::ofstream of_stream;
-  of_stream.open(filename.c_str(), mode);
-  if (!of_stream.is_open()) {
-    std::string msg = std::string(__func__) +
-                      ": failed to open ofstream for file " + filename;
-    IC_API::trap(msg);
-  }
-  return of_stream;
-}
-
-std::ifstream open_ifstream_or_trap(std::string filename,
-                                    std::ios_base::openmode mode) {
-  std::ifstream if_stream;
-  if_stream.open(filename.c_str(), mode);
-  if (!if_stream.is_open()) {
-    std::string msg = std::string(__func__) +
-                      ": failed to open ifstream for file " + filename;
-    IC_API::trap(msg);
-  }
-  return if_stream;
-}

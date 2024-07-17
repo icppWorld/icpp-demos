@@ -9,7 +9,12 @@ This canister is NOT deployed to the IC, because the investigation relies on pri
 1. Data structures fully living in the global/static section of the stack are correctly persisted. This includes regular data types like `int`, `float`, `uint64_t`, etc. and the special STL container `std::array`, which keeps all its data on the stack.
 2. Self-managed dynamic data structures are correctly persisted too. This is when the data lives on the Heap, but the pointer to the data is in the global/static section of the stack. This was tested for both `new/delete` and `calloc/free` style memory management.
 3. Self-managed pointers to STL containers like std::vector also work. As long as you self manage a pointer in the global/static memory, and then use new/delete on them inside your functions.
-4. Defining STL containers like std::vector directly in global/static section is not working. Not only are they not persisted, just adding these to the global/static section corrupts the canister memory, even if you’re not using them at all… The tests show that the metadata for the std::vector (like its size and the Heap address pointed to by the vector) is persisted, but the actual values aren’t.
+4. Defining STL containers like `std::vector`, `std::map`, or `static const std::vector`, `static const std::map`  directly in global/static section is not working. Not only are they not persisted, just adding these to the global/static section corrupts the canister memory, even if you’re not using them at all. The tests show that the metadata for an std::vector or std::map (like its size and the Heap address pointed to by the vector) is persisted, but the actual values aren’t. When you try to access them, the canister will return an error:
+
+    ```
+    Error: Failed query call.
+    Caused by: The replica returned a rejection error: reject code CanisterError, reject message IC0502: Error from Canister bkyz2-fmaaa-aaaaa-qaaaq-cai: Canister trapped: heap out of bounds, error code Some("IC0502")
+    ```
 
 ## To replicate the experiment
 
@@ -31,7 +36,7 @@ To run the experiment, follow these instructions.
   ```
 - Then run these commands:
   ```bash
-  icpp build-wasm  # second time, add this option: --to-compile mine
+  icpp build-wasm  # second time, add this option: --to-compile mine-no-lib
   dfx deploy
   dfx canister call memory change_memory # see output in local dfx log window
   dfx canister call memory print_memory  # see output in local dfx log window

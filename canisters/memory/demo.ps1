@@ -12,6 +12,19 @@
 #######################################################################
 Write-Host " "
 Write-Host "--------------------------------------------------"
+Write-Host "Building the Windows native debug executable with clang++"
+icpp build-native --to-compile all
+# icpp build-native --to-compile mine
+
+#######################################################################
+Write-Host " "
+Write-Host "--------------------------------------------------"
+Write-Host "Running the Windows native debug executable"
+.\build-native\mockic.exe
+
+#######################################################################
+Write-Host " "
+Write-Host "--------------------------------------------------"
 Write-Host "Stopping the local network in wsl"
 wsl --% . ~/.local/share/dfx/env; dfx stop
 
@@ -75,14 +88,3 @@ Write-Host "Stopping the local network in wsl"
 wsl --% . ~/.local/share/dfx/env; dfx stop
 
 #######################################################################
-Write-Host " "
-Write-Host "--------------------------------------------------"
-Write-Host "Building the Windows native debug executable with clang++"
-icpp build-native --to-compile all
-# icpp build-native --to-compile mine
-
-#######################################################################
-Write-Host " "
-Write-Host "--------------------------------------------------"
-Write-Host "Running the Windows native debug executable"
-.\build-native\mockic.exe

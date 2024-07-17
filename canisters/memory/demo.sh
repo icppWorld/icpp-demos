@@ -12,6 +12,19 @@
 #######################################################################
 echo " "
 echo "--------------------------------------------------"
+echo "Building the OS native debug executable with clang++"
+icpp build-native --to-compile all
+# icpp build-native --to-compile mine
+
+#######################################################################
+echo " "
+echo "--------------------------------------------------"
+echo "Running the OS native debug executable"
+./build-native/mockic.exe
+
+#######################################################################
+echo " "
+echo "--------------------------------------------------"
 echo "Stopping the local network"
 dfx stop
 
@@ -49,16 +62,3 @@ pytest --network=local
 echo "--------------------------------------------------"
 echo "Stopping the local network"
 dfx stop
-
-#######################################################################
-echo " "
-echo "--------------------------------------------------"
-echo "Building the OS native debug executable with clang++"
-icpp build-native --to-compile all
-# icpp build-native --to-compile mine
-
-#######################################################################
-echo " "
-echo "--------------------------------------------------"
-echo "Running the OS native debug executable"
-./build-native/mockic.exe

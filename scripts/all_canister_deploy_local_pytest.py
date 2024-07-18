@@ -65,17 +65,20 @@ def main() -> int:
                             "files persist across a canister upgrade"
                         )
 
-                    typer.echo(f"--\nDeploy {canister_path.name} with forced upgrade")
-                    run_dfx_cmd("deploy --upgrade-unchanged", cwd=canister_path)
+                        typer.echo(
+                            f"--\nDeploy {canister_path.name} with forced upgrade"
+                        )
+                        run_dfx_cmd("deploy --upgrade-unchanged", cwd=canister_path)
 
-                    typer.echo(
-                        f"--\nRun pytest on {test_api_path} for tests "
-                        "marked with 'run_after_upgrade'"
-                    )
-                    run_shell_cmd(
-                        f"pytest --network=local -m run_after_upgrade {test_api_path}",
-                        cwd=ROOT_PATH,
-                    )
+                        typer.echo(
+                            f"--\nRun pytest on {test_api_path} for tests "
+                            "marked with 'run_after_upgrade'"
+                        )
+                        run_shell_cmd(
+                            f"pytest --network=local -m run_after_upgrade "
+                            f"{test_api_path}",
+                            cwd=ROOT_PATH,
+                        )
 
                     typer.echo("--\nStop the local network")
                     run_dfx_cmd("stop")

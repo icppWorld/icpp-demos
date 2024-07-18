@@ -70,7 +70,6 @@ Caused by: The replica returned a rejection error: reject code CanisterError,
 // static const std::map<int, const char *> map1 = {
 //     {0, "item-0"}, {1, "item-1"}, {2, "item-2"}};
 
-
 // -----------------------------------------------------------------------
 // Helper functions
 void new_memory() {
@@ -137,7 +136,6 @@ void delete_memory() {
     delete p_map;
     p_map = nullptr;
   }
-
 }
 
 void change_it() {

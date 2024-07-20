@@ -8,15 +8,19 @@
 
 // -----------------------------------------------------------------------
 // State of the Smart Contract, using Orthogonal Persistence
-// For Orthogonal Persistence to work, the data must be managed at a global level
-
-// --
-// These work. Values are persisted after an update call.
+// Just define them in the static/global section, and they will be persisted
 
 // Fixed data structures with all data living on the stack
 uint64_t i1{0};
 std::array<uint64_t, 2> arr1{};
 
+// --
+// Standard library data structures that keep data on the heap
+std::vector<uint64_t> vec1(2, 0);
+static const std::map<int, const char *> map1 = {
+    {0, "item-0"}, {1, "item-1"}, {2, "item-2"}};
+
+// --
 // Self managed dynamic data structures:
 // (-) Memory lives on the Heap
 // (-) Point to memory lives on the Stack in static/global section
@@ -52,23 +56,6 @@ struct MyMap {
       {0, "item-0"}, {1, "item-1"}, {2, "item-2"}};
 };
 MyMap *p_map{nullptr};
-
-// --
-// Standard library data structures that keep data on the heap can NOT
-// be defined in the global/static section of the code:
-// -> Values are not persisted after an update call.
-// -> Just adding them here corrupts memory of the canister, and you will
-//    get this message when calling the endpoints:
-/*
-Error: Failed query call.
-Caused by: The replica returned a rejection error: reject code CanisterError, 
-           reject message IC0502: Error from Canister bkyz2-fmaaa-aaaaa-qaaaq-cai: 
-           Canister trapped: heap out of bounds, error code Some("IC0502")
-*/
-// std::vector<uint64_t> vec1(2, 0);
-// MyVec vec101;
-// static const std::map<int, const char *> map1 = {
-//     {0, "item-0"}, {1, "item-1"}, {2, "item-2"}};
 
 // -----------------------------------------------------------------------
 // Helper functions
@@ -161,11 +148,8 @@ void change_it() {
   p_str2->str = "String value: '" + std::to_string(i1) + "'";
 
   // Outcomment these will lead to HEAP OUT OF BOUND
-  // ++vec1[0];
-  // ++vec1[1];
-
-  // ++vec101.vec[0];
-  // ++vec101.vec[1];
+  ++vec1[0];
+  ++vec1[1];
 }
 
 void print_it(std::string calling_function) {
@@ -239,27 +223,17 @@ void print_it(std::string calling_function) {
   std::cout << "p_map->map.at(0)) = " << p_map->map.at(0) << std::endl;
 
   // Outcommenting these will lead to HEAP OUT OF BOUNDS
-  // std::cout << " " << std::endl;
-  // std::cout << "vec1.size() = " + std::to_string(vec1.size()) << std::endl;
-  // std::cout << "vec1[0] = " + std::to_string(vec1[0]) << std::endl;
-  // std::cout << "vec1[1] = " + std::to_string(vec1[1]) << std::endl;
-  // std::snprintf(buffer, sizeof(buffer), "%p", static_cast<void *>(vec1.data()));
-  // address = buffer;
-  // std::cout << "vec1.data() address = " + address << std::endl;
+  std::cout << " " << std::endl;
+  std::cout << "vec1.size() = " + std::to_string(vec1.size()) << std::endl;
+  std::cout << "vec1[0] = " + std::to_string(vec1[0]) << std::endl;
+  std::cout << "vec1[1] = " + std::to_string(vec1[1]) << std::endl;
+  std::snprintf(buffer, sizeof(buffer), "%p", static_cast<void *>(vec1.data()));
+  address = buffer;
+  std::cout << "vec1.data() address = " + address << std::endl;
 
-  // std::cout << " " << std::endl;
-  // std::cout << "vec101.vec.size() = " +
-  //                     std::to_string(vec101.vec.size()) << std::endl;
-  // std::cout << "vec101.vec[0] = " + std::to_string(vec101.vec[0]) << std::endl;
-  // std::cout << "vec101.vec[1] = " + std::to_string(vec101.vec[1]) << std::endl;
-  // std::snprintf(buffer, sizeof(buffer), "%p",
-  //               static_cast<void *>(vec101.vec.data()));
-  // address = buffer;
-  // std::cout << "vec101.vec.data() address = " + address << std::endl;
-
-  // std::cout << " " << std::endl;
-  // std::cout << "map1.size() = " << map1.size() << std::endl;
-  // std::cout << "map1.at(0)) = " << map1.at(0) << std::endl;
+  std::cout << " " << std::endl;
+  std::cout << "map1.size() = " << map1.size() << std::endl;
+  std::cout << "map1.at(0)) = " << map1.at(0) << std::endl;
 }
 
 // -----------------------------------------------------------------------

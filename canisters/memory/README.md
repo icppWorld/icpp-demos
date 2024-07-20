@@ -6,29 +6,23 @@ This canister is NOT deployed to the IC, because the investigation relies on pri
 
 ## Here are the key points:
 
-1. Data structures fully living in the global/static section of the stack are correctly persisted. This includes regular data types like `int`, `float`, `uint64_t`, etc. and the special STL container `std::array`, which keeps all its data on the stack.
-2. Self-managed dynamic data structures are correctly persisted too. This is when the data lives on the Heap, but the pointer to the data is in the global/static section of the stack. This was tested for both `new/delete` and `calloc/free` style memory management.
-3. Self-managed pointers to STL containers like std::vector also work. As long as you self manage a pointer in the global/static memory, and then use new/delete on them inside your functions.
-4. Defining STL containers like `std::vector`, `std::map`, or `static const std::vector`, `static const std::map`  directly in global/static section is not working. Not only are they not persisted, just adding these to the global/static section corrupts the canister memory, even if you’re not using them at all. The tests show that the metadata for an std::vector or std::map (like its size and the Heap address pointed to by the vector) is persisted, but the actual values aren’t. When you try to access them, the canister will return an error:
+Since icpp-pro 4.1.0, all data structures defined in the static section of your C++ code will be correctly persisted.
 
-    ```
-    Error: Failed query call.
-    Caused by: The replica returned a rejection error: reject code CanisterError, reject message IC0502: Error from Canister bkyz2-fmaaa-aaaaa-qaaaq-cai: Canister trapped: heap out of bounds, error code Some("IC0502")
-    ```
+NOTE:
+
+- Previous releases had an issue, which is described, together with the solution in the forum post: [Orthogonal Persistence of C++ Data Structures on the Internet Computer...](https://forum.dfinity.org/t/orthogonal-persistence-of-c-data-structures-on-the-internet-computer-a-study/21828?u=icpp)
+
 
 ## To replicate the experiment
-
-The code for testing std::vector defined directly in global/static section has been outcommented. If you want to test that, please edit the file `src/memory.cpp` first and uncomment the relevant lines.
 
 To run the experiment, follow these instructions. 
 
  - We assume you already have dfx installed
-   - On Windows, dfx runs in wsl, but you will issue these commands in a PowerShell/Miniconda shell, and simply prefix the dfx commands with: `wsl --% dfx ...`
+   - On Windows, dfx runs in wsl, but you will issue these commands in a PowerShell/Miniconda shell, and simply prefix the dfx commands with: `wsl --% . ~/.local/share/dfx/env; dfx ...`
 
 - [Install](https://docs.icpp.world/installation.html):  
   ```bash
   pip install icpp-pro
-  icpp install-wasi-sdk # installs wasi-sdk compiler in ~/.icpp
   ```
 - Start the local network:
   ```bash
@@ -41,124 +35,3 @@ To run the experiment, follow these instructions.
   dfx canister call memory change_memory # see output in local dfx log window
   dfx canister call memory print_memory  # see output in local dfx log window
   ```
-
-The output in the canister shows the following:
-
-```bash
-dfx canister call memory change_memory
-[Canister ...-cai] ------
-[Canister ...-cai] change_memory:
-[Canister ...-cai]  
-[Canister ...-cai] i1 = 0
-[Canister ...-cai]  
-[Canister ...-cai] arr1.size() = 2
-[Canister ...-cai] arr1[0] = 0
-[Canister ...-cai] arr1[1] = 0
-[Canister ...-cai] arr1.data() address = 0x14820
-[Canister ...-cai]  
-[Canister ...-cai] p_nd_i1[0] = 0
-[Canister ...-cai] p_nd_i1[1] = 0
-[Canister ...-cai] p_nd_i1 address = 0x148b0
-[Canister ...-cai]  
-[Canister ...-cai] p_cf_i1[0] = 0
-[Canister ...-cai] p_cf_i1[1] = 0
-[Canister ...-cai] p_cf_i1 address = 0x14a90
-[Canister ...-cai]  
-[Canister ...-cai] (*p_vec1).size() = 2
-[Canister ...-cai] (*p_vec1)[0] = 0
-[Canister ...-cai] (*p_vec1)[1] = 0
-[Canister ...-cai] (*p_vec1).data() address = 0x14ac0
-[Canister ...-cai]  
-[Canister ...-cai] p_vec2->vec.size() = 2
-[Canister ...-cai] p_vec2->vec[0] = 0
-[Canister ...-cai] p_vec2->vec[1] = 0
-[Canister ...-cai] p_vec2->vec.data() address = 0x14af0
-[Canister ...-cai]  
-[Canister ...-cai] vec1.size() = 2
-[Canister ...-cai] vec1[0] = 0
-[Canister ...-cai] vec1[1] = 0
-[Canister ...-cai] vec1.data() address = 0x14870
-[Canister ...-cai]  
-[Canister ...-cai] vec101.vec.size() = 2
-[Canister ...-cai] vec101.vec[0] = 0
-[Canister ...-cai] vec101.vec[1] = 0
-[Canister ...-cai] vec101.vec.data() address = 0x14890
-[Canister ...-cai] ------
-[Canister ...-cai] change_memory:
-[Canister ...-cai]  
-[Canister ...-cai] i1 = 1
-[Canister ...-cai]  
-[Canister ...-cai] arr1.size() = 2
-[Canister ...-cai] arr1[0] = 1
-[Canister ...-cai] arr1[1] = 1
-[Canister ...-cai] arr1.data() address = 0x14820
-[Canister ...-cai]  
-[Canister ...-cai] p_nd_i1[0] = 1
-[Canister ...-cai] p_nd_i1[1] = 1
-[Canister ...-cai] p_nd_i1 address = 0x148b0
-[Canister ...-cai]  
-[Canister ...-cai] p_cf_i1[0] = 1
-[Canister ...-cai] p_cf_i1[1] = 1
-[Canister ...-cai] p_cf_i1 address = 0x14a90
-[Canister ...-cai]  
-[Canister ...-cai] (*p_vec1).size() = 2
-[Canister ...-cai] (*p_vec1)[0] = 1
-[Canister ...-cai] (*p_vec1)[1] = 1
-[Canister ...-cai] (*p_vec1).data() address = 0x14ac0
-[Canister ...-cai]  
-[Canister ...-cai] p_vec2->vec.size() = 2
-[Canister ...-cai] p_vec2->vec[0] = 1
-[Canister ...-cai] p_vec2->vec[1] = 1
-[Canister ...-cai] p_vec2->vec.data() address = 0x14af0
-[Canister ...-cai]  
-[Canister ...-cai] vec1.size() = 2
-[Canister ...-cai] vec1[0] = 1
-[Canister ...-cai] vec1[1] = 1
-[Canister ...-cai] vec1.data() address = 0x14870
-[Canister ...-cai]  
-[Canister ...-cai] vec101.vec.size() = 2
-[Canister ...-cai] vec101.vec[0] = 1
-[Canister ...-cai] vec101.vec[1] = 1
-[Canister ...-cai] vec101.vec.data() address = 0x14890
-```
-
-```bash
-dfx canister call memory print_memory
-[Canister ...-cai] ------
-[Canister ...-cai] print_memory:
-[Canister ...-cai]  
-[Canister ...-cai] i1 = 1
-[Canister ...-cai]  
-[Canister ...-cai] arr1.size() = 2
-[Canister ...-cai] arr1[0] = 1
-[Canister ...-cai] arr1[1] = 1
-[Canister ...-cai] arr1.data() address = 0x14820
-[Canister ...-cai]  
-[Canister ...-cai] p_nd_i1[0] = 1
-[Canister ...-cai] p_nd_i1[1] = 1
-[Canister ...-cai] p_nd_i1 address = 0x148b0
-[Canister ...-cai]  
-[Canister ...-cai] p_cf_i1[0] = 1
-[Canister ...-cai] p_cf_i1[1] = 1
-[Canister ...-cai] p_cf_i1 address = 0x14a90
-[Canister ...-cai]  
-[Canister ...-cai] (*p_vec1).size() = 2
-[Canister ...-cai] (*p_vec1)[0] = 1
-[Canister ...-cai] (*p_vec1)[1] = 1
-[Canister ...-cai] (*p_vec1).data() address = 0x14ac0
-[Canister ...-cai]  
-[Canister ...-cai] p_vec2->vec.size() = 2
-[Canister ...-cai] p_vec2->vec[0] = 1
-[Canister ...-cai] p_vec2->vec[1] = 1
-[Canister ...-cai] p_vec2->vec.data() address = 0x14af0
-[Canister ...-cai]  
-[Canister ...-cai] vec1.size() = 2
-[Canister ...-cai] vec1[0] = 0                              # NOT OK!
-[Canister ...-cai] vec1[1] = 0                              # NOT OK!
-[Canister ...-cai] vec1.data() address = 0x14870
-[Canister ...-cai]  
-[Canister ...-cai] vec101.vec.size() = 2
-[Canister ...-cai] vec101.vec[0] = 0                        # NOT OK!
-[Canister ...-cai] vec101.vec[1] = 0                        # NOT OK!
-[Canister ...-cai] vec101.vec.data() address = 0x14890
-```

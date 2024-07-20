@@ -8,11 +8,6 @@ This canister is NOT deployed to the IC, because the investigation relies on pri
 
 Since icpp-pro 4.1.0, all data structures defined in the static section of your C++ code will be correctly persisted.
 
-NOTE:
-
-- Previous releases had an issue, which is described, together with the solution in the forum post: [Orthogonal Persistence of C++ Data Structures on the Internet Computer...](https://forum.dfinity.org/t/orthogonal-persistence-of-c-data-structures-on-the-internet-computer-a-study/21828?u=icpp)
-
-
 ## To replicate the experiment
 
 To run the experiment, follow these instructions. 

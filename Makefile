@@ -38,7 +38,7 @@ VERSION_CLANG := $(shell cat version_clang.txt)
 
 ###########################################################################
 # Use some clang tools that come with wasi-sdk
-WASI_SDK_COMPILER_ROOT := $(HOME)/.icpp/wasi-sdk/wasi-sdk-22.0
+WASI_SDK_COMPILER_ROOT := $(HOME)/.icpp/wasi-sdk/wasi-sdk-25.0
 CLANG_FORMAT = $(WASI_SDK_COMPILER_ROOT)/bin/clang-format
 CLANG_TIDY = $(WASI_SDK_COMPILER_ROOT)/bin/clang-tidy
 

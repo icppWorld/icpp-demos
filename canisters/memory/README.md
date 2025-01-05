@@ -13,7 +13,6 @@ Since icpp-pro 4.1.0, all data structures defined in the static section of your 
 To run the experiment, follow these instructions. 
 
  - We assume you already have dfx installed
-   - On Windows, dfx runs in wsl, but you will issue these commands in a PowerShell/Miniconda shell, and simply prefix the dfx commands with: `wsl --% . ~/.local/share/dfx/env; dfx ...`
 
 - [Install](https://docs.icpp.world/installation.html):  
   ```bash

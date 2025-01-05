@@ -19,7 +19,7 @@ Each sub folder of `canisters` contains a standalone icpp-pro project.
 
 - Follow the [icpp-pro installation](https://docs.icpp.world/installation.html) instructions
 - Then check the README for each canister
-  - Basically just run the `demo.ps1` on Windows PowerShell, and the `demo.sh` on Linux/Mac
+  - Basically just run the `demo.sh`
 
 
 ## Support

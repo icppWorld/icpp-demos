@@ -12,7 +12,7 @@
 #######################################################################
 echo " "
 echo "--------------------------------------------------"
-echo "Building the OS native debug executable with clang++"
+echo "Building the OS native debug executable with icpp-pro"
 icpp build-native --to-compile all
 # icpp build-native --to-compile mine
 
@@ -35,7 +35,7 @@ dfx start --clean --background
 
 #######################################################################
 echo "--------------------------------------------------"
-echo "Building the wasm with wasi-sdk"
+echo "Building the wasm with icpp-pro"
 icpp build-wasm --to-compile all
 # icpp build-wasm --to-compile mine
 

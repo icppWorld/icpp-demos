@@ -2,7 +2,6 @@
 
 #include "wasm_symbol.h"
 
-void canister_init() WASM_SYMBOL_EXPORTED("canister_init");
 void write_counters() WASM_SYMBOL_EXPORTED("canister_update write_counters");
 void additional_counters()
     WASM_SYMBOL_EXPORTED("canister_update additional_counters");

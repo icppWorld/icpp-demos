@@ -20,10 +20,6 @@ int main() {
   bool silent_on_trap = true;
 
   // --------------------------------------------------------------------
-  // '()' -> canister_init does not return directly, so skip validation check
-  mockIC.run_test("canister_init", canister_init, "4449444c0000", "",
-                  silent_on_trap, my_principal);
-
   // '(vec { 10 : nat64; 10 : nat64 })' -> '()'
   mockIC.run_test("write_counters", write_counters,
                   "4449444c016d780100020a000000000000000a00000000000000", "",

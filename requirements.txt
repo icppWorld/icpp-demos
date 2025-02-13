@@ -1,4 +1,4 @@
-icpp-pro>=5.0.1
+icpp-pro>=5.0.2
 ic-py==1.0.1
 
 # to lint python scripts

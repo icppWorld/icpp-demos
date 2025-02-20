@@ -3,7 +3,7 @@
   "canisters": {
     "counters": {
       "type": "custom",
-      "candid": "src/counters.did",
+      "candid": "build/counters.did",
       "wasm": "build/counters.wasm"
     }
   },

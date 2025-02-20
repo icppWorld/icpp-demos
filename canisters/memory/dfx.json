@@ -3,7 +3,7 @@
   "canisters": {
     "memory": {
       "type": "custom",
-      "candid": "src/memory.did",
+      "candid": "build/memory.did",
       "wasm": "build/memory.wasm"
     }
   },

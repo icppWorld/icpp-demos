@@ -3,7 +3,7 @@
   "canisters": {
     "counter4me": {
       "type": "custom",
-      "candid": "src/counter4me.did",
+      "candid": "build/counter4me.did",
       "wasm": "build/counter4me.wasm"
     }
   },

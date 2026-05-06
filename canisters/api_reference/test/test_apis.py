@@ -646,6 +646,227 @@ def test__demo_time(network: str, principal: str) -> None:
     assert response.startswith(expected_response_starts_with)
 
 
+# -------------------------------------------------------------------------------
+# Timers — IC_API::set_timer / set_timer_recurring / cancel_timer / cancel_all_timers
+#
+# The IC fires `canister_global_timer` automatically; tests poll the counter
+# query methods up to a deadline rather than sleeping a fixed duration.
+
+
+def _poll_one_shot_fires(network: str, deadline_s: float = 10.0) -> int:
+    import time
+
+    end = time.monotonic() + deadline_s
+    last = 0
+    while time.monotonic() < end:
+        response = call_canister_api(
+            dfx_json_path=DFX_JSON_PATH,
+            canister_name=CANISTER_NAME,
+            canister_method="demo_get_one_shot_fires",
+            canister_argument="()",
+            canister_input="idl",
+            canister_output="idl",
+            network=network,
+        )
+        # response is e.g. '(1 : nat64)'
+        last = int(response.strip("()").split(":")[0].strip().replace("_", ""))
+        if last >= 1:
+            return last
+        time.sleep(0.25)
+    return last
+
+
+def _poll_recurring_fires(
+    network: str, target: int, deadline_s: float = 10.0
+) -> int:
+    import time
+
+    end = time.monotonic() + deadline_s
+    last = 0
+    while time.monotonic() < end:
+        response = call_canister_api(
+            dfx_json_path=DFX_JSON_PATH,
+            canister_name=CANISTER_NAME,
+            canister_method="demo_get_recurring_fires",
+            canister_argument="()",
+            canister_input="idl",
+            canister_output="idl",
+            network=network,
+        )
+        last = int(response.strip("()").split(":")[0].strip().replace("_", ""))
+        if last >= target:
+            return last
+        time.sleep(0.25)
+    return last
+
+
+def _parse_nat64(response: str) -> int:
+    # response is e.g. '(1 : nat64)'
+    return int(response.strip("()").split(":")[0].strip().replace("_", ""))
+
+
+def test__demo_reset_timer_counters(network: str, principal: str) -> None:
+    response = call_canister_api(
+        dfx_json_path=DFX_JSON_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_reset_timer_counters",
+        canister_argument="()",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    assert response == ""
+
+    # Both counters should now be 0.
+    response = call_canister_api(
+        dfx_json_path=DFX_JSON_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_get_one_shot_fires",
+        canister_argument="()",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    assert _parse_nat64(response) == 0
+
+    response = call_canister_api(
+        dfx_json_path=DFX_JSON_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_get_recurring_fires",
+        canister_argument="()",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    assert _parse_nat64(response) == 0
+
+
+def test__demo_set_timer(network: str, principal: str) -> None:
+    # Clean slate.
+    call_canister_api(
+        dfx_json_path=DFX_JSON_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_reset_timer_counters",
+        canister_argument="()",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+
+    # Schedule a one-shot at delay 0 — IC fires it on the next round.
+    response = call_canister_api(
+        dfx_json_path=DFX_JSON_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_set_timer",
+        canister_argument="(0 : nat64)",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    timer_id = _parse_nat64(response)
+    assert timer_id > 0
+
+    # Poll until the callback fires.
+    fires = _poll_one_shot_fires(network)
+    assert fires >= 1, f"expected one-shot to fire at least once, got {fires}"
+
+
+def test__demo_set_timer_recurring(network: str, principal: str) -> None:
+    # Clean slate.
+    call_canister_api(
+        dfx_json_path=DFX_JSON_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_reset_timer_counters",
+        canister_argument="()",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+
+    # 200 ms period — fires fast enough to observe several within deadline.
+    period_ns = 200_000_000
+    response = call_canister_api(
+        dfx_json_path=DFX_JSON_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_set_timer_recurring",
+        canister_argument=f"({period_ns} : nat64)",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    timer_id = _parse_nat64(response)
+    assert timer_id > 0
+
+    # Wait for at least 2 firings, then cancel by id.
+    fires = _poll_recurring_fires(network, target=2)
+    assert fires >= 2, f"expected recurring to fire >=2 times, got {fires}"
+
+    response = call_canister_api(
+        dfx_json_path=DFX_JSON_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_cancel_timer",
+        canister_argument=f"({timer_id} : nat64)",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    assert response == "(true)"
+
+
+def test__demo_cancel_timer(network: str, principal: str) -> None:
+    # Cancelling an unknown id returns false (no exceptions).
+    response = call_canister_api(
+        dfx_json_path=DFX_JSON_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_cancel_timer",
+        canister_argument="(999_999 : nat64)",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    assert response == "(false)"
+
+
+def test__demo_cancel_all_timers(network: str, principal: str) -> None:
+    response = call_canister_api(
+        dfx_json_path=DFX_JSON_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_cancel_all_timers",
+        canister_argument="()",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    assert response == ""
+
+
+def test__demo_get_one_shot_fires(network: str, principal: str) -> None:
+    response = call_canister_api(
+        dfx_json_path=DFX_JSON_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_get_one_shot_fires",
+        canister_argument="()",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    # Counter is monotonic across the suite — just assert it's well-formed.
+    assert _parse_nat64(response) >= 0
+
+
+def test__demo_get_recurring_fires(network: str, principal: str) -> None:
+    response = call_canister_api(
+        dfx_json_path=DFX_JSON_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_get_recurring_fires",
+        canister_argument="()",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    assert _parse_nat64(response) >= 0
+
+
 def test__demo_to_wire_no_arg(network: str, principal: str) -> None:
     response = call_canister_api(
         dfx_json_path=DFX_JSON_PATH,

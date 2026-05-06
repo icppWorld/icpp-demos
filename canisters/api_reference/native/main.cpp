@@ -33,6 +33,7 @@
 #include "../src/demo_ic_api.h"
 #include "../src/demo_string_to_int128.h"
 #include "../src/demo_time.h"
+#include "../src/demo_timers.h"
 #include "../src/demo_trap.h"
 
 #include "../src/demo_to_string_128.h"
@@ -305,6 +306,50 @@ int main() {
       "",    // Don't assert, by passing expected_response=""
       false, // Activate debug_print, by passing silent_on_trap=false
       my_principal);
+
+  // ---- timers (IC_API::set_timer family) -----------------------------------
+  //
+  // The Mock IC does not link the icpp-pro canister_global_timer dispatcher
+  // and does not advance the IC clock, so we cannot drive timer firing here.
+  // These run_test calls verify that each method parses its arguments, calls
+  // the registry methods without trapping, and returns valid candid. End-to-
+  // end behavior (callbacks actually firing) is covered by the deployed
+  // pytest in test/test_apis.py.
+
+  // Reset state from any prior test scenarios in this run.
+  // '()' -> '()'
+  mockIC.run_test("demo_reset_timer_counters", demo_reset_timer_counters,
+                  "4449444c0000", "4449444c0000", silent_on_trap, my_principal);
+
+  // '(0 : nat64)' -> '(<id> : nat64)' — register a one-shot at delay 0
+  mockIC.run_test("demo_set_timer", demo_set_timer,
+                  "4449444c0001780000000000000000", "", silent_on_trap,
+                  my_principal);
+
+  // '()' -> '(0 : nat64)' — callback hasn't run yet (no dispatcher in native)
+  mockIC.run_test("demo_get_one_shot_fires", demo_get_one_shot_fires,
+                  "4449444c0000", "4449444c0001780000000000000000",
+                  silent_on_trap, my_principal);
+
+  // '(1_000_000_000 : nat64)' -> '(<id> : nat64)' — register a 1s recurring
+  mockIC.run_test("demo_set_timer_recurring", demo_set_timer_recurring,
+                  "4449444c00017800ca9a3b00000000", "", silent_on_trap,
+                  my_principal);
+
+  // Cancel an unknown id: '(999_999 : nat64)' -> '(false)'
+  mockIC.run_test("demo_cancel_timer (unknown id)", demo_cancel_timer,
+                  "4449444c0001783f420f0000000000", "4449444c00017e00",
+                  silent_on_trap, my_principal);
+
+  // Cancel all registered timers.
+  // '()' -> '()'
+  mockIC.run_test("demo_cancel_all_timers", demo_cancel_all_timers,
+                  "4449444c0000", "4449444c0000", silent_on_trap, my_principal);
+
+  // '()' -> '(0 : nat64)' — recurring counter unchanged (no dispatch in native)
+  mockIC.run_test("demo_get_recurring_fires", demo_get_recurring_fires,
+                  "4449444c0000", "4449444c0001780000000000000000",
+                  silent_on_trap, my_principal);
 
   // '()' -> '()'
   mockIC.run_test("demo_to_wire_no_arg", demo_to_wire_no_arg, "4449444c0000",

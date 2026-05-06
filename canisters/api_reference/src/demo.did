@@ -118,6 +118,15 @@ service : {
     // docs start: demo_time
     "demo_time": () -> (text) query; // docs end: demo_time
 
+    // docs start: demo_timers
+    "demo_set_timer": (nat64) -> (nat64);
+    "demo_set_timer_recurring": (nat64) -> (nat64);
+    "demo_cancel_timer": (nat64) -> (bool);
+    "demo_cancel_all_timers": () -> ();
+    "demo_get_one_shot_fires": () -> (nat64) query;
+    "demo_get_recurring_fires": () -> (nat64) query;
+    "demo_reset_timer_counters": () -> (); // docs end: demo_timers
+
     // docs start: demo_to_wire
     "demo_to_wire_no_arg": () -> () query;
     "demo_to_wire_one_arg": (text) -> (text) query;

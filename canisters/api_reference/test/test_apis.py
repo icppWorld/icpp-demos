@@ -676,9 +676,7 @@ def _poll_one_shot_fires(network: str, deadline_s: float = 10.0) -> int:
     return last
 
 
-def _poll_recurring_fires(
-    network: str, target: int, deadline_s: float = 10.0
-) -> int:
+def _poll_recurring_fires(network: str, target: int, deadline_s: float = 10.0) -> int:
     import time
 
     end = time.monotonic() + deadline_s

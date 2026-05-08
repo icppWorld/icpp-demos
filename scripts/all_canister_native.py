@@ -7,7 +7,6 @@ import subprocess
 import typer
 from icpp.run_shell_cmd import run_shell_cmd
 
-
 ROOT_PATH = Path(__file__).parent.parent
 
 

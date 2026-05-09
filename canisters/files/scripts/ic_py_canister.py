@@ -1,14 +1,11 @@
-"""Returns the ic-py Canister instance, for calling the endpoints."""
+"""Returns the icp-py-core Canister instance, for calling the endpoints."""
 
+import re
 import sys
-import platform
 import subprocess
 from pathlib import Path
-from typing import Optional
-from ic.canister import Canister  # type: ignore
-from ic.client import Client  # type: ignore
-from ic.identity import Identity  # type: ignore
-from ic.agent import Agent  # type: ignore
+from typing import Any, List, Optional
+from icp_core import Agent, Identity, Client, Canister
 from icpp.run_shell_cmd import run_shell_cmd
 
 ROOT_PATH = Path(__file__).parent.parent
@@ -16,24 +13,46 @@ ROOT_PATH = Path(__file__).parent.parent
 # We use dfx to get some information.
 DFX = "dfx"
 
+# dfx 0.32.0 emits this deprecation banner on every invocation. Because
+# run_shell_cmd merges stderr into stdout, the banner ends up in the
+# captured output and gets glued onto things like the identity name —
+# corrupting the next dfx call's arguments. Strip exactly this known line.
+# Mirrors the fix in icpp-pro src/icpp/smoketest.py (commit 6f401c4).
+_DFX_DEPRECATION_RE = re.compile(
+    r"^WARNING: dfx is deprecated.*$\n?", flags=re.MULTILINE
+)
 
-def run_dfx_command(cmd: str) -> Optional[str]:
+
+def _strip_dfx_warnings(s: str) -> str:
+    """Remove the known dfx deprecation banner from captured shell output."""
+    return _DFX_DEPRECATION_RE.sub("", s)
+
+
+def extract_variant(response: List[Any]) -> Any:
+    """Extract variant result from icp-py-core response.
+
+    icp-py-core returns: [{'type': 'variant', 'value': {'Ok': {...}}}]
+    old ic-py returned:  [{'Ok': {...}}]
+    This helper normalizes both formats to {'Ok': {...}} or {'Err': ...}.
+    """
+    item = response[0]
+    if "value" in item:
+        return item["value"]
+    return item
+
+
+def run_dfx_command(cmd: str, quiet: bool = False) -> Optional[str]:
     """Runs dfx command as a subprocess"""
     try:
-        return run_shell_cmd(cmd, capture_output=True).rstrip("\n")
+        return _strip_dfx_warnings(run_shell_cmd(cmd, capture_output=True)).rstrip("\n")
     except subprocess.CalledProcessError as e:
-        print(f"Failed dfx command: '{cmd}' with error: \n{e.output}")
-        sys.exit(1)
+        if not quiet:
+            print(f"Failed dfx command: '{cmd}' with error: \n{e.output}")
     return None
 
 
-def get_canister(
-    canister_name: str,
-    candid_path: Path,
-    network: str = "local",
-    canister_id: Optional[str] = "",
-) -> Canister:
-    """Returns an ic_py Canister instance"""
+def get_agent(network: str = "local") -> Agent:
+    """Returns an icp-py-core Agent instance"""
 
     # Check if the network is up
     print(f"--\nChecking if the {network} network is up...")
@@ -42,16 +61,21 @@ def get_canister(
 
     # Set the network URL
     if network == "local":
-        replica_port = run_dfx_command(f"{DFX} info replica-port  ")
-        replica_rev = run_dfx_command(f"{DFX} info replica-rev  ")
+        replica_port = run_dfx_command(f"{DFX} info replica-port  ", quiet=True)
         webserver_port = run_dfx_command(f"{DFX} info webserver-port  ")
         networks_json_path = run_dfx_command(f"{DFX} info networks-json-path  ")
         print(f"replica-port       = {replica_port}")
-        print(f"replica-rev        = {replica_rev}")
         print(f"webserver-port     = {webserver_port}")
         print(f"networks-json-path = {networks_json_path}")
 
         network_url = f"http://localhost:{replica_port}"
+        if replica_port is None:
+            if webserver_port is not None:
+                network_url = f"http://localhost:{webserver_port}"
+            else:
+                print("Error: replica_port and webserver_port are both None.")
+                sys.exit(1)
+
     else:
         # https://smartcontracts.org/docs/interface-spec/index.html#http-interface
         network_url = "https://ic0.app"
@@ -61,15 +85,6 @@ def get_canister(
     # Get the name of the current identity
     identity_whoami = run_dfx_command(f"{DFX} identity whoami ")
     print(f"Using identity = {identity_whoami}")
-
-    # Try to get the id of the canister if not provided explicitly
-    # This only works from the same directory as where you deployed from.
-    # So we also provide the option to just pass in the canister_id directly
-    if canister_id == "":
-        canister_id = run_dfx_command(
-            f"{DFX} canister --network {network} id {canister_name} "
-        )
-    print(f"Canister ID = {canister_id}")
 
     # Get the private key of the current identity
     private_key = run_dfx_command(f"{DFX} identity export {identity_whoami} ")
@@ -83,6 +98,27 @@ def get_canister(
 
     # Create an IC agent to communicate with IC canisters
     agent = Agent(identity, client)
+    return agent
+
+
+def get_canister(
+    canister_name: str,
+    candid_path: Path,
+    network: str = "local",
+    canister_id: Optional[str] = "",
+) -> Canister:
+    """Returns an icp-py-core Canister instance"""
+
+    agent = get_agent(network=network)
+
+    # Try to get the id of the canister if not provided explicitly
+    # This only works from the same directory as where you deployed from.
+    # So we also provide the option to just pass in the canister_id directly
+    if canister_id == "":
+        canister_id = run_dfx_command(
+            f"{DFX} canister --network {network} id {canister_name} "
+        )
+    print(f"Canister ID = {canister_id}")
 
     # Read canister's candid from file
     with open(
@@ -93,4 +129,4 @@ def get_canister(
         canister_did = f.read()
 
     # Create a Canister instance
-    return Canister(agent=agent, canister_id=canister_id, candid=canister_did)
+    return Canister(agent=agent, canister_id=canister_id, candid_str=canister_did)

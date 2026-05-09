@@ -13,7 +13,7 @@ Run with:
 import sys
 from pathlib import Path
 from typing import List
-from .ic_py_canister import get_canister
+from .ic_py_canister import extract_variant, get_canister
 from .parse_args_download import parse_args
 
 ROOT_PATH = Path(__file__).parent.parent
@@ -56,17 +56,17 @@ def main() -> int:
     )
 
     # ---------------------------------------------------------------------------
-    # get ic-py based Canister instance
+    # get icp-py-core based Canister instance
     canister_instance = get_canister(canister_name, candid_path, network, canister_id)
 
     # check health (liveness)
     print("--\nChecking liveness of canister (did we deploy it!)")
-    response = canister_instance.health()
-    if "Ok" in response[0].keys():
+    result = extract_variant(canister_instance.health())
+    if "Ok" in result:
         print("Ok!")
     else:
         print("Not OK, response is:")
-        print(response)
+        print(result)
 
     # ---------------------------------------------------------------------------
     # DOWNLOAD FILE
@@ -79,27 +79,29 @@ def main() -> int:
     offset = 0
     with open(local_filename_path, "ab") as f:
         while not done:
-            response = canister_instance.file_download_chunk(
-                {
-                    "filename": canister_filename,
-                    "chunksize": chunksize,
-                    "offset": offset,
-                }
+            result = extract_variant(
+                canister_instance.file_download_chunk(
+                    {
+                        "filename": canister_filename,
+                        "chunksize": chunksize,
+                        "offset": offset,
+                    }
+                )
             )
-            if "Ok" in response[0].keys():
-                chunk: List[int] = response[0]["Ok"]["chunk"]
+            if "Ok" in result:
+                chunk: List[int] = result["Ok"]["chunk"]
                 offset += len(chunk)
                 print(
                     f"filesize, chunksize, total_received: "
-                    f"{response[0]['Ok']['filesize']}, {len(chunk)}, {offset} "
+                    f"{result['Ok']['filesize']}, {len(chunk)}, {offset} "
                 )
 
                 f.write(bytearray(chunk))
 
-                done = response[0]["Ok"]["done"]
+                done = result["Ok"]["done"]
             else:
                 print("Something went wrong:")
-                print(response)
+                print(result)
                 sys.exit(1)
 
     # ---------------------------------------------------------------------------

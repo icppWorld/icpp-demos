@@ -1,5 +1,5 @@
 icpp-pro>=5.4.1
-ic-py==1.0.1
+icp-py-core==2.3.0
 
 # to lint python scripts — pinned to the same versions used by icpp-pro
 # after its Python 3.10–3.14 matrix bump. Keeping all three repos on the

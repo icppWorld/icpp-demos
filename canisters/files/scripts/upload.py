@@ -13,7 +13,7 @@ Run with:
 import sys
 from pathlib import Path
 from typing import Generator
-from .ic_py_canister import get_canister
+from .ic_py_canister import extract_variant, get_canister
 from .parse_args_upload import parse_args
 
 ROOT_PATH = Path(__file__).parent.parent
@@ -76,17 +76,17 @@ def main() -> int:
     )
 
     # ---------------------------------------------------------------------------
-    # get ic-py based Canister instance
+    # get icp-py-core based Canister instance
     canister_instance = get_canister(canister_name, candid_path, network, canister_id)
 
     # check health (liveness)
     print("--\nChecking liveness of canister (did we deploy it!)")
-    response = canister_instance.health()
-    if "Ok" in response[0].keys():
+    result = extract_variant(canister_instance.health())
+    if "Ok" in result:
         print("Ok!")
     else:
         print("Not OK, response is:")
-        print(response)
+        print(result)
 
     # ---------------------------------------------------------------------------
     # UPLOAD FILE
@@ -117,19 +117,22 @@ def main() -> int:
             print(f"- chunk[0]  = {chunk[0]}")
             print(f"- chunk[-1] = {chunk[-1]}")
 
-        response = canister_instance.file_upload_chunk(
-            {
-                "filename": canister_filename,
-                "chunk": chunk,
-                "chunksize": chunksize,
-                "offset": offset,
-            }
-        )  # pylint: disable=no-member
-        if "Ok" in response[0].keys():
-            print(f"OK! filesize = {response[0]['Ok']['filesize']}")
+        result = extract_variant(
+            canister_instance.file_upload_chunk(
+                {
+                    "filename": canister_filename,
+                    "chunk": chunk,
+                    "chunksize": chunksize,
+                    "offset": offset,
+                },
+                verify_certificate=False,
+            )  # pylint: disable=no-member
+        )
+        if "Ok" in result:
+            print(f"OK! filesize = {result['Ok']['filesize']}")
         else:
             print("Something went wrong:")
-            print(response)
+            print(result)
             sys.exit(1)
 
         offset += len(chunk)

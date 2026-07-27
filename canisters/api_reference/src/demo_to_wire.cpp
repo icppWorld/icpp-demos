@@ -1,12 +1,12 @@
 /* file: src/demo_to_wire.cpp
 
-$ dfx canister call --type idl --output idl demo demo_to_wire_no_arg '()'
+$ icp canister call demo demo_to_wire_no_arg '()' --environment local
 
 
-$ dfx canister call --type idl --output idl demo demo_to_wire_one_arg '("Neuron Staking")'
+$ icp canister call demo demo_to_wire_one_arg '("Neuron Staking")' --environment local
 ("Hello expmt-gtxsw-inftj-ttabj-qhp5s-nozup-n3bbo-k7zvn-dg4he-knac3-lae, your hobby is Neuron Staking")
 
-$ dfx canister call --type idl --output idl demo demo_to_wire_multiple_args '("Neuron Staking", 3000 : nat64)'
+$ icp canister call demo demo_to_wire_multiple_args '("Neuron Staking", 3000 : nat64)' --environment local
 ("expmt-gtxsw-inftj-ttabj-qhp5s-nozup-n3bbo-k7zvn-dg4he-knac3-lae", "Neuron Staking", 3_000 : nat64, "ICP")
 
 */

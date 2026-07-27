@@ -13,10 +13,10 @@ from typing import Dict
 import pytest
 from icpp.smoketest import call_canister_api
 
-# Path to the dfx.json file
-DFX_JSON_PATH = Path(__file__).parent / "../dfx.json"
+# Path to the icp.yaml file
+ICP_YAML_PATH = Path(__file__).parent / "../icp.yaml"
 
-# Canister in the dfx.json file we want to test
+# Canister in the icp.yaml file we want to test
 CANISTER_NAME = "counters"
 
 
@@ -28,37 +28,37 @@ def test__counters(identity_default: Dict[str, str], network: str) -> None:
     # ------------------------------------------------
     # Set the counter to 10
     response = call_canister_api(
-        dfx_json_path=DFX_JSON_PATH,
+        icp_yaml_path=ICP_YAML_PATH,
         canister_name=CANISTER_NAME,
         canister_method="write_counters",
         canister_argument="(vec { 10 : nat64; 10 : nat64 })",
         network=network,
         timeout_seconds=update_timeout_seconds,
     )
-    expected_response = ""
+    expected_response = "()"
     assert response == expected_response
 
     # ------------------------------------------------
     # Increment the counter
     response = call_canister_api(
-        dfx_json_path=DFX_JSON_PATH,
+        icp_yaml_path=ICP_YAML_PATH,
         canister_name=CANISTER_NAME,
         canister_method="inc_counters",
         canister_argument="()",
         network=network,
         timeout_seconds=update_timeout_seconds,
     )
-    expected_response = ""
+    expected_response = "()"
     assert response == expected_response
 
     # ------------------------------------------------
     # Read the counter and check value is 11
     response = call_canister_api(
-        dfx_json_path=DFX_JSON_PATH,
+        icp_yaml_path=ICP_YAML_PATH,
         canister_name=CANISTER_NAME,
         canister_method="read_counters",
         canister_argument="()",
         network=network,
     )
-    expected_response = "(vec { 11 : nat64; 11 : nat64;})"
+    expected_response = "(vec { 11 : nat64; 11 : nat64 })"
     assert response == expected_response

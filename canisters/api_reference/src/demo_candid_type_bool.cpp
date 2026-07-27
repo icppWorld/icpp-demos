@@ -1,11 +1,11 @@
 /* file: https://github.com/icppWorld/icpp-demos/tree/main/canisters/api_reference/src/demo_candid_type_bool.cpp
 
-$ dfx canister call --type idl --output idl demo demo_candid_type_bool '(true)'
+$ icp canister call demo demo_candid_type_bool '(true)' --environment local
 (true)
 -> check the console of the local network. The canister will print:
    [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Method demo_candid_type_bool received value '1'
 
-$ dfx canister call --type idl --output idl demo demo_candid_type_bools '(true, false)'
+$ icp canister call demo demo_candid_type_bools '(true, false)' --environment local
 (true, false)
 -> check the console of the local network. The canister will print:
    [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Method demo_candid_type_bools received values '1' & '0'

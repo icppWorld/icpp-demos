@@ -1,6 +1,6 @@
 /* file: src/demo_time.cpp
 
-$ dfx canister call --type idl --output idl demo demo_time '()'
+$ icp canister call demo demo_time '()' --environment local
 ("The current system time in nanoseconds: 1684265399218380314 (2023-5-16 19:29:59)")
 
 */

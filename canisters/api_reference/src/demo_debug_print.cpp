@@ -1,6 +1,6 @@
 /* file: src/demo_debug_print.cpp
 
-$ dfx canister call --type idl --output idl demo demo_debug_print '()'
+$ icp canister call demo demo_debug_print '()' --environment local
 ...nothing is printed here
 
 -> check the console of the local network. The canister will print:

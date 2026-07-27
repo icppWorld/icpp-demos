@@ -12,10 +12,10 @@ from pathlib import Path
 import pytest
 from icpp.smoketest import call_canister_api
 
-# Path to the dfx.json file
-DFX_JSON_PATH = Path(__file__).parent / "../dfx.json"
+# Path to the icp.yaml file
+ICP_YAML_PATH = Path(__file__).parent / "../icp.yaml"
 
-# Canister in the dfx.json file we want to test
+# Canister in the icp.yaml file we want to test
 CANISTER_NAME = "memory"
 
 
@@ -26,24 +26,24 @@ def test__memory(network: str) -> None:
         update_timeout_seconds = 60
     # ------------------------------------------------
     response = call_canister_api(
-        dfx_json_path=DFX_JSON_PATH,
+        icp_yaml_path=ICP_YAML_PATH,
         canister_name=CANISTER_NAME,
         canister_method="change_memory",
         canister_argument="()",
         network=network,
         timeout_seconds=update_timeout_seconds,
     )
-    expected_response = ""
+    expected_response = "()"
     assert response == expected_response
 
     # ------------------------------------------------
     # print it (only does something in local network)
     response = call_canister_api(
-        dfx_json_path=DFX_JSON_PATH,
+        icp_yaml_path=ICP_YAML_PATH,
         canister_name=CANISTER_NAME,
         canister_method="print_memory",
         canister_argument="()",
         network=network,
     )
-    expected_response = ""
+    expected_response = "()"
     assert response == expected_response

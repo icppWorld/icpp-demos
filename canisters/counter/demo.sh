@@ -4,7 +4,7 @@
 # This is a Linux & Mac shell script
 #
 # (-) Install icpp-pro in a python environment
-# (-) Install dfx
+# (-) Install icp-cli: npm install -g @icp-sdk/icp-cli
 # (-) In a terminal:
 #
 #     ./demo.sh
@@ -13,12 +13,15 @@
 echo " "
 echo "--------------------------------------------------"
 echo "Stopping the local network"
-dfx stop
+icp network stop
 
 echo " "
 echo "--------------------------------------------------"
 echo "Starting the local network as a background process"
-dfx start --clean --background
+# icp-cli has no `--clean` flag: a managed network keeps its state in
+# .icp/cache (NOT .icp/data, which holds the mainnet canister ids)
+rm -rf .icp/cache
+icp network start --background
 
 #######################################################################
 echo "--------------------------------------------------"
@@ -30,19 +33,19 @@ icpp build-wasm --to-compile all
 echo " "
 echo "--------------------------------------------------"
 echo "Deploying the wasm to a canister on the local network"
-dfx deploy
+icp deploy --environment local --yes
 
 #######################################################################
 echo " "
 echo "--------------------------------------------------"
-echo "Testing counter with dfx"
-dfx canister call counter read
-dfx canister call counter inc
-dfx canister call counter read
-dfx canister call counter write '(10)'
-dfx canister call counter read
-dfx canister call counter inc_query
-dfx canister call counter read
+echo "Testing counter with icp"
+icp canister call counter read '()' --environment local
+icp canister call counter inc '()' --environment local
+icp canister call counter read '()' --environment local
+icp canister call counter write '(10)' --environment local
+icp canister call counter read '()' --environment local
+icp canister call counter inc_query '()' --environment local
+icp canister call counter read '()' --environment local
 
 #######################################################################
 echo " "
@@ -53,7 +56,7 @@ pytest --network=local
 #######################################################################
 echo "--------------------------------------------------"
 echo "Stopping the local network"
-dfx stop
+icp network stop
 
 #######################################################################
 echo " "

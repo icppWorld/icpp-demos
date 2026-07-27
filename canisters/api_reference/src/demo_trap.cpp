@@ -1,6 +1,6 @@
 /* file: src/demo_trap.cpp
 
-$ dfx canister call --type idl --output idl demo demo_trap '()'
+$ icp canister call demo demo_trap '()' --environment local
 Error: Failed query call.
 Caused by: Failed query call.
   The Replica returned an error: code 5, message: "IC0503: Canister bkyz2-fmaaa-aaaaa-qaaaq-cai trapped explicitly:

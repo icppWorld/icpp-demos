@@ -1,11 +1,11 @@
 /* file: https://github.com/icppWorld/icpp-demos/tree/main/canisters/api_reference/src/demo_candid_type_principal.cpp
 
-$ dfx canister call --type idl --output idl demo demo_candid_type_principal '(principal "2ibo7-dia")'
+$ icp canister call demo demo_candid_type_principal '(principal "2ibo7-dia")' --environment local
 (principal "2ibo7-dia")
 -> check the console of the local network. The canister will print:
    [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Method demo_candid_type_principal received value '2ibo7-dia'
 
-$ dfx canister call --type idl --output idl demo demo_candid_type_principals '(principal "2ibo7-dia", principal "w3gef-eqbai")'
+$ icp canister call demo demo_candid_type_principals '(principal "2ibo7-dia", principal "w3gef-eqbai")' --environment local
 (principal "2ibo7-dia", principal "w3gef-eqbai")
 -> check the console of the local network. The canister will print:
    [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Method demo_candid_type_principals received values '2ibo7-dia' & 'w3gef-eqbai'

@@ -12,7 +12,7 @@ Since icpp-pro 4.1.0, all data structures defined in the static section of your 
 
 To run the experiment, follow these instructions. 
 
- - We assume you already have dfx installed
+ - We assume you already have icp-cli installed
 
 - [Install](https://docs.icpp.world/installation.html):  
   ```bash
@@ -20,12 +20,14 @@ To run the experiment, follow these instructions.
   ```
 - Start the local network:
   ```bash
-  dfx start --clean
+  icp network stop
+  rm -rf .icp/cache
+  icp network start --background
   ```
 - Then run these commands:
   ```bash
   icpp build-wasm  # second time, add this option: --to-compile mine-no-lib
-  dfx deploy
-  dfx canister call memory change_memory # see output in local dfx log window
-  dfx canister call memory print_memory  # see output in local dfx log window
+  icp deploy --environment local --yes
+  icp canister call memory change_memory '()' --environment local # see output in the local network log
+  icp canister call memory print_memory '()' --environment local  # see output in the local network log
   ```

@@ -1,6 +1,6 @@
 /* file: src/demo_ic_api.cpp
 
-$ dfx canister call --type idl --output idl demo demo_ic_api '()'
+$ icp canister call demo demo_ic_api '()' --environment local
 
 */
 #include "demo_ic_api.h"

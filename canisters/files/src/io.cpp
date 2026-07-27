@@ -74,7 +74,7 @@ void write_read(IC_API &ic_api) {
 
   if_stream.close();
 
-  // print it to the dfx canister console
+  // print it to the local network console
   std::cout << "Content read back from file " << filename << ": " << std::endl;
   std::cout << "Header  : " << header << std::endl;
   std::cout << "Data    : ";

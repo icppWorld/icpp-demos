@@ -1,11 +1,11 @@
 /* file: https://github.com/icppWorld/icpp-demos/tree/main/canisters/api_reference/src/demo_candid_type_float64.cpp
 
-$ dfx canister call --type idl --output idl demo demo_candid_type_float64 '(0.1 : float64)'
+$ icp canister call demo demo_candid_type_float64 '(0.1 : float64)' --environment local
 (0.1 : float64)
 -> check the console of the local network. The canister will print:
    [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Method demo_candid_type_float64 received value '0.100000'
 
-$ dfx canister call --type idl --output idl demo demo_candid_type_float64s '(0.1 : float64, -1.2 : float64)'
+$ icp canister call demo demo_candid_type_float64s '(0.1 : float64, -1.2 : float64)' --environment local
 (0.1 : float64, -1.2 : float64)
 -> check the console of the local network. The canister will print:
    [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Method demo_candid_type_float64s received values '0.100000' & '-1.200000'

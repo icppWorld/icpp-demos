@@ -61,7 +61,7 @@ def main() -> int:
         canister_filename = args.__dict__["local-filename"]
     chunksize = args.chunksize
 
-    dfx_json_path = ROOT_PATH / "dfx.json"
+    icp_yaml_path = ROOT_PATH / "icp.yaml"
 
     print(
         f"Summary:"
@@ -71,7 +71,7 @@ def main() -> int:
         f"\n - network             = {network}"
         f"\n - canister            = {canister_name}"
         f"\n - canister_id         = {canister_id}"
-        f"\n - dfx_json_path       = {dfx_json_path}"
+        f"\n - icp_yaml_path       = {icp_yaml_path}"
         f"\n - candid_path         = {candid_path}"
     )
 

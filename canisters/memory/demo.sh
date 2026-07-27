@@ -4,7 +4,7 @@
 # This is a Linux & Mac shell script
 #
 # (-) Install icpp-pro in a python environment
-# (-) Install dfx
+# (-) Install icp-cli: npm install -g @icp-sdk/icp-cli
 # (-) In a terminal:
 #
 #     ./demo.sh
@@ -26,12 +26,15 @@ echo "Running the OS native debug executable"
 echo " "
 echo "--------------------------------------------------"
 echo "Stopping the local network"
-dfx stop
+icp network stop
 
 echo " "
 echo "--------------------------------------------------"
 echo "Starting the local network as a background process"
-dfx start --clean --background
+# icp-cli has no `--clean` flag: a managed network keeps its state in
+# .icp/cache (NOT .icp/data, which holds the mainnet canister ids)
+rm -rf .icp/cache
+icp network start --background
 
 #######################################################################
 echo "--------------------------------------------------"
@@ -43,14 +46,14 @@ icpp build-wasm --to-compile all
 echo " "
 echo "--------------------------------------------------"
 echo "Deploying the wasm to a canister on the local network"
-dfx deploy
+icp deploy --environment local --yes
 
 #######################################################################
 echo " "
 echo "--------------------------------------------------"
-echo "Testing memory with dfx"
-dfx canister call memory change_memory
-dfx canister call memory print_memory
+echo "Testing memory with icp"
+icp canister call memory change_memory '()' --environment local
+icp canister call memory print_memory '()' --environment local
 
 #######################################################################
 echo " "
@@ -61,4 +64,4 @@ pytest --network=local
 #######################################################################
 echo "--------------------------------------------------"
 echo "Stopping the local network"
-dfx stop
+icp network stop

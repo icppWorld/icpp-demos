@@ -1,6 +1,6 @@
 """Returns the icp-py-core Canister instance, for calling the endpoints."""
 
-import re
+import json
 import sys
 import subprocess
 from pathlib import Path
@@ -10,22 +10,8 @@ from icpp.run_shell_cmd import run_shell_cmd
 
 ROOT_PATH = Path(__file__).parent.parent
 
-# We use dfx to get some information.
-DFX = "dfx"
-
-# dfx 0.32.0 emits this deprecation banner on every invocation. Because
-# run_shell_cmd merges stderr into stdout, the banner ends up in the
-# captured output and gets glued onto things like the identity name —
-# corrupting the next dfx call's arguments. Strip exactly this known line.
-# Mirrors the fix in icpp-pro src/icpp/smoketest.py (commit 6f401c4).
-_DFX_DEPRECATION_RE = re.compile(
-    r"^WARNING: dfx is deprecated.*$\n?", flags=re.MULTILINE
-)
-
-
-def _strip_dfx_warnings(s: str) -> str:
-    """Remove the known dfx deprecation banner from captured shell output."""
-    return _DFX_DEPRECATION_RE.sub("", s)
+# We use icp-cli to get some information.
+ICP = "icp"
 
 
 def extract_variant(response: List[Any]) -> Any:
@@ -41,13 +27,19 @@ def extract_variant(response: List[Any]) -> Any:
     return item
 
 
-def run_dfx_command(cmd: str, quiet: bool = False) -> Optional[str]:
-    """Runs dfx command as a subprocess"""
+def run_icp_command(cmd: str, quiet: bool = False) -> Optional[str]:
+    """Runs an icp command as a subprocess.
+
+    Runs from ROOT_PATH so icp finds this canister's `icp.yaml`, and closes
+    stdin so icp can never block on an interactive prompt.
+    """
     try:
-        return _strip_dfx_warnings(run_shell_cmd(cmd, capture_output=True)).rstrip("\n")
+        return run_shell_cmd(
+            f"{cmd} < /dev/null", capture_output=True, cwd=ROOT_PATH
+        ).rstrip("\n")
     except subprocess.CalledProcessError as e:
         if not quiet:
-            print(f"Failed dfx command: '{cmd}' with error: \n{e.output}")
+            print(f"Failed icp command: '{cmd}' with error: \n{e.output}")
     return None
 
 
@@ -56,38 +48,28 @@ def get_agent(network: str = "local") -> Agent:
 
     # Check if the network is up
     print(f"--\nChecking if the {network} network is up...")
-    run_dfx_command(f"{DFX} ping {network} ")
+    run_icp_command(f"{ICP} network ping --environment {network} ")
     print("Ok!")
 
-    # Set the network URL
-    if network == "local":
-        replica_port = run_dfx_command(f"{DFX} info replica-port  ", quiet=True)
-        webserver_port = run_dfx_command(f"{DFX} info webserver-port  ")
-        networks_json_path = run_dfx_command(f"{DFX} info networks-json-path  ")
-        print(f"replica-port       = {replica_port}")
-        print(f"webserver-port     = {webserver_port}")
-        print(f"networks-json-path = {networks_json_path}")
-
-        network_url = f"http://localhost:{replica_port}"
-        if replica_port is None:
-            if webserver_port is not None:
-                network_url = f"http://localhost:{webserver_port}"
-            else:
-                print("Error: replica_port and webserver_port are both None.")
-                sys.exit(1)
-
-    else:
-        # https://smartcontracts.org/docs/interface-spec/index.html#http-interface
-        network_url = "https://ic0.app"
+    # Set the network URL.
+    #
+    # The local network runs on an ephemeral port (`gateway.port: 0` in
+    # icp.yaml), so it MUST be read back - it differs on every
+    # `icp network start`.
+    status = run_icp_command(f"{ICP} network status --environment {network} --json ")
+    if status is None:
+        print(f"Error: could not get the status of the '{network}' network.")
+        sys.exit(1)
+    network_url = json.loads(status)["api_url"]
 
     print(f"Network URL        = {network_url}")
 
     # Get the name of the current identity
-    identity_whoami = run_dfx_command(f"{DFX} identity whoami ")
+    identity_whoami = run_icp_command(f"{ICP} identity default ")
     print(f"Using identity = {identity_whoami}")
 
     # Get the private key of the current identity
-    private_key = run_dfx_command(f"{DFX} identity export {identity_whoami} ")
+    private_key = run_icp_command(f"{ICP} identity export {identity_whoami} ")
 
     # Create an Identity instance using the private key
     identity = Identity.from_pem(private_key)
@@ -111,12 +93,13 @@ def get_canister(
 
     agent = get_agent(network=network)
 
-    # Try to get the id of the canister if not provided explicitly
-    # This only works from the same directory as where you deployed from.
-    # So we also provide the option to just pass in the canister_id directly
+    # Try to get the id of the canister if not provided explicitly.
+    # This reads icp's canister ID store, so it works without the network.
+    # We also provide the option to just pass in the canister_id directly.
     if canister_id == "":
-        canister_id = run_dfx_command(
-            f"{DFX} canister --network {network} id {canister_name} "
+        canister_id = run_icp_command(
+            f"{ICP} canister status {canister_name} "
+            f"--environment {network} --id-only "
         )
     print(f"Canister ID = {canister_id}")
 

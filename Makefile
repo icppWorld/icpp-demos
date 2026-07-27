@@ -61,9 +61,20 @@ summary:
 all-tests: all-static all-canister-native all-canister-deploy-local-pytest
 
 .PHONY: all-canister-deploy-local-pytest
-all-canister-deploy-local-pytest:
-	dfx identity use default
-	@python -m scripts.all_canister_deploy_local_pytest
+# JOBS controls how many canisters are built & tested concurrently.
+# Each canister gets its own local network on an ephemeral port, so they do
+# not collide. Use JOBS=1 for a simple, serial log when debugging one canister.
+JOBS ?=
+all-canister-deploy-local-pytest: icp-identity-default
+	@python -m scripts.all_canister_deploy_local_pytest $(if $(JOBS),--jobs $(JOBS),)
+
+# The tests deploy as the `default` identity. Unlike dfx, icp-cli does not
+# create one for you, so create it if it is not there yet.
+.PHONY: icp-identity-default
+icp-identity-default:
+	@icp identity list | awk '{ if ($$1 == "*") print $$2; else print $$1 }' \
+	  | grep -qx default || icp identity new default --storage plaintext
+	@icp identity default default
 
 .PHONY: all-canister-native
 all-canister-native:
@@ -90,9 +101,11 @@ cpp-lint:
 	@echo "cpp-lint"
 	@echo "TO IMPLEMENT with clang-tidy"
 
-.PHONY: clean-dfx
-clean-dfx:
-	rm -rf $(shell find . -name '.dfx' -type d)
+# Removes the disposable icp-cli caches. NEVER remove `.icp` itself:
+# `.icp/data/mappings/` holds the mainnet canister ids.
+.PHONY: clean-icp
+clean-icp:
+	rm -rf $(shell find . -type d -path '*/.icp/cache')
 
 .PHONY: clean-build
 clean-build:

@@ -4,7 +4,7 @@
 # This is a Linux & Mac shell script
 #
 # (-) Install icpp-pro in a python environment
-# (-) Install dfx
+# (-) Install icp-cli: npm install -g @icp-sdk/icp-cli
 # (-) In a terminal:
 #
 #     ./demo.sh
@@ -13,12 +13,15 @@
 echo " "
 echo "--------------------------------------------------"
 echo "Stopping the local network"
-dfx stop
+icp network stop
 
 echo " "
 echo "--------------------------------------------------"
 echo "Starting the local network as a background process"
-dfx start --clean --background
+# icp-cli has no `--clean` flag: a managed network keeps its state in
+# .icp/cache (NOT .icp/data, which holds the mainnet canister ids)
+rm -rf .icp/cache
+icp network start --background
 
 #######################################################################
 echo "--------------------------------------------------"
@@ -30,39 +33,39 @@ icpp build-wasm --to-compile all
 echo " "
 echo "--------------------------------------------------"
 echo "Deploying the wasm to a canister on the local network"
-dfx deploy
+icp deploy --environment local --yes
 
 #######################################################################
 echo " "
 echo "--------------------------------------------------"
-echo "Testing counters with dfx"
+echo "Testing counters with icp"
 
 echo "- Check initial state of counters:"
-dfx canister call counters read_counters
+icp canister call counters read_counters '()' --environment local
 
 echo "- Write the initial state of 2 counters:"
-dfx canister call counters write_counters '(vec { 10 : nat64; 10 : nat64 })'
+icp canister call counters write_counters '(vec { 10 : nat64; 10 : nat64 })' --environment local
 
 echo "- Verify the state change of counters persists:"
-dfx canister call counters read_counters
+icp canister call counters read_counters '()' --environment local
 
 echo "- Increment the 2 counters, using an update call:"
-dfx canister call counters inc_counters
+icp canister call counters inc_counters '()' --environment local
 
 echo "- Verify the state change of counters persists:"
-dfx canister call counters read_counters
+icp canister call counters read_counters '()' --environment local
 
 echo "- Add two more counters:"
-dfx canister call counters additional_counters '(vec { 10 : nat64; 10 : nat64 })'
+icp canister call counters additional_counters '(vec { 10 : nat64; 10 : nat64 })' --environment local
 
 echo "- Verify the state change of counters persists:"
-dfx canister call counters read_counters
+icp canister call counters read_counters '()' --environment local
 
 echo "- Increment the 4 counters, using an update call:"
-dfx canister call counters inc_counters
+icp canister call counters inc_counters '()' --environment local
 
 echo "- Verify the state change of counters persists:"
-dfx canister call counters read_counters
+icp canister call counters read_counters '()' --environment local
 
 #######################################################################
 echo " "
@@ -73,7 +76,7 @@ pytest --network=local
 #######################################################################
 echo "--------------------------------------------------"
 echo "Stopping the local network"
-dfx stop
+icp network stop
 
 #######################################################################
 echo " "

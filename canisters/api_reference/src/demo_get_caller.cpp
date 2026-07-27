@@ -1,6 +1,6 @@
 /* file: src/demo_get_caller.cpp
 
-$ dfx canister call --type idl --output idl demo demo_get_caller '()'
+$ icp canister call demo demo_get_caller '()' --environment local
 (Hello! Your principal is expmt-gtxsw-inftj-ttabj-qhp5s-nozup-n3bbo-k7zvn-dg4he-knac3-lae)
 
 */

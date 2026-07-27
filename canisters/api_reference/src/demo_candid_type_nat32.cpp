@@ -1,11 +1,11 @@
 /* file: https://github.com/icppWorld/icpp-demos/tree/main/canisters/api_reference/src/demo_candid_type_nat32.cpp
 
-$ dfx canister call --type idl --output idl demo demo_candid_type_nat32 '(101 : nat32)'
+$ icp canister call demo demo_candid_type_nat32 '(101 : nat32)' --environment local
 (101 : nat32)
 -> check the console of the local network. The canister will print:
    [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Method demo_candid_type_nat32 received value '101'
 
-$ dfx canister call --type idl --output idl demo demo_candid_type_nat32s '(101 : nat32, 102 : nat32)'
+$ icp canister call demo demo_candid_type_nat32s '(101 : nat32, 102 : nat32)' --environment local
 (101 : nat32, 102 : nat32)
 -> check the console of the local network. The canister will print:
    [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Method demo_candid_type_nat32s received values '101' & '102'

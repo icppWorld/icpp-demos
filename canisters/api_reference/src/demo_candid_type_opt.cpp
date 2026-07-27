@@ -7,17 +7,17 @@
 // - no value
 // Let's try them all out:
 
-$ dfx canister call --type idl --output idl demo demo_candid_type_opt '(opt (true : bool))'
+$ icp canister call demo demo_candid_type_opt '(opt (true : bool))' --environment local
 (opt true)
 -> check the console of the local network. The canister will print:
    [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Method demo_candid_type_opt received bool value '1'
 
-$ dfx canister call --type idl --output idl demo demo_candid_type_opt '(opt (false : bool))'
+$ icp canister call demo demo_candid_type_opt '(opt (false : bool))' --environment local
 (opt false)
 -> check the console of the local network. The canister will print:
    [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Method demo_candid_type_opt received bool value '0'
 
-$ dfx canister call --type idl --output idl demo demo_candid_type_opt '(null)'
+$ icp canister call demo demo_candid_type_opt '(null)' --environment local
 (null)
 -> check the console of the local network. The canister will print:
    [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Method demo_candid_type_opt did not receive a bool value
@@ -25,7 +25,7 @@ $ dfx canister call --type idl --output idl demo demo_candid_type_opt '(null)'
 // ----------------------------------------------------------
 // The other method has as argument a list of all opt types, eg.
 
-$ dfx canister call --type idl --output idl demo demo_candid_type_opts '(opt (true : bool), opt (0.1 : float32), opt (0.2 : float64), opt (-8 : int8), opt (-16 : int16), opt (-32 : int32), opt (-64 : int64), opt (-128 : int), opt (8 : nat8), opt (16 : nat16), opt (32 : nat32), opt (64 : nat64), opt (128 : nat), opt (principal "2ibo7-dia"), opt ("demo" : text))'
+$ icp canister call demo demo_candid_type_opts '(opt (true : bool), opt (0.1 : float32), opt (0.2 : float64), opt (-8 : int8), opt (-16 : int16), opt (-32 : int32), opt (-64 : int64), opt (-128 : int), opt (8 : nat8), opt (16 : nat16), opt (32 : nat32), opt (64 : nat64), opt (128 : nat), opt (principal "2ibo7-dia"), opt ("demo" : text))' --environment local
 (opt true, opt (0.1 : float32), opt (0.2 : float64), opt (-8 : int8), opt (-16 : int16), opt (-32 : int32), opt (-64 : int64), opt (-128 : int), opt (8 : nat8), opt (16 : nat16), opt (32 : nat32), opt (64 : nat64), opt (128 : nat), opt principal "2ibo7-dia", opt "demo")
 -> check the console of the local network. The canister will print:
   [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Method demo_candid_type_opts received bool value '1'

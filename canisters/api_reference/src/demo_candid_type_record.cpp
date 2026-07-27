@@ -1,6 +1,6 @@
 /* file: https://github.com/icppWorld/icpp-demos/tree/main/canisters/api_reference/src/demo_candid_type_record.cpp
 
-$ dfx canister call --type idl --output idl demo demo_candid_type_record '(record {"field 1" = true : bool; "field 2" = 0.1 : float32; "field 3" = 0.2 : float64; "field 4" = -8 : int8; "field 5" = -16 : int16; "field 6" = -32 : int32; "field 7" = -64 : int64; "field 8" = -128 : int; "field 9" = 8 : nat8; "field 10" = 16 : nat16; "field A" = 32 : nat32; "field B" = 64 : nat64; "field C" = 128 : nat; "field D" = principal "2ibo7-dia"; "field E" = "demo" : text;})'
+$ icp canister call demo demo_candid_type_record '(record {"field 1" = true : bool; "field 2" = 0.1 : float32; "field 3" = 0.2 : float64; "field 4" = -8 : int8; "field 5" = -16 : int16; "field 6" = -32 : int32; "field 7" = -64 : int64; "field 8" = -128 : int; "field 9" = 8 : nat8; "field 10" = 16 : nat16; "field A" = 32 : nat32; "field B" = 64 : nat64; "field C" = 128 : nat; "field D" = principal "2ibo7-dia"; "field E" = "demo" : text;})' --environment local
 (record { field 10 = 16 : nat16; field 1 = true; field 2 = 0.1 : float32; field 3 = 0.2 : float64; field 4 = -8 : int8; field 5 = -16 : int16; field 6 = -32 : int32; field 7 = -64 : int64; field 8 = -128 : int; field 9 = 8 : nat8; field A = 32 : nat32; field B = 64 : nat64; field C = 128 : nat; field D = principal "2ibo7-dia"; field E = "demo";})
 -> check the console of the local network. The canister will print:
    [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Method demo_candid_type_record
@@ -22,7 +22,7 @@ $ dfx canister call --type idl --output idl demo demo_candid_type_record '(recor
  field D  - std::string value '2ibo7-dia
  field E  - std::string value 'demo'
 
-$ dfx canister call --type idl --output idl demo demo_candid_type_records '(record {"field 1A" = -8 : int8;}, record {"field 2A" = -16 : int16;})'
+$ icp canister call demo demo_candid_type_records '(record {"field 1A" = -8 : int8;}, record {"field 2A" = -16 : int16;})' --environment local
 (record { field 1A = -8 : int8;}, record { field 2A = -16 : int16;})
 -> check the console of the local network. The canister will print:
    [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Method demo_candid_type_records

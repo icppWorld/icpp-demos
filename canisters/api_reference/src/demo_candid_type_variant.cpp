@@ -1,6 +1,6 @@
 /* file: https://github.com/icppWorld/icpp-demos/tree/main/canisters/api_reference/src/demo_candid_type_variant.cpp
 
-$ dfx canister call --type idl --output idl demo demo_candid_type_variant '(variant {"field 2" = 0.1 : float32;})'
+$ icp canister call demo demo_candid_type_variant '(variant {"field 2" = 0.1 : float32;})' --environment local
 (variant { field 2 = 0.1 : float32;})
 -> check the console of the local network. The canister will print:
    [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Method demo_candid_type_variant
@@ -8,7 +8,7 @@ $ dfx canister call --type idl --output idl demo demo_candid_type_variant '(vari
 
     field 2  - float       value '0.100000
 
-$ dfx canister call --type idl --output idl demo demo_candid_type_variants '(variant {"field 1" = true : bool;}, variant {"field 2" = 0.1 : float32;})'
+$ icp canister call demo demo_candid_type_variants '(variant {"field 1" = true : bool;}, variant {"field 2" = 0.1 : float32;})' --environment local
 (variant {"field 1" = true : bool;}, variant {"field 2" = 0.1 : float32;})
 -> check the console of the local network. The canister will print:
    [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Method demo_candid_type_variants

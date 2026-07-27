@@ -1,6 +1,6 @@
 /* file: src/demo_string_to_int128.cpp
 
-$ dfx canister call --type idl --output idl demo demo_string_to_int128 '()'
+$ icp canister call demo demo_string_to_int128 '()' --environment local
 ...nothing is printed here
 
 -> check the console of the local network. The canister will print:

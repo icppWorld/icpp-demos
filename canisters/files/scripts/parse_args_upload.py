@@ -27,7 +27,7 @@ def parse_args() -> argparse.Namespace:
         "--canister",
         type=str,
         default="files",
-        help="canister name in dfx.json",
+        help="canister name in icp.yaml",
     )
     parser.add_argument(
         "--canister-id",

@@ -13,26 +13,26 @@ only — re-register your timers in `canister_post_upgrade` if needed.
 
 Example session:
 
-  $ dfx canister call --type idl --output idl demo demo_set_timer '(0 : nat64)'
+  $ icp canister call demo demo_set_timer '(0 : nat64)' --environment local
   (1 : nat64)
 
   # ... wait ~1s for the IC to fire canister_global_timer ...
 
-  $ dfx canister call --type idl --output idl demo demo_get_one_shot_fires '()'
+  $ icp canister call demo demo_get_one_shot_fires '()' --environment local
   (1 : nat64)
 
-  $ dfx canister call --type idl --output idl demo demo_set_timer_recurring '(1_000_000_000 : nat64)'
+  $ icp canister call demo demo_set_timer_recurring '(1_000_000_000 : nat64)' --environment local
   (2 : nat64)
 
   # ... wait a few seconds ...
 
-  $ dfx canister call --type idl --output idl demo demo_get_recurring_fires '()'
+  $ icp canister call demo demo_get_recurring_fires '()' --environment local
   (3 : nat64)
 
-  $ dfx canister call --type idl --output idl demo demo_cancel_timer '(2 : nat64)'
+  $ icp canister call demo demo_cancel_timer '(2 : nat64)' --environment local
   (true)
 
-  $ dfx canister call --type idl --output idl demo demo_cancel_all_timers '()'
+  $ icp canister call demo demo_cancel_all_timers '()' --environment local
   ()
 
 */

@@ -20,7 +20,11 @@ tmp_upload_data
 CppProperties.json
 
 # Internet Computer
-.dfx
+# icp-cli: ONLY the cache is disposable. `.icp/data/` holds the mainnet
+# canister id mappings (the replacement for canister_ids.json) and MUST be
+# committed. `**/` because each canister is its own icp project under
+# canisters/, so a root-anchored `.icp/cache/` would match nothing.
+**/.icp/cache/
 
 # C++
 null.d
@@ -149,3 +153,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Scratch / task-todo notes for AI agents & humans. Deliberately local-only:
+# they capture in-flight plans and findings, not repo state.
+TMP-*

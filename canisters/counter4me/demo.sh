@@ -4,7 +4,7 @@
 # This is a Linux & Mac shell script
 #
 # (-) Install icpp-pro in a python environment
-# (-) Install dfx
+# (-) Install icp-cli: npm install -g @icp-sdk/icp-cli
 # (-) In a terminal:
 #
 #     ./demo.sh
@@ -13,12 +13,15 @@
 echo " "
 echo "--------------------------------------------------"
 echo "Stopping the local network"
-dfx stop
+icp network stop
 
 echo " "
 echo "--------------------------------------------------"
 echo "Starting the local network as a background process"
-dfx start --clean --background
+# icp-cli has no `--clean` flag: a managed network keeps its state in
+# .icp/cache (NOT .icp/data, which holds the mainnet canister ids)
+rm -rf .icp/cache
+icp network start --background
 
 #######################################################################
 echo "--------------------------------------------------"
@@ -30,39 +33,39 @@ icpp build-wasm --to-compile all
 echo " "
 echo "--------------------------------------------------"
 echo "Deploying the wasm to a canister on the local network"
-dfx deploy
+icp deploy --environment local --yes
 
 #######################################################################
 echo " "
 echo "--------------------------------------------------"
-echo "Testing counter4me with dfx"
+echo "Testing counter4me with icp"
 
 echo "- Check initial state of counter4me:"
-dfx canister call --identity default counter4me  read_counter4me
+icp canister call --identity default counter4me  read_counter4me --environment local
 
 echo "- Write the initial state for counter of default identity:"
-dfx canister call --identity default counter4me write_counter4me '(10: nat64)'
+icp canister call --identity default counter4me write_counter4me '(10: nat64)' --environment local
 
 echo "- Verify the state change of counter4me persists:"
-dfx canister call --identity default counter4me read_counter4me
+icp canister call --identity default counter4me read_counter4me --environment local
 
 echo "- Increment counter for default identity, using an update call:"
-dfx canister call --identity default counter4me inc_counter4me
+icp canister call --identity default counter4me inc_counter4me --environment local
 
 echo "- Verify the state change of counter4me persists:"
-dfx canister call --identity default counter4me read_counter4me
+icp canister call --identity default counter4me read_counter4me --environment local
 
 echo "- Write the initial state for counter of anonymous identity:"
-dfx canister call --identity anonymous counter4me write_counter4me '(10: nat64)'
+icp canister call --identity anonymous counter4me write_counter4me '(10: nat64)' --environment local
 
 echo "- Verify the state change of counter4me persists:"
-dfx canister call --identity anonymous counter4me read_counter4me
+icp canister call --identity anonymous counter4me read_counter4me --environment local
 
 echo "- Increment counter for anonymous identity, using an update call:"
-dfx canister call --identity anonymous counter4me inc_counter4me
+icp canister call --identity anonymous counter4me inc_counter4me --environment local
 
 echo "- Verify the state change of counter4me persists:"
-dfx canister call --identity anonymous counter4me read_counter4me
+icp canister call --identity anonymous counter4me read_counter4me --environment local
 
 #######################################################################
 echo " "
@@ -73,7 +76,7 @@ pytest --network=local
 #######################################################################
 echo "--------------------------------------------------"
 echo "Stopping the local network"
-dfx stop
+icp network stop
 
 #######################################################################
 echo " "

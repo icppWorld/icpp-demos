@@ -1,11 +1,11 @@
 /* file: https://github.com/icppWorld/icpp-demos/tree/main/canisters/api_reference/src/demo_candid_type_int.cpp
 
-$ dfx canister call --type idl --output idl demo demo_candid_type_int '(101 : int)'
+$ icp canister call demo demo_candid_type_int '(101 : int)' --environment local
 (101 : int)
 -> check the console of the local network. The canister will print:
    [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Method demo_candid_type_int received value '101'
 
-$ dfx canister call --type idl --output idl demo demo_candid_type_ints '(101 : int, -102 : int)'
+$ icp canister call demo demo_candid_type_ints '(101 : int, -102 : int)' --environment local
 (101 : int, -102 : int)
 -> check the console of the local network. The canister will print:
    [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Method demo_candid_type_ints received values '101' & '-102'

@@ -61,8 +61,12 @@ summary:
 all-tests: all-static all-canister-native all-canister-deploy-local-pytest
 
 .PHONY: all-canister-deploy-local-pytest
+# JOBS controls how many canisters are built & tested concurrently.
+# Each canister gets its own local network on an ephemeral port, so they do
+# not collide. Use JOBS=1 for a simple, serial log when debugging one canister.
+JOBS ?=
 all-canister-deploy-local-pytest: icp-identity-default
-	@python -m scripts.all_canister_deploy_local_pytest
+	@python -m scripts.all_canister_deploy_local_pytest $(if $(JOBS),--jobs $(JOBS),)
 
 # The tests deploy as the `default` identity. Unlike dfx, icp-cli does not
 # create one for you, so create it if it is not there yet.

@@ -35,6 +35,7 @@ def test__counter4me_default_principal(
         canister_method="write_counter4me",
         canister_argument="(10: nat64)",
         network=network,
+        identity=identity_default["identity"],
         timeout_seconds=update_timeout_seconds,
     )
     expected_response = "()"
@@ -48,6 +49,7 @@ def test__counter4me_default_principal(
         canister_method="inc_counter4me",
         canister_argument="()",
         network=network,
+        identity=identity_default["identity"],
         timeout_seconds=update_timeout_seconds,
     )
     expected_response = "()"
@@ -61,6 +63,7 @@ def test__counter4me_default_principal(
         canister_method="read_counter4me",
         canister_argument="()",
         network=network,
+        identity=identity_default["identity"],
     )
     expected_response = "(11 : nat64)"
     assert response == expected_response

@@ -6,6 +6,13 @@ MAKEFLAGS += --no-builtin-variables
 
 NETWORK := local
 
+# The identity we deploy with and run the tests as. It is named explicitly and
+# passed to every icp command, so the machine-wide active identity
+# (`icp identity default`) is never read and never changed - running the tests
+# cannot disturb the identity you use for mainnet work.
+ICPP_PRO_TEST_IDENTITY ?= icpp-demos-testing
+export ICPP_PRO_TEST_IDENTITY
+
 ###########################################################################
 # OS we're running on
 ifeq ($(OS),Windows_NT)
@@ -65,16 +72,18 @@ all-tests: all-static all-canister-native all-canister-deploy-local-pytest
 # Each canister gets its own local network on an ephemeral port, so they do
 # not collide. Use JOBS=1 for a simple, serial log when debugging one canister.
 JOBS ?=
-all-canister-deploy-local-pytest: icp-identity-default
+all-canister-deploy-local-pytest: icpp-demos-test-identity
 	@python -m scripts.all_canister_deploy_local_pytest $(if $(JOBS),--jobs $(JOBS),)
 
-# The tests deploy as the `default` identity. Unlike dfx, icp-cli does not
-# create one for you, so create it if it is not there yet.
-.PHONY: icp-identity-default
-icp-identity-default:
-	@icp identity list | awk '{ if ($$1 == "*") print $$2; else print $$1 }' \
-	  | grep -qx default || icp identity new default --storage plaintext
-	@icp identity default default
+# Creates $(ICPP_PRO_TEST_IDENTITY) if it does not exist yet. It is never
+# switched to: `icp identity default <name>` would rewrite the machine-wide
+# identity permanently and never restore it.
+# `icp identity principal` exits non-zero for an unknown name, which is an exact
+# check - unlike grepping `icp identity list`.
+.PHONY: icpp-demos-test-identity
+icpp-demos-test-identity:
+	@icp identity principal --identity "$(ICPP_PRO_TEST_IDENTITY)" >/dev/null 2>&1 || \
+	  icp identity new "$(ICPP_PRO_TEST_IDENTITY)" --storage plaintext
 
 .PHONY: all-canister-native
 all-canister-native:

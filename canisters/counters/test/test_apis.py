@@ -33,6 +33,7 @@ def test__counters(identity_default: Dict[str, str], network: str) -> None:
         canister_method="write_counters",
         canister_argument="(vec { 10 : nat64; 10 : nat64 })",
         network=network,
+        identity=identity_default["identity"],
         timeout_seconds=update_timeout_seconds,
     )
     expected_response = "()"
@@ -46,6 +47,7 @@ def test__counters(identity_default: Dict[str, str], network: str) -> None:
         canister_method="inc_counters",
         canister_argument="()",
         network=network,
+        identity=identity_default["identity"],
         timeout_seconds=update_timeout_seconds,
     )
     expected_response = "()"
@@ -59,6 +61,7 @@ def test__counters(identity_default: Dict[str, str], network: str) -> None:
         canister_method="read_counters",
         canister_argument="()",
         network=network,
+        identity=identity_default["identity"],
     )
     expected_response = "(vec { 11 : nat64; 11 : nat64 })"
     assert response == expected_response

@@ -10,6 +10,18 @@
 #     ./demo.sh
 #
 #######################################################################
+#######################################################################
+# The identity we deploy with and run the tests as. It is named explicitly and
+# passed to every icp command, so the machine-wide active identity
+# (`icp identity default`) is never read and never changed - running this demo
+# cannot disturb the identity you use for mainnet work.
+ICPP_PRO_TEST_IDENTITY=${ICPP_PRO_TEST_IDENTITY:-icpp-demos-testing}
+export ICPP_PRO_TEST_IDENTITY
+# `icp identity principal` exits non-zero for an unknown name, which is an exact
+# check - unlike grepping `icp identity list`.
+icp identity principal --identity "$ICPP_PRO_TEST_IDENTITY" >/dev/null 2>&1 || \
+  icp identity new "$ICPP_PRO_TEST_IDENTITY" --storage plaintext
+
 echo " "
 echo "--------------------------------------------------"
 echo "Stopping the local network"
@@ -33,19 +45,19 @@ icpp build-wasm --to-compile all
 echo " "
 echo "--------------------------------------------------"
 echo "Deploying the wasm to a canister on the local network"
-icp deploy --environment local --yes
+icp deploy --environment local --yes --identity "$ICPP_PRO_TEST_IDENTITY"
 
 #######################################################################
 echo " "
 echo "--------------------------------------------------"
 echo "Testing counter with icp"
-icp canister call counter read '()' --environment local
-icp canister call counter inc '()' --environment local
-icp canister call counter read '()' --environment local
-icp canister call counter write '(10)' --environment local
-icp canister call counter read '()' --environment local
-icp canister call counter inc_query '()' --environment local
-icp canister call counter read '()' --environment local
+icp canister call counter read '()' --environment local --identity "$ICPP_PRO_TEST_IDENTITY"
+icp canister call counter inc '()' --environment local --identity "$ICPP_PRO_TEST_IDENTITY"
+icp canister call counter read '()' --environment local --identity "$ICPP_PRO_TEST_IDENTITY"
+icp canister call counter write '(10)' --environment local --identity "$ICPP_PRO_TEST_IDENTITY"
+icp canister call counter read '()' --environment local --identity "$ICPP_PRO_TEST_IDENTITY"
+icp canister call counter inc_query '()' --environment local --identity "$ICPP_PRO_TEST_IDENTITY"
+icp canister call counter read '()' --environment local --identity "$ICPP_PRO_TEST_IDENTITY"
 
 #######################################################################
 echo " "

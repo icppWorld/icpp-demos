@@ -7,6 +7,11 @@ was impossible: there was a single global replica on a fixed port.
 
 Use `--jobs 1` to fall back to running them one at a time, which produces a
 simpler log when you are debugging a single canister.
+
+Every canister is deployed with, and tested as, the identity named by
+${ICPP_PRO_TEST_IDENTITY} - the Makefile creates it and exports it. The
+machine-wide active identity (`icp identity default`) is never read and never
+changed.
 """
 
 import argparse
@@ -15,6 +20,7 @@ import shutil
 import subprocess
 import sys
 from concurrent.futures import ThreadPoolExecutor
+from functools import partial
 from pathlib import Path
 from typing import List, Tuple
 
@@ -23,6 +29,11 @@ from icpp.run_shell_cmd import run_shell_cmd
 
 SCRIPTS_PATH = Path(__file__).parent
 ROOT_PATH = Path(__file__).parent.parent
+
+# The identity to deploy with. A canister's controller is whoever deployed it,
+# so the deploy and the tests must agree on it. pytest picks the same name up
+# from this environment variable, which the Makefile exports.
+IDENTITY_ENV_VAR = "ICPP_PRO_TEST_IDENTITY"
 
 # Generous ceiling: a cold `icpp build-wasm` compiles the whole C++ tree.
 # It matters that this is explicit - `run_shell_cmd` defaults to 30s whenever
@@ -88,7 +99,24 @@ def network_start_clean(canister_path: Path, log: List[str]) -> None:
     run_step("icp network start --background", canister_path, log)
 
 
-def test_canister(canister_path: Path) -> Tuple[str, bool, List[str]]:
+def get_test_identity() -> str:
+    """Returns the icp identity to deploy with, or exits with an explanation."""
+    identity = os.environ.get(IDENTITY_ENV_VAR)
+    if not identity:
+        typer.echo(
+            f"ERROR: ${IDENTITY_ENV_VAR} is not set.\n"
+            f"It names the icp identity to deploy with and run the tests as. "
+            f"icpp-pro never uses the machine-wide active identity.\n"
+            f"Run this through `make all-canister-deploy-local-pytest`, which "
+            f"creates & exports it, or set it yourself:\n"
+            f"    icp identity new my-testing --storage plaintext\n"
+            f"    export {IDENTITY_ENV_VAR}=my-testing"
+        )
+        sys.exit(1)
+    return identity
+
+
+def test_canister(canister_path: Path, identity: str) -> Tuple[str, bool, List[str]]:
     """Builds, deploys & tests one canister. Returns (name, ok, log)."""
     name = canister_path.name
     log: List[str] = [f"==== {name}"]
@@ -108,17 +136,24 @@ def test_canister(canister_path: Path) -> Tuple[str, bool, List[str]]:
             )
 
             log.append(f"-- deploy {name}")
-            run_step("icp deploy --environment local --yes", canister_path, log)
+            run_step(
+                f"icp deploy --environment local --yes --identity {identity}",
+                canister_path,
+                log,
+            )
 
             # pytest runs from the canister directory: that is the icp project
             # root, which is how icp finds icp.yaml and this canister's network.
+            # It needs no --identity flag: the subprocess inherits the exported
+            # ${ICPP_PRO_TEST_IDENTITY}, so it runs as the same identity.
             log.append(f"-- pytest {test_api_path}")
             run_step(f"pytest --network=local {test_api_path}", canister_path, log)
 
             if name == "files":
                 log.append("-- verify files persist across a canister upgrade")
                 run_step(
-                    "icp deploy --environment local --yes --mode upgrade",
+                    f"icp deploy --environment local --yes --mode upgrade "
+                    f"--identity {identity}",
                     canister_path,
                     log,
                 )
@@ -157,14 +192,20 @@ def main() -> int:
     args = parser.parse_args()
     jobs = max(1, args.jobs)
 
+    # Resolved up front, so a missing identity is one clear error before
+    # anything is built, rather than six failing deploys.
+    identity = get_test_identity()
+
     typer.echo(
-        f"Testing {len(canister_paths)} canisters "
+        f"Testing {len(canister_paths)} canisters as identity '{identity}' "
         f"with {jobs} job(s): {', '.join(p.name for p in canister_paths)}"
     )
 
     failed: List[str] = []
     with ThreadPoolExecutor(max_workers=jobs) as pool:
-        for name, ok, log in pool.map(test_canister, canister_paths):
+        for name, ok, log in pool.map(
+            partial(test_canister, identity=identity), canister_paths
+        ):
             # One block per canister, printed whole, so parallel logs stay readable.
             typer.echo("\n".join(log))
             typer.echo(f"---- {name}: {'PASSED' if ok else 'FAILED'}\n")

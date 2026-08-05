@@ -1,6 +1,7 @@
 """Returns the icp-py-core Canister instance, for calling the endpoints."""
 
 import json
+import os
 import sys
 import subprocess
 from pathlib import Path
@@ -12,6 +13,12 @@ ROOT_PATH = Path(__file__).parent.parent
 
 # We use icp-cli to get some information.
 ICP = "icp"
+
+# The identity to sign the calls with. It is the same one `demo.sh` deploys
+# with, so these uploads/downloads run as the canister's controller. It is
+# named explicitly: the machine-wide active identity (`icp identity default`)
+# is never read, because any other process can change it at any moment.
+TEST_IDENTITY = os.environ.get("ICPP_PRO_TEST_IDENTITY", "icpp-demos-testing")
 
 
 def extract_variant(response: List[Any]) -> Any:
@@ -60,16 +67,25 @@ def get_agent(network: str = "local") -> Agent:
     if status is None:
         print(f"Error: could not get the status of the '{network}' network.")
         sys.exit(1)
-    network_url = json.loads(status)["api_url"]
+    # `icp` reports it with a trailing slash, which must be stripped: icp-py-core
+    # builds its endpoints as f"{url}/api/v2/...", so the slash would produce a
+    # `//api/...` path that the gateway rejects with `canister_id_not_resolved`.
+    network_url = json.loads(status)["api_url"].rstrip("/")
 
     print(f"Network URL        = {network_url}")
 
-    # Get the name of the current identity
-    identity_whoami = run_icp_command(f"{ICP} identity default ")
-    print(f"Using identity = {identity_whoami}")
+    print(f"Using identity = {TEST_IDENTITY}")
 
-    # Get the private key of the current identity
-    private_key = run_icp_command(f"{ICP} identity export {identity_whoami} ")
+    # Get the private key of that identity, to sign the calls locally.
+    # It must have been created with `--storage plaintext` to be exportable.
+    private_key = run_icp_command(f"{ICP} identity export {TEST_IDENTITY} ")
+    if private_key is None:
+        print(
+            f"Error: could not export the identity '{TEST_IDENTITY}'.\n"
+            f"Create it, or point $ICPP_PRO_TEST_IDENTITY at another one:\n"
+            f"    icp identity new {TEST_IDENTITY} --storage plaintext"
+        )
+        sys.exit(1)
 
     # Create an Identity instance using the private key
     identity = Identity.from_pem(private_key)

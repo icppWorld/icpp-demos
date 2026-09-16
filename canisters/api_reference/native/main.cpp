@@ -27,6 +27,8 @@
 #include "../src/demo_candid_type_text.h"
 #include "../src/demo_candid_type_variant.h"
 
+#include "../src/demo_certified_data.h"
+#include "../src/demo_cycles.h"
 #include "../src/demo_debug_print.h"
 #include "../src/demo_from_wire.h"
 #include "../src/demo_get_caller.h"
@@ -306,6 +308,25 @@ int main() {
       "",    // Don't assert, by passing expected_response=""
       false, // Activate debug_print, by passing silent_on_trap=false
       my_principal);
+
+  // '()' -> '("Cycle balance: ... total, ... liquid (spendable)")'
+  mockIC.run_test("demo_cycles_balances", demo_cycles_balances, "4449444c0000",
+                  "", // Don't assert - the balance varies
+                  false, my_principal);
+
+  // '()' -> '("Burned 1000000 cycles. New balance: ...")'
+  mockIC.run_test("demo_burn_cycles", demo_burn_cycles, "4449444c0000",
+                  "", // Don't assert - the balance varies
+                  false, my_principal);
+
+  // '()' -> '("Certified 32 bytes (use the hash of your application data)")'
+  mockIC.run_test("demo_certified_data_set", demo_certified_data_set,
+                  "4449444c0000", "", false, my_principal);
+
+  // '()' -> '("No data certificate (not a non-replicated query call)")'
+  // The Mock IC has no certificate installed by default.
+  mockIC.run_test("demo_get_data_certificate", demo_get_data_certificate,
+                  "4449444c0000", "", false, my_principal);
 
   // ---- timers (IC_API::set_timer family) -----------------------------------
   //

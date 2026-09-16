@@ -118,6 +118,14 @@ service : {
     // docs start: demo_time
     "demo_time": () -> (text) query; // docs end: demo_time
 
+    // docs start: demo_cycles
+    "demo_cycles_balances": () -> (text) query;
+    "demo_burn_cycles": () -> (text); // docs end: demo_cycles
+
+    // docs start: demo_certified_data
+    "demo_certified_data_set": () -> (text);
+    "demo_get_data_certificate": () -> (text) query; // docs end: demo_certified_data
+
     // docs start: demo_timers
     "demo_set_timer": (nat64) -> (nat64);
     "demo_set_timer_recurring": (nat64) -> (nat64);

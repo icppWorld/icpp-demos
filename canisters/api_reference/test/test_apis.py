@@ -644,6 +644,67 @@ def test__demo_time(network: str, principal: str) -> None:
 
 
 # -------------------------------------------------------------------------------
+# Cycles — IC_API::get_canister_(liquid_)cycle_balance / burn_cycles
+def test__demo_cycles_balances(network: str, principal: str) -> None:
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_cycles_balances",
+        canister_argument="()",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    expected_response_contains = '"Cycle balance:'
+    assert expected_response_contains in flatten_candid_text(response)
+
+
+def test__demo_burn_cycles(network: str, principal: str) -> None:
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_burn_cycles",
+        canister_argument="()",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    expected_response_contains = '"Burned 1000000 cycles.'
+    assert expected_response_contains in flatten_candid_text(response)
+
+
+# -------------------------------------------------------------------------------
+# Certified data — IC_API::set_certified_data / get_data_certificate
+def test__demo_certified_data_set(network: str, principal: str) -> None:
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_certified_data_set",
+        canister_argument="()",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    expected_response_contains = '"Certified 32 bytes'
+    assert expected_response_contains in flatten_candid_text(response)
+
+
+def test__demo_get_data_certificate(network: str, principal: str) -> None:
+    # A deployed non-replicated query carries a data certificate
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_get_data_certificate",
+        canister_argument="()",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    expected_response_contains = '"The data certificate is present:'
+    assert expected_response_contains in flatten_candid_text(response)
+
+
+# -------------------------------------------------------------------------------
 # Timers — IC_API::set_timer / set_timer_recurring / cancel_timer / cancel_all_timers
 #
 # The IC fires `canister_global_timer` automatically; tests poll the counter

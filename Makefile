@@ -85,6 +85,27 @@ icpp-demos-test-identity:
 	@icp identity principal --identity "$(ICPP_PRO_TEST_IDENTITY)" >/dev/null 2>&1 || \
 	  icp identity new "$(ICPP_PRO_TEST_IDENTITY)" --storage plaintext
 
+# The identity to deploy to mainnet as. It must control the api_reference canister.
+# Read from `.icp-identity`, which is per developer and never committed. Override
+# with `make api-reference-deploy-ic IDENTITY=foo`. This is NOT the test identity above.
+# ("\043" is octal for the comment character: a literal one here would start
+#  a Makefile comment and swallow the rest of the $(shell ...) call.)
+IDENTITY ?= $(shell awk 'NF && substr($$1,1,1) != "\043" {print $$1; exit}' .icp-identity 2>/dev/null)
+
+# Fail early and clearly rather than letting `icp deploy --identity ""` run.
+.PHONY: require-identity
+require-identity:
+	@test -n "$(IDENTITY)" || { \
+	  echo "ERROR: no deploy identity configured."; \
+	  echo "Put the name of your IC identity on a line in .icp-identity"; \
+	  echo "(the file is git-ignored). Your identities:"; \
+	  icp identity list 2>/dev/null | sed 's/^/    /'; \
+	  exit 1; }
+
+.PHONY: api-reference-deploy-ic
+api-reference-deploy-ic: require-identity
+	cd canisters/api_reference && icpp build-wasm && icp deploy --environment ic --yes --identity $(IDENTITY)
+
 .PHONY: all-canister-native
 all-canister-native:
 	@python -m scripts.all_canister_native

@@ -25,10 +25,14 @@ UpgradeHistory load_history() {
   return history;
 }
 
+// Traps when the file cannot be written: in canister_pre_upgrade that aborts
+// the upgrade, instead of letting it go ahead with the history lost.
 void save_history(const UpgradeHistory &history) {
   std::ofstream file(HISTORY_PATH, std::ios::trunc);
   file << history.pre_upgrade_count << " " << history.post_upgrade_count << " "
        << history.last_pre_upgrade_caller << "\n";
+  file.close();
+  if (!file) IC_API::trap(std::string("Failed to write ") + HISTORY_PATH);
 }
 } // namespace
 

@@ -3,10 +3,12 @@
 
 #include "main.h"
 
+#include <cstdio>
 #include <iostream>
 
 #include "../src/download.h"
 #include "../src/io.h"
+#include "../src/upgrade_hooks.h"
 
 // The Mock IC
 #include "mock_ic.h"
@@ -45,6 +47,24 @@ int main() {
       "4449444c016c0393affe810678c7dda8bb0771aec3faa40b780100000000000000000012696e7465726e616c5f646174615f66696c6580841e0000000000",
       "4449444c036c0582e1b793047eed8c8bae040193affe810678bdbaf9d50778aec3faa40b786d7b6b01bc8a010001020001405f646174615f060000000000000048656c6c6f20090000000000000066726f6d20746865201300000000000000696e7465726e616c20646174612066696c6521000000000000000040000000000000004000000000000000",
       silent_on_trap, my_principal);
+
+  // -----------------------------------------------------------------------------
+  // An upgrade calls canister_pre_upgrade on the old wasm, then
+  // canister_post_upgrade on the new one. Start from no history.
+  std::remove("upgrade_history.txt");
+
+  mockIC.run_test("canister_pre_upgrade", canister_pre_upgrade, "4449444c0000",
+                  "", silent_on_trap, my_principal);
+  mockIC.run_test("canister_post_upgrade", canister_post_upgrade,
+                  "4449444c0000", "", silent_on_trap, my_principal);
+
+  // '()' -> '(record { pre_upgrade_count = 1 : nat64; post_upgrade_count = 1 : nat64; last_pre_upgrade_caller = "expmt-gtxsw-inftj-ttabj-qhp5s-nozup-n3bbo-k7zvn-dg4he-knac3-lae" })'
+  mockIC.run_test(
+      "upgrade_history", upgrade_history, "4449444c0000",
+      "4449444c016c03f39885ac0171d08a97b40178cdf4e389027801003f6578706d742d67747873772d696e66746a2d747461626a2d71687035732d6e6f7a75702d6e3362626f2d6b377a766e2d64673468652d6b6e6163332d6c616501000000000000000100000000000000",
+      silent_on_trap, my_principal);
+
+  std::remove("upgrade_history.txt");
 
   // returns 1 if any tests failed
   return mockIC.test_summary();

@@ -58,9 +58,11 @@ int main() {
   mockIC.run_test("canister_post_upgrade", canister_post_upgrade,
                   "4449444c0000", "", silent_on_trap, my_principal);
 
-  // '()' -> '(record { pre_upgrade_count = 1 : nat64; post_upgrade_count = 1 : nat64; last_pre_upgrade_caller = "expmt-gtxsw-..." })'
-  mockIC.run_test("upgrade_history", upgrade_history, "4449444c0000", "",
-                  silent_on_trap, my_principal);
+  // '()' -> '(record { pre_upgrade_count = 1 : nat64; post_upgrade_count = 1 : nat64; last_pre_upgrade_caller = "expmt-gtxsw-inftj-ttabj-qhp5s-nozup-n3bbo-k7zvn-dg4he-knac3-lae" })'
+  mockIC.run_test(
+      "upgrade_history", upgrade_history, "4449444c0000",
+      "4449444c016c03f39885ac0171d08a97b40178cdf4e389027801003f6578706d742d67747873772d696e66746a2d747461626a2d71687035732d6e6f7a75702d6e3362626f2d6b377a766e2d64673468652d6b6e6163332d6c616501000000000000000100000000000000",
+      silent_on_trap, my_principal);
 
   std::remove("upgrade_history.txt");
 

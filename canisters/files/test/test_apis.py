@@ -8,6 +8,7 @@ $ pytest --network=[local/ic] test_apis.py
 
 # pylint: disable=missing-function-docstring, unused-import, unused-argument, wildcard-import, unused-wildcard-import, line-too-long
 
+import re
 from pathlib import Path
 from typing import Dict
 import pytest
@@ -121,3 +122,23 @@ def test__file_download_chunk_last_10(network: str) -> None:
     )
     expected_response = r'( variant { Ok = record { done = true; chunk = blob "data file!"; offset = 42 : nat64; filesize = 52 : nat64; chunksize = 10 : nat64; } }, )'
     assert flatten_candid_text(response) == expected_response
+
+
+@pytest.mark.run_after_upgrade
+def test__upgrade_history(network: str, principal: str) -> None:
+    # canister_pre_upgrade & canister_post_upgrade each count their runs.
+    # Before an upgrade both are 0; after each upgrade both went up by one.
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="upgrade_history",
+        network=network,
+    )
+    pre = re.search(r"pre_upgrade_count = (\d+) : nat64", response)
+    post = re.search(r"post_upgrade_count = (\d+) : nat64", response)
+    caller = re.search(r'last_pre_upgrade_caller = "([^"]*)"', response)
+    assert pre and post and caller, response
+    assert pre.group(1) == post.group(1)
+    if int(pre.group(1)) > 0:
+        # The identity that upgraded the canister called canister_pre_upgrade
+        assert caller.group(1) == principal

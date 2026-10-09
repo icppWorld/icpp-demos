@@ -53,6 +53,13 @@ type FileContentRecord = record {
   data : vec text;
 };
 
+// -----------------------------------------------------
+type UpgradeHistoryRecord = record {
+  pre_upgrade_count : nat64;
+  post_upgrade_count : nat64;
+  last_pre_upgrade_caller : text;
+};
+
 service : {
   // canister
   health : () -> (StatusCodeRecordResult) query;
@@ -64,5 +71,8 @@ service : {
   // up & down load of files
   file_download_chunk : (FileDownloadInputRecord) -> (FileDownloadRecordResult) query;
   file_upload_chunk : (FileUploadInputRecord) -> (FileUploadRecordResult);
+
+  // counted by canister_pre_upgrade & canister_post_upgrade
+  upgrade_history : () -> (UpgradeHistoryRecord) query;
 
 };

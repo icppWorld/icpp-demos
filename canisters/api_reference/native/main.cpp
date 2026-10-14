@@ -33,6 +33,7 @@
 #include "../src/demo_from_wire.h"
 #include "../src/demo_get_caller.h"
 #include "../src/demo_ic_api.h"
+#include "../src/demo_introspection.h"
 #include "../src/demo_string_to_int128.h"
 #include "../src/demo_time.h"
 #include "../src/demo_timers.h"
@@ -326,6 +327,15 @@ int main() {
   // '()' -> '("No data certificate (not a non-replicated query call)")'
   // The Mock IC has no certificate installed by default.
   mockIC.run_test("demo_get_data_certificate", demo_get_data_certificate,
+                  "4449444c0000", "", false, my_principal);
+
+  // '()' -> '("Canister version 1, running, replicated execution, on subnet ...")'
+  mockIC.run_test("demo_introspection", demo_introspection, "4449444c0000",
+                  "", // Don't assert - the instruction count varies
+                  false, my_principal);
+
+  // '()' -> '("Non-replicated execution. Caller info: 0 bytes, no signer.")'
+  mockIC.run_test("demo_introspection_query", demo_introspection_query,
                   "4449444c0000", "", false, my_principal);
 
   // ---- timers (IC_API::set_timer family) -----------------------------------

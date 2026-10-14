@@ -133,6 +133,9 @@ service : {
     // docs start: demo_env_vars
     "demo_env_vars": () -> (text) query; // docs end: demo_env_vars
 
+    // docs start: demo_cost
+    "demo_cost": () -> (text) query; // docs end: demo_cost
+
     // docs start: demo_timers
     "demo_set_timer": (nat64) -> (nat64);
     "demo_set_timer_recurring": (nat64) -> (nat64);

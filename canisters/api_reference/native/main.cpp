@@ -33,6 +33,7 @@
 #include "../src/demo_from_wire.h"
 #include "../src/demo_get_caller.h"
 #include "../src/demo_ic_api.h"
+#include "../src/demo_cost.h"
 #include "../src/demo_env_vars.h"
 #include "../src/demo_introspection.h"
 #include "../src/demo_string_to_int128.h"
@@ -345,6 +346,10 @@ int main() {
   mockIC.run_test("demo_env_vars", demo_env_vars, "4449444c0000", "", false,
                   my_principal);
   mockIC.clear_env_vars();
+
+  // '()' -> '("Calling greet with 100 bytes: 42102517000 cycles. ...")'
+  mockIC.run_test("demo_cost", demo_cost, "4449444c0000", "", false,
+                  my_principal);
 
   // ---- timers (IC_API::set_timer family) -----------------------------------
   //

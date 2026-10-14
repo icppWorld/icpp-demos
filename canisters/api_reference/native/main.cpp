@@ -33,6 +33,7 @@
 #include "../src/demo_from_wire.h"
 #include "../src/demo_get_caller.h"
 #include "../src/demo_ic_api.h"
+#include "../src/demo_env_vars.h"
 #include "../src/demo_introspection.h"
 #include "../src/demo_string_to_int128.h"
 #include "../src/demo_time.h"
@@ -337,6 +338,13 @@ int main() {
   // '()' -> '("Non-replicated execution. Caller info: 0 bytes, no signer.")'
   mockIC.run_test("demo_introspection_query", demo_introspection_query,
                   "4449444c0000", "", false, my_principal);
+
+  // '()' -> '("A_NAME=a value. getenv(\"GREETING\") returns NULL.")'
+  // On native, getenv() reads the host environment, not the Mock IC's
+  mockIC.set_env_var("A_NAME", "a value");
+  mockIC.run_test("demo_env_vars", demo_env_vars, "4449444c0000", "", false,
+                  my_principal);
+  mockIC.clear_env_vars();
 
   // ---- timers (IC_API::set_timer family) -----------------------------------
   //

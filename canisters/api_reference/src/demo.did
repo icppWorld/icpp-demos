@@ -130,6 +130,9 @@ service : {
     "demo_introspection": () -> (text);
     "demo_introspection_query": () -> (text) query; // docs end: demo_introspection
 
+    // docs start: demo_env_vars
+    "demo_env_vars": () -> (text) query; // docs end: demo_env_vars
+
     // docs start: demo_timers
     "demo_set_timer": (nat64) -> (nat64);
     "demo_set_timer_recurring": (nat64) -> (nat64);

@@ -733,6 +733,34 @@ def test__demo_introspection_query(network: str, principal: str) -> None:
     assert expected_response in flatten_candid_text(response)
 
 
+def test__demo_call(network: str, principal: str) -> None:
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_call",
+        canister_argument='("C++")',
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    assert flatten_candid_text(response) == '("The callee replied: Hello, C++!")'
+
+
+def test__demo_yield(network: str, principal: str) -> None:
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_yield",
+        canister_argument="(3 : nat32)",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    response = flatten_candid_text(response)
+    assert "Instructions per message: " in response
+    assert " instructions." in response
+
+
 def test__demo_cost(network: str, principal: str) -> None:
     response = call_canister_api(
         icp_yaml_path=ICP_YAML_PATH,

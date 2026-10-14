@@ -33,6 +33,7 @@
 #include "../src/demo_from_wire.h"
 #include "../src/demo_get_caller.h"
 #include "../src/demo_ic_api.h"
+#include "../src/demo_calls.h"
 #include "../src/demo_cost.h"
 #include "../src/demo_env_vars.h"
 #include "../src/demo_introspection.h"
@@ -349,6 +350,15 @@ int main() {
 
   // '()' -> '("Calling greet with 100 bytes: 42102517000 cycles. ...")'
   mockIC.run_test("demo_cost", demo_cost, "4449444c0000", "", false,
+                  my_principal);
+
+  // '("C++")' -> '("The callee replied: Hello, C++!")'
+  // The Mock IC runs a call to the canister itself with the registered method
+  mockIC.register_method("demo_call_callee", demo_call_callee);
+  mockIC.run_test("demo_call", demo_call, "4449444c00017103432b2b", "", false,
+                  my_principal);
+  // '(3 : nat32)' -> '("Instructions per message: ...")'
+  mockIC.run_test("demo_yield", demo_yield, "4449444c00017903000000", "", false,
                   my_principal);
 
   // ---- timers (IC_API::set_timer family) -----------------------------------

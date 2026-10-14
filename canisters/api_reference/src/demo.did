@@ -136,6 +136,11 @@ service : {
     // docs start: demo_cost
     "demo_cost": () -> (text) query; // docs end: demo_cost
 
+    // docs start: demo_calls
+    "demo_call": (text) -> (text);
+    "demo_call_callee": (text) -> (text);
+    "demo_yield": (nat32) -> (text); // docs end: demo_calls
+
     // docs start: demo_timers
     "demo_set_timer": (nat64) -> (nat64);
     "demo_set_timer_recurring": (nat64) -> (nat64);

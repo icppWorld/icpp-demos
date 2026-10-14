@@ -51,6 +51,9 @@ IC_Async demo_yield_async() {
   IC_API ic_api(CanisterUpdate{"demo_yield"}, false);
   uint32_t n{0};
   ic_api.from_wire(CandidTypeNat32{&n});
+  if (n > 10) {
+    IC_API::trap("demo_yield: at most 10 yields");
+  }
 
   std::string msg = "Instructions per message:";
   for (uint32_t i = 0; i < n; ++i) {

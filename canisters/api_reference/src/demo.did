@@ -139,7 +139,7 @@ service : {
     // docs start: demo_calls
     "demo_call": (text) -> (text);
     "demo_call_callee": (text) -> (text);
-    "demo_yield": (nat32) -> (text); // docs end: demo_calls
+    "demo_yield": (nat32) -> (text); // at most 10 yields. docs end: demo_calls
 
     // docs start: demo_timers
     "demo_set_timer": (nat64) -> (nat64);

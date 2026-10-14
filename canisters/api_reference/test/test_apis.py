@@ -733,6 +733,22 @@ def test__demo_introspection_query(network: str, principal: str) -> None:
     assert expected_response in flatten_candid_text(response)
 
 
+def test__demo_env_vars(network: str, principal: str) -> None:
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_env_vars",
+        canister_argument="()",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    response = flatten_candid_text(response)
+    assert "GREETING=Hello from icp.yaml. " in response
+    assert f"PUBLIC_CANISTER_ID:{CANISTER_NAME}=" in response
+    assert 'getenv(\\"GREETING\\") returns \\"Hello from icp.yaml\\".' in response
+
+
 # -------------------------------------------------------------------------------
 # Timers — IC_API::set_timer / set_timer_recurring / cancel_timer / cancel_all_timers
 #

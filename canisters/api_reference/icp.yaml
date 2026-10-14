@@ -12,6 +12,10 @@ canisters:
       steps:
         - type: pre-built
           path: build/demo.wasm
+    # Read by demo_env_vars
+    settings:
+      environment_variables:
+        GREETING: "Hello from icp.yaml"
 
 networks:
   # A project-local replica, started with `icp network start`. icp-cli runs one

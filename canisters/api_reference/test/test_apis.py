@@ -733,6 +733,21 @@ def test__demo_introspection_query(network: str, principal: str) -> None:
     assert expected_response in flatten_candid_text(response)
 
 
+def test__demo_cost(network: str, principal: str) -> None:
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_cost",
+        canister_argument="()",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    response = flatten_candid_text(response)
+    assert "Calling greet with 100 bytes: " in response
+    assert "An Ed25519 signature with test_key_1: " in response
+
+
 def test__demo_env_vars(network: str, principal: str) -> None:
     response = call_canister_api(
         icp_yaml_path=ICP_YAML_PATH,

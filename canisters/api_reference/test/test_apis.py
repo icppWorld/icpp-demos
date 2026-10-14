@@ -704,6 +704,35 @@ def test__demo_get_data_certificate(network: str, principal: str) -> None:
     assert expected_response_contains in flatten_candid_text(response)
 
 
+def test__demo_introspection(network: str, principal: str) -> None:
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_introspection",
+        canister_argument="()",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    response = flatten_candid_text(response)
+    assert ", running, replicated execution, on subnet " in response
+    assert "The IC root key has 133 bytes." in response
+
+
+def test__demo_introspection_query(network: str, principal: str) -> None:
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_introspection_query",
+        canister_argument="()",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    expected_response = '"Non-replicated execution. Caller info: 0 bytes, no signer."'
+    assert expected_response in flatten_candid_text(response)
+
+
 # -------------------------------------------------------------------------------
 # Timers — IC_API::set_timer / set_timer_recurring / cancel_timer / cancel_all_timers
 #

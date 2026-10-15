@@ -360,6 +360,9 @@ int main() {
   // '(3 : nat32)' -> '("Instructions per message: ...")'
   mockIC.run_test("demo_yield", demo_yield, "4449444c00017903000000", "", false,
                   my_principal);
+  // '(150 : nat32)' -> '("150B instructions in 8 messages, ...")'
+  mockIC.run_test("demo_long_compute", demo_long_compute,
+                  "4449444c00017996000000", "", false, my_principal);
 
   // ---- timers (IC_API::set_timer family) -----------------------------------
   //

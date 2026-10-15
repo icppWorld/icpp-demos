@@ -5,3 +5,5 @@ void demo_call() WASM_SYMBOL_EXPORTED("canister_update demo_call");
 void demo_call_callee()
     WASM_SYMBOL_EXPORTED("canister_update demo_call_callee");
 void demo_yield() WASM_SYMBOL_EXPORTED("canister_update demo_yield");
+void demo_long_compute()
+    WASM_SYMBOL_EXPORTED("canister_update demo_long_compute");

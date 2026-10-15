@@ -8,6 +8,11 @@ $ icp canister call demo demo_yield '(3 : nat32)' --environment local
   "Instructions per message: 1207587 1074949 1074599. The whole call: 3613406 instructions.",
 )
 
+$ icp canister call demo demo_long_compute '(150 : nat32)' --environment local
+(
+  "150B instructions in 8 messages, at most 20B each. One message can execute at most 40B. Result: 11403713523426525226",
+)
+
 */
 #include "demo_calls.h"
 #include "ic_api.h"
@@ -73,3 +78,51 @@ IC_Async demo_yield_async() {
   ic_api.to_wire(CandidTypeText{msg});
 }
 void demo_yield() { demo_yield_async(); }
+
+// A computation of `billions` billion instructions: up to 200B, five times
+// the 40B limit of one message. It runs in chunks of at most 20B
+// instructions, with a yield after each, and replies once it is done.
+// It burns cycles, so only a controller may call it.
+IC_Async demo_long_compute_async() {
+  IC_API ic_api(CanisterUpdate{"demo_long_compute"}, false);
+  uint32_t billions{0};
+  ic_api.from_wire(CandidTypeNat32{&billions});
+  if (!ic_api.is_controller(ic_api.get_caller())) {
+    IC_API::trap("demo_long_compute: only a controller may call it");
+  }
+  if (billions > 200) {
+    IC_API::trap("demo_long_compute: at most 200 billion instructions");
+  }
+  const uint64_t target = uint64_t{billions} * 1'000'000'000;
+  const uint64_t chunk = 20'000'000'000;
+
+  auto total = [] {
+    return IC_API::performance_counter(
+        IC_API::PerformanceCounterType::CallContextInstructions);
+  };
+
+  // The state of the computation: an LCG, x = a * x + c (mod 2^64).
+  // It lives in the coroutine, so it survives the yields.
+  uint64_t x = 42;
+  uint32_t messages = 0;
+  while (true) {
+    ++messages;
+    // A chunk of work, until this message executed `chunk` instructions,
+    // or the whole call `target` instructions...
+    do {
+      for (int i = 0; i < 65536; ++i)
+        x = 6364136223846793005ULL * x + 1442695040888963407ULL;
+    } while (IC_API::performance_counter() < chunk && total() < target);
+    if (total() >= target) break;
+    // ...then continue in a new message, with a fresh instruction limit
+    IC_CallResult<void> yielded = co_await ic_api.yield_fresh_budget();
+    yielded.value();
+  }
+  ic_api.to_wire(CandidTypeText{
+      std::to_string(total() / 1'000'000'000) + "B instructions in " +
+      std::to_string(messages) +
+      " messages, at most 20B each. One message can execute at most 40B. "
+      "Result: " +
+      std::to_string(x)});
+}
+void demo_long_compute() { demo_long_compute_async(); }

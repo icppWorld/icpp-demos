@@ -761,6 +761,23 @@ def test__demo_yield(network: str, principal: str) -> None:
     assert " instructions." in response
 
 
+def test__demo_long_compute(network: str, principal: str) -> None:
+    # 150B instructions, almost 4x the limit of one message: it completes,
+    # 20B at a time, with a yield after each chunk
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_long_compute",
+        canister_argument="(150 : nat32)",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+        timeout_seconds=900,
+    )
+    response = flatten_candid_text(response)
+    assert "150B instructions in 8 messages, at most 20B each." in response
+
+
 def test__demo_cost(network: str, principal: str) -> None:
     response = call_canister_api(
         icp_yaml_path=ICP_YAML_PATH,

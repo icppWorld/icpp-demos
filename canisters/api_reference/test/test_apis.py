@@ -9,6 +9,7 @@ $ pytest --network=[local/ic] test_apis.py
 # pylint: disable=missing-function-docstring, unused-import, wildcard-import, unused-wildcard-import, line-too-long, unused-argument
 
 from pathlib import Path
+from typing import Dict
 import pytest
 from icpp.smoketest import call_canister_api, flatten_candid_text
 
@@ -759,6 +760,12 @@ def test__demo_yield(network: str, principal: str) -> None:
     response = flatten_candid_text(response)
     assert "Instructions per message: " in response
     assert " instructions." in response
+    # One count per yield
+    per_message = response.split("Instructions per message: ", 1)[1]
+    per_message = per_message.split(". The whole call: ", 1)[0]
+    values = per_message.split()
+    assert len(values) == 3
+    assert all(value.isdigit() for value in values)
 
 
 def test__demo_long_compute(network: str, principal: str) -> None:
@@ -776,6 +783,22 @@ def test__demo_long_compute(network: str, principal: str) -> None:
     )
     response = flatten_candid_text(response)
     assert "150B instructions in 8 messages, at most 20B each." in response
+
+
+def test__demo_long_compute_not_controller(
+    network: str, identity_anonymous: Dict[str, str]
+) -> None:
+    # It burns cycles, so a caller that is not a controller is refused
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_long_compute",
+        canister_argument="(1 : nat32)",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    assert "only a controller may call it" in response
 
 
 def test__demo_cost(network: str, principal: str) -> None:

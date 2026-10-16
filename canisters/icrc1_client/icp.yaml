@@ -1,0 +1,43 @@
+# yaml-language-server: $schema=https://github.com/dfinity/icp-cli/raw/refs/tags/v1.2.0/docs/schemas/icp-yaml-schema.json
+#
+# An ICRC-1 client in C++, and an ICRC-1 ledger to call: the ledger of the
+# DFINITY ledger suite, pinned to a release and its sha256.
+canisters:
+  - name: icrc1_client
+    build:
+      steps:
+        - type: pre-built
+          path: build/icrc1_client.wasm
+  - name: icrc1_ledger
+    build:
+      steps:
+        - type: pre-built
+          url: https://github.com/dfinity/ic/releases/download/ledger-suite-icrc-2026-03-09/ic-icrc1-ledger.wasm.gz
+          sha256: 354dd6ecfdc72b5409805b31dea22c9db11df6e14095a5a68924eb63535e6d8a
+    # A token without balances. The tests reinstall the ledger with balances
+    # for the principals of this deployment (test/conftest.py), which are not
+    # known before the canisters exist.
+    init_args: >-
+      (variant { Init = record {
+        token_symbol = "TEST"; token_name = "Test Token";
+        minting_account = record { owner = principal "aaaaa-aa" };
+        transfer_fee = 10_000 : nat; metadata = vec {}; initial_balances = vec {};
+        archive_options = record { num_blocks_to_archive = 1000 : nat64;
+          trigger_threshold = 2000 : nat64; controller_id = principal "aaaaa-aa" };
+      } })
+
+networks:
+  # A project-local replica, started with `icp network start`. icp-cli runs one
+  # local network per project, and `port: 0` lets the OS assign a free ephemeral
+  # port - so the demos never collide with each other or with another project.
+  - name: local
+    mode: managed
+    gateway:
+      port: 0
+
+environments:
+  # These names are the values you pass to pytest as `--network=[local/ic]`.
+  - name: local
+    network: local
+  - name: ic
+    network: ic

@@ -1,0 +1,9 @@
+service : {
+  // docs start: icrc1_client
+  // The token of an ICRC-1 ledger: '(ledger)' -> '("TEST: fee 10000, 8 decimals")'
+  "token_info": (principal) -> (text);
+  // The balance of this canister: '(ledger)' -> '(nat)'
+  "balance": (principal) -> (nat);
+  // A transfer from this canister: '(ledger, to, amount)' -> '("Ok: block 1")'
+  "transfer": (principal, principal, nat) -> (text); // docs end: icrc1_client
+};

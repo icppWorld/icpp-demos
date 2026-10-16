@@ -801,6 +801,35 @@ def test__demo_long_compute_not_controller(
     assert "only a controller may call it" in response
 
 
+def test__demo_raw_rand(network: str, principal: str) -> None:
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_raw_rand",
+        canister_argument="()",
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    text = flatten_candid_text(response).strip('()" ,')
+    assert text.startswith("32 random bytes: ") and len(text) == 17 + 64, text
+
+
+def test__demo_sign(network: str, principal: str) -> None:
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_sign",
+        canister_argument='("icpp")',
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+        timeout_seconds=120,
+    )
+    text = flatten_candid_text(response)
+    assert "public key " in text and ", signature " in text, text
+
+
 def test__demo_cost(network: str, principal: str) -> None:
     response = call_canister_api(
         icp_yaml_path=ICP_YAML_PATH,

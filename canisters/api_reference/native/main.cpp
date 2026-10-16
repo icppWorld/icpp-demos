@@ -34,6 +34,7 @@
 #include "../src/demo_get_caller.h"
 #include "../src/demo_ic_api.h"
 #include "../src/demo_calls.h"
+#include "../src/demo_management.h"
 #include "../src/demo_cost.h"
 #include "../src/demo_env_vars.h"
 #include "../src/demo_introspection.h"
@@ -363,6 +364,14 @@ int main() {
   // '(150 : nat32)' -> '("150B instructions in 8 messages, ...")'
   mockIC.run_test("demo_long_compute", demo_long_compute,
                   "4449444c00017996000000", "", false, my_principal);
+
+  // The Mock IC answers the management canister with deterministic bytes
+  // '()' -> '("32 random bytes: ...")'
+  mockIC.run_test("demo_raw_rand", demo_raw_rand, "4449444c0000", "", false,
+                  my_principal);
+  // '("icpp")' -> '("public key ..., signature ...")'
+  mockIC.run_test("demo_sign", demo_sign, "4449444c0001710469637070", "", false,
+                  my_principal);
 
   // ---- timers (IC_API::set_timer family) -----------------------------------
   //

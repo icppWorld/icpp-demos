@@ -144,6 +144,10 @@ service : {
     // demo_long_compute: controllers only, at most 200 (billion instructions)
     "demo_long_compute": (nat32) -> (text); // docs end: demo_calls
 
+    // docs start: demo_management
+    "demo_raw_rand": () -> (text);
+    "demo_sign": (text) -> (text); // docs end: demo_management
+
     // docs start: demo_timers
     "demo_set_timer": (nat64) -> (nat64);
     "demo_set_timer_recurring": (nat64) -> (nat64);

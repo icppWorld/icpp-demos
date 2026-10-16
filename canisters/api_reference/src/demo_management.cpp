@@ -39,7 +39,7 @@ IC_Async demo_raw_rand_async() {
 }
 void demo_raw_rand() { demo_raw_rand_async(); }
 
-// Signs the SHA-256 hash of a message with threshold ECDSA. The cycles of the
+// Signs a 32-byte digest of a message with threshold ECDSA. The cycles of the
 // signature are attached for you. test_key_1 exists on mainnet and on a
 // local network.
 IC_Async demo_sign_async() {
@@ -47,7 +47,9 @@ IC_Async demo_sign_async() {
   std::string message;
   ic_api.from_wire(CandidTypeText{&message});
 
-  IC_Blob message_hash(32, 0); // for a real use: the SHA-256 of the message
+  // An illustrative XOR fold, not a cryptographic hash: a real application
+  // signs the SHA-256 of the message.
+  IC_Blob message_hash(32, 0);
   for (size_t i = 0; i < message.size(); ++i)
     message_hash[i % 32] ^= (uint8_t)message[i];
 

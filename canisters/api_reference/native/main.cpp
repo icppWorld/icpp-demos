@@ -265,11 +265,10 @@ int main() {
 
   // '(variant {"field 2" = 0.1 : float32}, variant {"field 2" = 0.1 : float32})'
   // -> same
-  mockIC.run_test(
-      "demo_candid_type_variants", demo_candid_type_variants,
-      "4449444c016b01cca6b7e10f7302000000cdcccc3d00cdcccc3d",
-      "4449444c026b01cca6b7e10f736b01cca6b7e10f7302000100cdcccc3d00cdcccc3d",
-      silent_on_trap, my_principal);
+  mockIC.run_test("demo_candid_type_variants", demo_candid_type_variants,
+                  "4449444c016b01cca6b7e10f7302000000cdcccc3d00cdcccc3d",
+                  "4449444c016b01cca6b7e10f7302000000cdcccc3d00cdcccc3d",
+                  silent_on_trap, my_principal);
   // -----------------------------------------------------------------------------
   // IC_API - ic0 system interface
 

@@ -1172,3 +1172,18 @@ def test__demo_create_on_subnet(network: str) -> None:
     assert text.startswith(
         ('( "created ', '( "not created: ', '( "the call failed: ')
     ), text
+
+
+def test__demo_create_on_subnet_not_controller(
+    network: str, identity_anonymous: Dict[str, str]
+) -> None:
+    # It spends this canister's cycles, so a caller that is not a controller
+    # is refused
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_create_on_subnet",
+        canister_argument='(principal "2vxsx-fae", 1_000_000_000_000 : nat)',
+        network=network,
+    )
+    assert "only a controller may call it" in response

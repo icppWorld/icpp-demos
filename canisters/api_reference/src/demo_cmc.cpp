@@ -19,7 +19,8 @@ $ icp canister call demo demo_create_on_subnet '(principal "<subnet>", 2_000_000
 const char *CMC = "rkp4c-7iaaa-aaaaa-aaaca-cai";
 
 // '(subnet, cycles)' -> '("created <principal>")'. The attached cycles pay for
-// the creation; the rest is the new canister's balance.
+// the creation; the rest is the new canister's balance. They come from this
+// canister's balance, so only a controller may call it, with at most 10T.
 IC_Async demo_create_on_subnet_async() {
   IC_API ic_api(CanisterUpdate{"demo_create_on_subnet"}, false);
   std::string subnet;
@@ -28,6 +29,12 @@ IC_Async demo_create_on_subnet_async() {
   args.append(CandidTypePrincipal{&subnet});
   args.append(CandidTypeNat{&cycles});
   ic_api.from_wire(args);
+  if (!ic_api.is_controller(ic_api.get_caller())) {
+    IC_API::trap("demo_create_on_subnet: only a controller may call it");
+  }
+  if (cycles > 10'000'000'000'000) {
+    IC_API::trap("demo_create_on_subnet: at most 10T cycles");
+  }
 
   // record { subnet_selection : opt variant { Subnet : record { subnet } } }
   // settings is left out: this canister becomes the controller

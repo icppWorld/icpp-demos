@@ -148,6 +148,7 @@ service : {
     "demo_raw_rand": () -> (text);
     "demo_sign": (text) -> (text); // docs end: demo_management
     // docs start: demo_cmc
+    // demo_create_on_subnet: controllers only, at most 10T cycles
     "demo_create_on_subnet": (principal, nat) -> (text); // docs end: demo_cmc
 
     // docs start: demo_timers

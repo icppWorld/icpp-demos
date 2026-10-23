@@ -400,6 +400,14 @@ int main() {
       "6f7765642028726566756e6465642031393030303030303030303030206379636c6573"
       "29",
       false, my_principal);
+  // '(principal "2vxsx-fae", 20_000_000_000_000 : nat)' -> trap: over 10T
+  mockIC.run_trap_test("demo_create_on_subnet over 10T", demo_create_on_subnet,
+                       "4449444c0002687d010104808095e789c604", silent_on_trap,
+                       my_principal);
+  // A caller that is not a controller -> trap
+  mockIC.run_trap_test(
+      "demo_create_on_subnet not controller", demo_create_on_subnet,
+      "4449444c0002687d01010480c0a8ca9a3a", silent_on_trap, "2vxsx-fae");
 
   // ---- timers (IC_API::set_timer family) -----------------------------------
   //

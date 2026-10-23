@@ -35,6 +35,7 @@
 #include "../src/demo_ic_api.h"
 #include "../src/demo_calls.h"
 #include "../src/demo_management.h"
+#include "../src/demo_cmc.h"
 #include "../src/demo_cost.h"
 #include "../src/demo_env_vars.h"
 #include "../src/demo_introspection.h"
@@ -371,6 +372,42 @@ int main() {
   // '("icpp")' -> '("public key ..., signature ...")'
   mockIC.run_test("demo_sign", demo_sign, "4449444c0001710469637070", "", false,
                   my_principal);
+
+  // The CMC (another canister) answers with the reply set with expect_call:
+  // created, then not created (refunded); the replies are didc encode-d with
+  // the CMC's cmc.did.
+  // '(principal "2vxsx-fae", 2_000_000_000_000 : nat)' -> '("created ...")'
+  mockIC.expect_call(
+      "rkp4c-7iaaa-aaaaa-aaaca-cai", "create_canister",
+      MockIC::MockResponse::reply("4449444c036b02bc8a0168c5fed201016b01f78dabcb"
+                                  "02026c0285bec7e60571fffbbdce077d010000010a00"
+                                  "000000000000020101"));
+  mockIC.run_test("demo_create_on_subnet", demo_create_on_subnet,
+                  "4449444c0002687d01010480c0a8ca9a3a",
+                  "4449444c00017123637265617465642072796a6c332d74796161612d6161"
+                  "6161612d61616162612d636169",
+                  false, my_principal);
+  // -> '("not created: subnet not allowed (refunded 1900000000000 cycles)")'
+  mockIC.expect_call(
+      "rkp4c-7iaaa-aaaaa-aaaca-cai", "create_canister",
+      MockIC::MockResponse::reply(
+          "4449444c036b02bc8a0168c5fed201016b01f78dabcb02026c0285bec7e60571fffb"
+          "bdce077d01000100127375626e6574206e6f7420616c6c6f77656480f0cc86a637"));
+  mockIC.run_test(
+      "demo_create_on_subnet refunded", demo_create_on_subnet,
+      "4449444c0002687d01010480c0a8ca9a3a",
+      "4449444c0001713f6e6f7420637265617465643a207375626e6574206e6f7420616c6c"
+      "6f7765642028726566756e6465642031393030303030303030303030206379636c6573"
+      "29",
+      false, my_principal);
+  // '(principal "2vxsx-fae", 20_000_000_000_000 : nat)' -> trap: over 10T
+  mockIC.run_trap_test("demo_create_on_subnet over 10T", demo_create_on_subnet,
+                       "4449444c0002687d010104808095e789c604", silent_on_trap,
+                       my_principal);
+  // A caller that is not a controller -> trap
+  mockIC.run_trap_test(
+      "demo_create_on_subnet not controller", demo_create_on_subnet,
+      "4449444c0002687d01010480c0a8ca9a3a", silent_on_trap, "2vxsx-fae");
 
   // ---- timers (IC_API::set_timer family) -----------------------------------
   //

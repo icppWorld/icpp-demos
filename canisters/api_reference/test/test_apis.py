@@ -8,9 +8,12 @@ $ pytest --network=[local/ic] test_apis.py
 
 # pylint: disable=missing-function-docstring, unused-import, wildcard-import, unused-wildcard-import, line-too-long, unused-argument
 
+import json
+import re
 from pathlib import Path
 from typing import Dict
 import pytest
+from icpp.run_shell_cmd import run_shell_cmd
 from icpp.smoketest import call_canister_api, flatten_candid_text
 
 # Path to the icp.yaml file
@@ -18,6 +21,9 @@ ICP_YAML_PATH = Path(__file__).parent / "../icp.yaml"
 
 # Canister in the icp.yaml file we want to test
 CANISTER_NAME = "demo"
+
+# The cycles minting canister
+CMC = "rkp4c-7iaaa-aaaaa-aaaca-cai"
 
 # -------------------------------------------------------------------------------
 # IC_API - ic0 system interface
@@ -1156,3 +1162,58 @@ def test__demo_to_string_128(network: str, principal: str) -> None:
     )
     expected_response = "()"
     assert response == expected_response
+
+
+def test__demo_create_on_subnet(network: str, identity: str, principal: str) -> None:
+    # Only on a local network: on mainnet this would spend real cycles. The
+    # local network has a cycles minting canister with a default subnet
+    if network != "local":
+        pytest.skip("creates a canister: local network only")
+    # The cycles it attaches come from the demo canister's balance
+    run_shell_cmd(
+        f"icp canister top-up --amount 2t {CANISTER_NAME} "
+        f"--environment {network} --identity {identity} < /dev/null",
+        cwd=ICP_YAML_PATH.parent,
+        timeout_seconds=60,
+    )
+    reply = run_shell_cmd(
+        f"icp canister call {CMC} get_default_subnets '()' "
+        f"--environment {network} --identity {identity} < /dev/null",
+        capture_output=True,
+        timeout_seconds=60,
+    )
+    subnets = re.findall(r'principal "([^"]+)"', reply)
+    assert subnets, reply
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_create_on_subnet",
+        canister_argument=f'(principal "{subnets[0]}", 1_000_000_000_000 : nat)',
+        network=network,
+    )
+    text = flatten_candid_text(response).strip('()" ,')
+    assert text.startswith("created "), text
+    created = text.removeprefix("created ")
+    # The caller controls the new canister, so it can install code into it
+    status = run_shell_cmd(
+        f"icp canister status {created} --environment {network} "
+        f"--identity {identity} --json < /dev/null",
+        capture_output=True,
+        timeout_seconds=60,
+    )
+    assert principal in json.loads(status)["settings"]["controllers"], status
+
+
+def test__demo_create_on_subnet_not_controller(
+    network: str, identity_anonymous: Dict[str, str]
+) -> None:
+    # It spends this canister's cycles, so a caller that is not a controller
+    # is refused
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_create_on_subnet",
+        canister_argument='(principal "2vxsx-fae", 1_000_000_000_000 : nat)',
+        network=network,
+    )
+    assert "only a controller may call it" in response

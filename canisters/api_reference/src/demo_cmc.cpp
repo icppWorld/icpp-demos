@@ -14,6 +14,7 @@ $ icp canister call demo demo_create_on_subnet '(principal "<subnet>", 2_000_000
 #include "ic_api.h"
 
 #include <string>
+#include <vector>
 
 // The cycles minting canister, on mainnet
 const char *CMC = "rkp4c-7iaaa-aaaaa-aaaca-cai";
@@ -36,13 +37,22 @@ IC_Async demo_create_on_subnet_async() {
     IC_API::trap("demo_create_on_subnet: at most 10T cycles");
   }
 
-  // record { subnet_selection : opt variant { Subnet : record { subnet } } }
-  // settings is left out: this canister becomes the controller
+  // record { subnet_selection : opt variant { Subnet : record { subnet } };
+  //          settings : opt record { controllers : opt vec principal } }
+  // The caller and this canister control the new canister, so the caller can
+  // install its code. Without controllers, only this canister would.
   CandidTypeRecord choice;
   choice.append("subnet", CandidTypePrincipal{subnet});
+  CandidTypeRecord settings;
+  settings.append(
+      "controllers",
+      CandidTypeOptVec{CandidTypeVecPrincipal{
+          std::vector<std::string>{ic_api.get_caller().get_text(),
+                                   ic_api.get_canister_self().get_text()}}});
   CandidTypeRecord arg;
   arg.append("subnet_selection",
              CandidTypeOptVariant{CandidTypeVariant{"Subnet", choice}});
+  arg.append("settings", CandidTypeOptRecord{settings});
 
   // The call carries cycles, and the CMC is part of the IC: an unbounded wait,
   // so the cycles can't be lost on a timeout

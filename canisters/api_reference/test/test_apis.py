@@ -1156,3 +1156,19 @@ def test__demo_to_string_128(network: str, principal: str) -> None:
     )
     expected_response = "()"
     assert response == expected_response
+
+
+def test__demo_create_on_subnet(network: str) -> None:
+    # A local network may have no cycles minting canister: then the call
+    # fails, which the demo reports; on mainnet it creates the canister
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="demo_create_on_subnet",
+        canister_argument='(principal "2vxsx-fae", 1_000_000_000_000 : nat)',
+        network=network,
+    )
+    text = flatten_candid_text(response)
+    assert text.startswith(
+        ('( "created ', '( "not created: ', '( "the call failed: ')
+    ), text

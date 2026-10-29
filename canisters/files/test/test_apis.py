@@ -142,3 +142,21 @@ def test__upgrade_history(network: str, principal: str) -> None:
     if int(pre.group(1)) > 0:
         # The identity that upgraded the canister called canister_pre_upgrade
         assert caller.group(1) == principal
+
+
+def test__file_upload_chunk_not_controller(
+    network: str, identity_anonymous: Dict[str, str]
+) -> None:
+    # It writes into the canister's memory, so a caller that is not a
+    # controller is refused
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method="file_upload_chunk",
+        canister_argument=(
+            '(record { filename = "x"; chunk = vec {}; '
+            "chunksize = 0 : nat64; offset = 0 : nat64 })"
+        ),
+        network=network,
+    )
+    assert "only a controller may call it" in response

@@ -836,6 +836,31 @@ def test__demo_sign(network: str, principal: str) -> None:
     assert "public key " in text and ", signature " in text, text
 
 
+@pytest.mark.parametrize(
+    "method, argument",
+    [
+        ("demo_sign", '("icpp")'),
+        ("demo_set_timer", "(0 : nat64)"),
+        ("demo_set_timer_recurring", "(1_000_000_000 : nat64)"),
+    ],
+)
+def test__spends_cycles_not_controller(
+    network: str, identity_anonymous: Dict[str, str], method: str, argument: str
+) -> None:
+    # It spends the canister's cycles, so a caller that is not a controller is
+    # refused
+    response = call_canister_api(
+        icp_yaml_path=ICP_YAML_PATH,
+        canister_name=CANISTER_NAME,
+        canister_method=method,
+        canister_argument=argument,
+        canister_input="idl",
+        canister_output="idl",
+        network=network,
+    )
+    assert "only a controller may call it" in response
+
+
 def test__demo_cost(network: str, principal: str) -> None:
     response = call_canister_api(
         icp_yaml_path=ICP_YAML_PATH,

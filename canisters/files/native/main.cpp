@@ -9,6 +9,7 @@
 #include "../src/download.h"
 #include "../src/io.h"
 #include "../src/upgrade_hooks.h"
+#include "../src/upload.h"
 
 // The Mock IC
 #include "mock_ic.h"
@@ -47,6 +48,11 @@ int main() {
       "4449444c016c0393affe810678c7dda8bb0771aec3faa40b780100000000000000000012696e7465726e616c5f646174615f66696c6580841e0000000000",
       "4449444c036c0582e1b793047eed8c8bae040193affe810678bdbaf9d50778aec3faa40b786d7b6b01bc8a010001020001405f646174615f060000000000000048656c6c6f20090000000000000066726f6d20746865201300000000000000696e7465726e616c20646174612066696c6521000000000000000040000000000000004000000000000000",
       silent_on_trap, my_principal);
+
+  // A caller that is not a controller can't upload: it would write into the
+  // canister's memory. '()' -> trap, before the argument is read
+  mockIC.run_trap_test("file_upload_chunk not controller", file_upload_chunk,
+                       "4449444c0000", silent_on_trap, anonymous_principal);
 
   // -----------------------------------------------------------------------------
   // An upgrade calls canister_pre_upgrade on the old wasm, then

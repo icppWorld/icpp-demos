@@ -372,6 +372,9 @@ int main() {
   // '("icpp")' -> '("public key ..., signature ...")'
   mockIC.run_test("demo_sign", demo_sign, "4449444c0001710469637070", "", false,
                   my_principal);
+  // A caller that is not a controller -> trap
+  mockIC.run_trap_test("demo_sign not controller", demo_sign,
+                       "4449444c0001710469637070", silent_on_trap, "2vxsx-fae");
 
   // The CMC (another canister) answers with the reply set with expect_call:
   // created, then not created (refunded); the replies are didc encode-d with
@@ -437,6 +440,14 @@ int main() {
   mockIC.run_test("demo_set_timer_recurring", demo_set_timer_recurring,
                   "4449444c00017800ca9a3b00000000", "", silent_on_trap,
                   my_principal);
+
+  // A caller that is not a controller -> trap
+  mockIC.run_trap_test("demo_set_timer not controller", demo_set_timer,
+                       "4449444c0001780000000000000000", silent_on_trap,
+                       "2vxsx-fae");
+  mockIC.run_trap_test(
+      "demo_set_timer_recurring not controller", demo_set_timer_recurring,
+      "4449444c00017800ca9a3b00000000", silent_on_trap, "2vxsx-fae");
 
   // Cancel an unknown id: '(999_999 : nat64)' -> '(false)'
   mockIC.run_test("demo_cancel_timer (unknown id)", demo_cancel_timer,

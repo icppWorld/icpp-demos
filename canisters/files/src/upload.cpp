@@ -17,8 +17,12 @@ void print_file_upload_summary(const std::string &filename,
   std::cout << msg << std::endl;
 }
 
+// It writes into this canister's memory, so only a controller may call it.
 void file_upload_chunk() {
   IC_API ic_api(CanisterUpdate{std::string(__func__)}, false);
+  if (!ic_api.is_controller(ic_api.get_caller())) {
+    IC_API::trap("file_upload_chunk: only a controller may call it");
+  }
 
   // Get filename and the chunk to write to it
   std::string filename{""};

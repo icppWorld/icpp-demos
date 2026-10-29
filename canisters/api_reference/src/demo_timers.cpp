@@ -47,10 +47,15 @@ uint64_t g_one_shot_fires{0};
 uint64_t g_recurring_fires{0};
 } // namespace
 
+// Each timer that fires spends this canister's cycles, so only a controller
+// may set one.
 void demo_set_timer() {
   IC_API ic_api(CanisterUpdate{std::string(__func__)}, false);
   uint64_t delay_ns{0};
   ic_api.from_wire(CandidTypeNat64{&delay_ns});
+  if (!ic_api.is_controller(ic_api.get_caller())) {
+    IC_API::trap("demo_set_timer: only a controller may call it");
+  }
 
   uint64_t id = IC_API::set_timer(delay_ns, []() { ++g_one_shot_fires; });
 
@@ -61,6 +66,9 @@ void demo_set_timer_recurring() {
   IC_API ic_api(CanisterUpdate{std::string(__func__)}, false);
   uint64_t period_ns{0};
   ic_api.from_wire(CandidTypeNat64{&period_ns});
+  if (!ic_api.is_controller(ic_api.get_caller())) {
+    IC_API::trap("demo_set_timer_recurring: only a controller may call it");
+  }
 
   uint64_t id =
       IC_API::set_timer_recurring(period_ns, []() { ++g_recurring_fires; });

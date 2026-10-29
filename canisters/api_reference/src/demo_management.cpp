@@ -41,11 +41,15 @@ void demo_raw_rand() { demo_raw_rand_async(); }
 
 // Signs a 32-byte digest of a message with threshold ECDSA. The cycles of the
 // signature are attached for you. test_key_1 exists on mainnet and on a
-// local network.
+// local network. It spends this canister's cycles, so only a controller may
+// call it.
 IC_Async demo_sign_async() {
   IC_API ic_api(CanisterUpdate{"demo_sign"}, false);
   std::string message;
   ic_api.from_wire(CandidTypeText{&message});
+  if (!ic_api.is_controller(ic_api.get_caller())) {
+    IC_API::trap("demo_sign: only a controller may call it");
+  }
 
   // An illustrative XOR fold, not a cryptographic hash: a real application
   // signs the SHA-256 of the message.

@@ -50,9 +50,12 @@ int main() {
       silent_on_trap, my_principal);
 
   // A caller that is not a controller can't upload: it would write into the
-  // canister's memory. '()' -> trap, before the argument is read
-  mockIC.run_trap_test("file_upload_chunk not controller", file_upload_chunk,
-                       "4449444c0000", silent_on_trap, anonymous_principal);
+  // canister's memory. A valid argument, so only the controller check traps:
+  // '(record { filename = "x"; chunk = vec {}; chunksize = 0 : nat64; offset = 0 : nat64 })' -> trap
+  mockIC.run_trap_test(
+      "file_upload_chunk not controller", file_upload_chunk,
+      "4449444c026c04ed8c8bae040193affe810678c7dda8bb0771aec3faa40b786d7b010000000000000000000001780000000000000000",
+      silent_on_trap, anonymous_principal);
 
   // -----------------------------------------------------------------------------
   // An upgrade calls canister_pre_upgrade on the old wasm, then

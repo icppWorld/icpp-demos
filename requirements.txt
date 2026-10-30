@@ -1,4 +1,4 @@
-icpp-pro>=7.0.0rc7
+icpp-pro>=7.0.0
 icp-py-core==2.3.0
 
 # Pin cbor2<6: cbor2 6.x decodes tag-55799-wrapped maps to frozendict, which

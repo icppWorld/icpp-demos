@@ -1,0 +1,104 @@
+name: verify-dev
+
+# icpp-demos' tests against a development install of icpp-pro & icpp-candid, by
+# hand: the `make siblings-verify-demos` step of icpp-pro's release process.
+#   gh workflow run verify-dev.yml -R icppWorld/icpp-demos
+#
+# Lives here, so that adding or changing it does not change the icpp-pro commit
+# that is being released.
+
+on:
+  workflow_dispatch:
+    inputs:
+      icpp-pro-ref:
+        description: "icpp-pro branch, tag or commit to test against"
+        type: string
+        default: main
+      icpp-candid-ref:
+        description: "icpp-candid branch, tag or commit to test against"
+        type: string
+        default: main
+
+# Least privilege: the job only reads the repositories
+permissions:
+  contents: read
+
+jobs:
+  verify-dev:
+    runs-on: ubuntu-latest
+
+    env:
+      # `icp network start` downloads its launcher from the GitHub API, which
+      # is rate limited without a token
+      ICP_CLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      # https://github.com/marketplace/actions/setup-miniconda
+      - uses: conda-incubator/setup-miniconda@be893c923ea9cf1cf7cd510fbdde27c7e18cbdcb # v4.1.0
+        with:
+          python-version: "3.11"
+          channels: conda-forge,defaults
+          channel-priority: strict
+
+      # -------------------------------------------------------------------
+      # The layout icpp-pro's Makefile expects: icpp-demos next to icpp-pro,
+      # and icpp-candid nested in icpp-pro
+      - name: checkout icpp-demos
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          path: icpp-demos
+
+      - name: checkout icpp-pro
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          repository: icppWorld/icpp-pro
+          path: icpp-pro
+          ref: ${{ inputs.icpp-pro-ref }}
+
+      - name: checkout icpp-candid
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          repository: icppWorld/icpp-candid
+          path: icpp-pro/icpp-candid
+          ref: ${{ inputs.icpp-candid-ref }}
+      # -------------------------------------------------------------------
+
+      - name: install
+        shell: bash -l {0} # activates the default conda environment ('test')
+        working-directory: icpp-pro
+        run: |
+          sudo apt-get update
+          sudo apt-get install build-essential
+          make install-icp
+          make install-python-w-demos
+          make install-clang-ubuntu
+          make install-jp-ubuntu
+          icpp install-wasi-sdk
+          icpp install-rust
+
+      # The release notes state what was tested
+      - name: versions
+        shell: bash -l {0}
+        run: |
+          echo "icpp-demos  : $(git -C icpp-demos rev-parse HEAD)"
+          echo "icpp-pro    : $(git -C icpp-pro rev-parse HEAD)"
+          echo "icpp-candid : $(git -C icpp-pro/icpp-candid rev-parse HEAD)"
+          echo "icpp        : $(icpp --version | head -1)"
+
+      - name: siblings-verify-demos
+        shell: bash -l {0}
+        working-directory: icpp-pro
+        run: |
+          make siblings-verify-demos
+
+      - name: logs
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: siblings-verify-logs
+          path: icpp-pro/.siblings-verify-logs/
+          if-no-files-found: ignore
+          include-hidden-files: true

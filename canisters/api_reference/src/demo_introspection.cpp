@@ -42,7 +42,7 @@ void demo_introspection() {
       " with " + std::to_string(ic_api.get_subnet_node_count()) +
       " nodes. The IC root key has " +
       std::to_string(ic_api.get_root_key().size()) + " bytes. " +
-      // The file system keeps its files in stable memory
+      // Reserved by the file system, which keeps its files in stable memory
       "Stable memory: " + std::to_string(IC_API::get_stable_size()) +
       " pages of 64 KiB. " + std::to_string(IC_API::performance_counter()) +
       " instructions executed so far.";

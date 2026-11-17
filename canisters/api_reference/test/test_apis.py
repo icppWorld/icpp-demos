@@ -724,6 +724,8 @@ def test__demo_introspection(network: str, principal: str) -> None:
     response = flatten_candid_text(response)
     assert ", running, replicated execution, on subnet " in response
     assert "The IC root key has 133 bytes." in response
+    match = re.search(r"Stable memory: (\d+) pages of 64 KiB\.", response)
+    assert match and int(match.group(1)) > 0, response
 
 
 def test__demo_introspection_query(network: str, principal: str) -> None:

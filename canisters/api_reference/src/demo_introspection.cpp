@@ -1,7 +1,7 @@
 /* file: src/demo_introspection.cpp
 
 $ icp canister call demo demo_introspection '()' --environment local
-("Canister version 2, running, replicated execution, on subnet w5bul-v73ez-ptacz-wphit-tyxt7-saait-4di22-ws2wo-dtv4x-2rmts-7ae with 13 nodes. The IC root key has 133 bytes. 312114 instructions executed so far.")
+("Canister version 2, running, replicated execution, on subnet w5bul-v73ez-ptacz-wphit-tyxt7-saait-4di22-ws2wo-dtv4x-2rmts-7ae with 13 nodes. The IC root key has 133 bytes. Stable memory: 1025 pages of 64 KiB. 312114 instructions executed so far.")
 
 $ icp canister call demo demo_introspection_query '()' --environment local --query
 ("Non-replicated execution. Caller info: 0 bytes, no signer.")
@@ -42,7 +42,9 @@ void demo_introspection() {
       " with " + std::to_string(ic_api.get_subnet_node_count()) +
       " nodes. The IC root key has " +
       std::to_string(ic_api.get_root_key().size()) + " bytes. " +
-      std::to_string(IC_API::performance_counter()) +
+      // Mostly reserved by the file system, which keeps its files there
+      "Stable memory: " + std::to_string(IC_API::get_stable_size()) +
+      " pages of 64 KiB. " + std::to_string(IC_API::performance_counter()) +
       " instructions executed so far.";
   ic_api.to_wire(CandidTypeText(msg));
 }

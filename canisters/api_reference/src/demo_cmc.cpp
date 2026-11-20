@@ -55,12 +55,10 @@ IC_Async demo_create_on_subnet_async() {
   arg.append("settings", CandidTypeOptRecord{settings});
 
   // The call carries cycles, and the CMC is part of the IC: an unbounded wait,
-  // so the cycles can't be lost on a timeout
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wuser-defined-warnings"
-  IC_Call call =
-      IC_Call::unbounded_wait(CandidTypePrincipal{CMC}, "create_canister");
-#pragma clang diagnostic pop
+  // so the cycles can't be lost on a timeout. IC_TrustedCallee acknowledges
+  // this one call, so it compiles without the unbounded_wait warning.
+  IC_Call call = IC_Call::unbounded_wait(CandidTypePrincipal{CMC},
+                                         "create_canister", IC_TrustedCallee{});
   IC_CallResult<IC_CallReply> r =
       co_await call.with_arg(arg).with_cycles(cycles);
   if (!r) {
